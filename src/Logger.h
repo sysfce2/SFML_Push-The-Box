@@ -19,7 +19,6 @@ public:
 	}
 	static void display_log(int log_type, std::string msg);
 	static void init();
-
 private:
 	static std::string to_string();
 	template<typename P1, typename ... Param>
@@ -27,6 +26,7 @@ private:
 		std::stringstream ss; ss << p1;
 		return ss.str() + ' ' + to_string(param...);
 	}
+
 private:
 	static HANDLE m_ConsoleHandle;
 };

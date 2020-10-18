@@ -5,27 +5,25 @@ HANDLE Logger::m_ConsoleHandle;
 
 void Logger::display_log(int log_type, std::string msg)
 {
-	uint16_t print_color = 7;
 	switch (log_type) {
 	case 1:
+		SetConsoleTextAttribute(Logger::m_ConsoleHandle, _INFO_COLOR);
 		std::cout << "[INFO] ";
-		print_color = _INFO_COLOR;
 		break;
 	case 2:
+		SetConsoleTextAttribute(Logger::m_ConsoleHandle, _WARN_COLOR);
 		std::cout << "[WARN] ";
-		print_color = _WARN_COLOR;
 		break;
 	case 3:
+		SetConsoleTextAttribute(Logger::m_ConsoleHandle, _ERROR_COLOR);
 		std::cout << "[ERROR] ";
-		print_color = _ERROR_COLOR;
 		break;
 	default:
+		SetConsoleTextAttribute(Logger::m_ConsoleHandle, _LOG_COLOR);
 		std::cout << "[LOG] ";
-		print_color = _LOG_COLOR;
 		break;
 	}
 
-	SetConsoleTextAttribute(Logger::m_ConsoleHandle, print_color);
 	std::cout << msg << std::endl;
 	SetConsoleTextAttribute(Logger::m_ConsoleHandle, 7);
 }

@@ -3,10 +3,12 @@
 
 class Player : public Entity
 {
-private:
-	void update(float dt);
 public:
 	Player(AssetsManager* assets_manager);
 	virtual ~Player();
+private:
+	void update(float dt);
+
+	float m_MovementSpeed;
 };
 

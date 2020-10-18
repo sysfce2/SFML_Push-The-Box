@@ -3,16 +3,14 @@
 #include "Logger.h"
 #include "Player.h"
 #include <algorithm>
-#include <math.h>
 
 Application::Application(uint16_t screen_width, uint16_t screen_height, std::string app_name)
 	:	m_ScreenWidth(screen_width), m_ScreenHeight(screen_height), m_AppName(app_name),
 		m_Window(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, sf::Style::Close)
 {
-	m_IsRunning = false;
+	m_SkipNextRender = false;
 	m_FrameTime = 0.0f;
 	m_TitleUpdateTimer = 0.0f;
-	m_InitErrorMessage = "\b\b.";
 	Logger::init();
 }
 
@@ -20,10 +18,9 @@ void Application::run(uint16_t fps_limit)
 {
 	if (init_game()) {
 		sf::Clock clock;
-		m_IsRunning = true;
 		m_Window.setFramerateLimit(fps_limit);
 
-		while (m_IsRunning) {
+		while (m_Window.isOpen()) {
 			sf::Time frame_start = clock.getElapsedTime();
 			handle_events();
 			update_all(m_FrameTime);
@@ -46,8 +43,8 @@ Application::~Application()
 
 bool Application::init_game()
 {
-	m_AssetsManager.load_texture("player-spritesheet.png", "player");
-	m_AppStates.push(new StatePlaying(&m_AssetsManager));
+	m_AssetsManager.load_texture("player-spritesheet.png", "player", true);
+	m_AppStates.push(new StatePlaying(&m_AppStates, &m_AssetsManager));
 	return true;
 }
 
@@ -58,7 +55,6 @@ void Application::handle_events()
 		switch (event.type) {
 		case sf::Event::Closed:
 			m_Window.close();
-			m_IsRunning = false;
 			break;
 		}
 	}
@@ -66,15 +62,29 @@ void Application::handle_events()
 
 void Application::update_all(float dt)
 {
-	m_AppStates.top()->update_entities(dt);
-	m_AppStates.top()->update(dt);
+	if (!m_AppStates.top()->m_DestroyState) {
+		m_AppStates.top()->update_entities(dt);
+		m_AppStates.top()->update(dt);
+	}
+	else {
+		delete m_AppStates.top();
+		m_AppStates.pop();
+		m_SkipNextRender = true;
+	}
+
+	if (m_AppStates.size() == 0)
+		m_Window.close();
 }
 
 void Application::draw_all()
 {
-	m_Window.clear();
-	m_AppStates.top()->render(m_Window);
-	m_Window.display();
+	if (!m_SkipNextRender) {
+		m_Window.clear();
+		m_AppStates.top()->render(m_Window);
+		m_Window.display();
+	}
+	else
+		m_SkipNextRender = false;
 }
 
 void Application::update_window_title(float dt)

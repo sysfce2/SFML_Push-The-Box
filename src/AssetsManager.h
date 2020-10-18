@@ -4,12 +4,12 @@
 
 class AssetsManager
 {
-private:
-	std::unordered_map<std::string, sf::Texture*> textures;
 public:
-	bool load_texture(std::string path, std::string name_id);
-	sf::Texture* get_texture(std::string name_id);
+	bool load_texture(std::string path, std::string asset_id, bool smooth = false);
+	sf::Texture* get_texture(std::string asset_id);
 
 	AssetsManager();
 	virtual ~AssetsManager();
+private:
+	std::unordered_map<std::string, sf::Texture*> textures;
 };

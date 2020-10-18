@@ -6,6 +6,6 @@ class StatePlaying : public State
 private:
 	void update(float dt);
 public:
-	StatePlaying(AssetsManager* assets_manager);
+	StatePlaying(StateStack* states_ptr, AssetsManager* assets_manager);
 	virtual ~StatePlaying();
 };

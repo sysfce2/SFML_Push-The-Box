@@ -1,18 +1,20 @@
 #include "AssetsManager.h"
 
-bool AssetsManager::load_texture(std::string path, std::string name_id)
+bool AssetsManager::load_texture(std::string path, std::string asset_id, bool smooth)
 {
     sf::Texture* texture = new sf::Texture();
     if (texture->loadFromFile(path)) {
-        textures[name_id] = texture;
+        if (smooth)
+            texture->setSmooth(true);
+        textures[asset_id] = texture;
         return true;
     }
     else return false;
 }
 
-sf::Texture* AssetsManager::get_texture(std::string name_id)
+sf::Texture* AssetsManager::get_texture(std::string asset_id)
 {
-    return textures.at(name_id);
+    return textures.at(asset_id);
 }
 
 AssetsManager::AssetsManager()

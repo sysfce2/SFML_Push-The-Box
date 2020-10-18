@@ -8,19 +8,22 @@ class Entity
 {
 public:
 	friend class State;
-private:
-	vec2f m_Position;
-	bool has_sprite;
-	sf::Sprite m_Sprite;
-	AssetsManager* m_AssetsManager;
-
+	const vec2f& get_position();
+	const vec2f& get_size();
+protected:
+	void set_sprite(std::string asset_id, int x = -1, int y = -1, int w = -1, int h = -1);
+	void set_position(vec2f position);
+	void set_scale(vec2f scale);
 	virtual void update(float dt) = 0;
 	virtual void render(sf::RenderTarget& target);
 public:
-	void set_sprite(std::string name_id, int left = -1, int top = -1, int width = -1, int height = -1);
-	void set_position(vec2f position);
-	void set_scale(vec2f scale);
-	const vec2f& get_position();
 	Entity(AssetsManager* assets_manager);
 	virtual ~Entity();
+
+protected:
+	bool m_VisibleSprite;
+	sf::Sprite m_Sprite;
+private:
+	vec2f m_Position;
+	AssetsManager* m_AssetsManager;
 };
