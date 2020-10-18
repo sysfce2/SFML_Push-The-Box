@@ -1,16 +1,14 @@
-#pragma once
 #include "Application.h"
+#include "WindowHandle.h"
 #include "Logger.h"
-#include "Player.h"
 #include <algorithm>
 
-Application::Application(uint16_t screen_width, uint16_t screen_height, std::string app_name)
+Application::Application(uint16_t screen_width, uint16_t screen_height, const std::string& app_name)
 	:	m_ScreenWidth(screen_width), m_ScreenHeight(screen_height), m_AppName(app_name),
-		m_Window(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, sf::Style::Close)
+		m_Window(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, sf::Style::Close),
+		m_AppStatesPtr(&StatesManager::m_AppStates)
 {
-	m_SkipNextRender = false;
-	m_FrameTime = 0.0f;
-	m_TitleUpdateTimer = 0.0f;
+	WindowHandle::set_handle(&m_Window);
 	Logger::init();
 }
 
@@ -35,16 +33,27 @@ void Application::run(uint16_t fps_limit)
 
 Application::~Application()
 {
-	while (!m_AppStates.empty()) {
-		delete m_AppStates.top();
-		m_AppStates.pop();
+	while (!StatesManager::m_AppStates.empty()) {
+		delete StatesManager::m_AppStates.top();
+		StatesManager::m_AppStates.pop();
 	}
 }
 
 bool Application::init_game()
 {
-	m_AssetsManager.load_texture("player-spritesheet.png", "player", true);
-	m_AppStates.push(new StatePlaying(&m_AppStates, &m_AssetsManager));
+	uint8_t load_ok = 1;
+	load_ok *= m_AssetsManager.load_texture("player-spritesheet.png", "player", true);
+	load_ok *= m_AssetsManager.load_texture("wall-sprite.png", "wall", false);
+	load_ok *= m_AssetsManager.load_texture("play-btn.png", "play-button", false);
+	load_ok *= m_AssetsManager.load_texture("play-btn-hold.png", "hold-play-button", false);
+	load_ok *= m_AssetsManager.load_texture("title-logo.png", "title", false);
+
+	if (!load_ok) {
+		m_InitErrorMessage = "Failed to load game resources";
+		return false;
+	}
+
+	StatesManager::create_active_state(new StateMainMenu(&m_AssetsManager));
 	return true;
 }
 
@@ -62,17 +71,17 @@ void Application::handle_events()
 
 void Application::update_all(float dt)
 {
-	if (!m_AppStates.top()->m_DestroyState) {
-		m_AppStates.top()->update_entities(dt);
-		m_AppStates.top()->update(dt);
+	if (!m_AppStatesPtr->top()->m_DestroyState) {
+		m_AppStatesPtr->top()->update_entities(dt);
+		m_AppStatesPtr->top()->update(dt);
 	}
 	else {
-		delete m_AppStates.top();
-		m_AppStates.pop();
+		delete m_AppStatesPtr->top();
+		m_AppStatesPtr->pop();
 		m_SkipNextRender = true;
 	}
 
-	if (m_AppStates.size() == 0)
+	if (m_AppStatesPtr->size() == 0)
 		m_Window.close();
 }
 
@@ -80,7 +89,7 @@ void Application::draw_all()
 {
 	if (!m_SkipNextRender) {
 		m_Window.clear();
-		m_AppStates.top()->render(m_Window);
+		m_AppStatesPtr->top()->render(m_Window);
 		m_Window.display();
 	}
 	else

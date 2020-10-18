@@ -21,7 +21,6 @@ Player::Player(AssetsManager* assets_manager)
 	set_sprite("player", 48, 64 * 2, 48, 64);
 	set_position(vec2f(100.f, 100.f));
 	set_scale(vec2f(1.5f, 1.5f));
-	m_MovementSpeed = 200.f;
 }
 
 Player::~Player()

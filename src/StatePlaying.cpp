@@ -10,8 +10,8 @@ void StatePlaying::update(float dt)
 		destroy_state();
 }
 
-StatePlaying::StatePlaying(StateStack* states_ptr, AssetsManager* assets_manager)
-	: State(states_ptr, assets_manager)
+StatePlaying::StatePlaying( AssetsManager* assets_manager)
+	: State(assets_manager)
 {
 	auto player = make_entity(new Player(m_AssetsManager));
 }

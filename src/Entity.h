@@ -8,6 +8,7 @@ class Entity
 {
 public:
 	friend class State;
+	friend class StateMainMenu;
 	const vec2f& get_position();
 	const vec2f& get_size();
 protected:
@@ -21,9 +22,8 @@ public:
 	virtual ~Entity();
 
 protected:
-	bool m_VisibleSprite;
+	bool m_VisibleSprite = false;
 	sf::Sprite m_Sprite;
 private:
-	vec2f m_Position;
 	AssetsManager* m_AssetsManager;
 };

@@ -15,9 +15,7 @@ void Entity::set_sprite(std::string asset_id, int x, int y, int w, int h)
 
 void Entity::set_position(vec2f position)
 {
-	m_Position = position;
-	if (m_VisibleSprite)
-		m_Sprite.setPosition(position);
+	m_Sprite.setPosition(position);
 }
 
 void Entity::set_scale(vec2f scale)
@@ -27,7 +25,7 @@ void Entity::set_scale(vec2f scale)
 
 const vec2f& Entity::get_position()
 {
-	return m_Position;
+	return m_Sprite.getPosition();
 }
 
 const vec2f& Entity::get_size()
@@ -38,7 +36,7 @@ const vec2f& Entity::get_size()
 }
 
 Entity::Entity(AssetsManager* assets_manager)
-	: m_VisibleSprite(false), m_AssetsManager(assets_manager)
+	: m_AssetsManager(assets_manager)
 {
 }
 

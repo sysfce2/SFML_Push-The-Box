@@ -1,20 +1,22 @@
 #include "AssetsManager.h"
+#include "Logger.h"
 
-bool AssetsManager::load_texture(std::string path, std::string asset_id, bool smooth)
+bool AssetsManager::load_texture(const std::string& file_path, const std::string& asset_id, bool smooth)
 {
     sf::Texture* texture = new sf::Texture();
-    if (texture->loadFromFile(path)) {
+    if (texture->loadFromFile(file_path)) {
         if (smooth)
             texture->setSmooth(true);
-        textures[asset_id] = texture;
+        m_Textures[asset_id] = texture;
+        LOG_INFO("AssetsManager: loaded texture '", '\b' + asset_id, "\b'");
         return true;
     }
     else return false;
 }
 
-sf::Texture* AssetsManager::get_texture(std::string asset_id)
+sf::Texture* AssetsManager::get_texture(const std::string& asset_id)
 {
-    return textures.at(asset_id);
+    return m_Textures.at(asset_id);
 }
 
 AssetsManager::AssetsManager()
@@ -23,7 +25,7 @@ AssetsManager::AssetsManager()
 
 AssetsManager::~AssetsManager()
 {
-    for (auto& t : textures)
+    for (auto& t : m_Textures)
         delete t.second;
-    textures.clear();
+    m_Textures.clear();
 }

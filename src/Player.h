@@ -9,6 +9,6 @@ public:
 private:
 	void update(float dt);
 
-	float m_MovementSpeed;
+	float m_MovementSpeed = 300.f;
 };
 

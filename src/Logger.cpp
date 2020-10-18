@@ -1,4 +1,3 @@
-#pragma once
 #include "Logger.h"
 
 HANDLE Logger::m_ConsoleHandle;
@@ -24,8 +23,8 @@ void Logger::display_log(int log_type, std::string msg)
 		break;
 	}
 
-	std::cout << msg << std::endl;
 	SetConsoleTextAttribute(Logger::m_ConsoleHandle, 7);
+	std::cout << msg << std::endl;
 }
 
 void Logger::init()

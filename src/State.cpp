@@ -1,9 +1,7 @@
 #include "State.h"
-#pragma once
 
-State::State(StateStack* states_ptr, AssetsManager* assets_manager)
-	: m_AssetsManager(assets_manager), m_AppStatesPtr(states_ptr),
-	m_DestroyState(false)
+State::State(AssetsManager* assets_manager)
+	: m_AssetsManager(assets_manager)
 {
 }
 

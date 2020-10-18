@@ -13,6 +13,9 @@
     <Filter Include="Entity">
       <UniqueIdentifier>{a624511f-aaa5-4ec4-8876-658b4f7df40e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{81a961bd-67c1-4869-af55-b11974309e24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h">
@@ -36,6 +39,19 @@
     <ClInclude Include="src\Entity.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="src\Wall.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UIButton.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateMainMenu.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WindowHandle.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StatesManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -62,5 +78,18 @@
     <ClCompile Include="src\Player.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="src\Wall.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateMainMenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WindowHandle.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UIButton.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StatesManager.cpp" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@ class State
 {
 public:
 	friend class Application;
+	friend class StatesManager;
 protected:
 	Entity* make_entity(Entity* entity);
 	void update_entities(float dt);
@@ -17,12 +18,12 @@ protected:
 	void destroy_state();
 	virtual void update(float dt) = 0;
 
-	State(StateStack* states_ptr, AssetsManager* assets_manager);
+	State(AssetsManager* assets_manager);
 	virtual ~State();
 private:
-	bool m_DestroyState;
-	StateStack* m_AppStatesPtr;
-	std::vector<Entity*> m_Entities;
+	bool m_DestroyState = false;
+	StateStack* m_AppStatesPtr = nullptr;
 protected:
+	std::vector<Entity*> m_Entities;
 	AssetsManager* m_AssetsManager;
 };

@@ -1,8 +1,8 @@
 #pragma once
-#include <iostream>
 #include <SFML/Graphics.hpp>
-#include <stack>
 #include "StatePlaying.h"
+#include "StatesManager.h"
+#include "StateMainMenu.h"
 #include "AssetsManager.h"
 
 class Application
@@ -15,19 +15,19 @@ private:
 	void update_window_title(float dt);
 public:
 	void run(uint16_t fps_limit);
-	Application(uint16_t screen_width, uint16_t screen_height, std::string app_name);
+	Application(uint16_t screen_width, uint16_t screen_height, const std::string& app_name);
 	~Application();
 
-public:
-	AssetsManager m_AssetsManager;
-	StateStack m_AppStates;
 private:
-	bool m_SkipNextRender;
-	float m_FrameTime;
-	float m_TitleUpdateTimer;
+	AssetsManager m_AssetsManager;
+	StateStack* m_AppStatesPtr;
 	uint16_t m_ScreenWidth;
 	uint16_t m_ScreenHeight;
 	std::string m_AppName;
 	std::string m_InitErrorMessage;
 	sf::RenderWindow m_Window;
+
+	bool m_SkipNextRender = false;
+	float m_FrameTime = 0.f;
+	float m_TitleUpdateTimer = 0.f;
 };
