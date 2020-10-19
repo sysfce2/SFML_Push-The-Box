@@ -9,21 +9,25 @@ class Entity
 public:
 	friend class State;
 	friend class StateMainMenu;
-	const vec2f& get_position();
-	const vec2f& get_size();
+	friend class SatePlaying;
+
+	const vec2f get_position();
+	const vec2f get_position_px();
+	const vec2f get_size();
+	const vec2f get_size_px();
+	const vec2f get_scale();
+	void set_sprite(const std::string& asset_id, int x = -1, int y = -1, int w = -1, int h = -1);
+	void set_position(const vec2f& position);
+	void set_scale(const vec2f& scale);
+
 protected:
-	void set_sprite(std::string asset_id, int x = -1, int y = -1, int w = -1, int h = -1);
-	void set_position(vec2f position);
-	void set_scale(vec2f scale);
-	virtual void update(float dt) = 0;
-	virtual void render(sf::RenderTarget& target);
+	virtual void update(const float& dt) = 0;
+	virtual void render(sf::RenderTarget& target, vec2f camera_offset);
 public:
-	Entity(AssetsManager* assets_manager);
+	Entity();
 	virtual ~Entity();
 
 protected:
 	bool m_VisibleSprite = false;
 	sf::Sprite m_Sprite;
-private:
-	AssetsManager* m_AssetsManager;
 };

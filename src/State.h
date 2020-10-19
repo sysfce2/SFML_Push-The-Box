@@ -13,17 +13,16 @@ public:
 	friend class StatesManager;
 protected:
 	Entity* make_entity(Entity* entity);
-	void update_entities(float dt);
+	void update_entities(const float& dt);
 	void render(sf::RenderTarget& target);
 	void destroy_state();
-	virtual void update(float dt) = 0;
+	virtual void update(const float& dt) = 0;
 
-	State(AssetsManager* assets_manager);
+	State();
 	virtual ~State();
 private:
 	bool m_DestroyState = false;
-	StateStack* m_AppStatesPtr = nullptr;
 protected:
 	std::vector<Entity*> m_Entities;
-	AssetsManager* m_AssetsManager;
+	vec2f m_CameraOffset = { 0.f, 0.f };
 };

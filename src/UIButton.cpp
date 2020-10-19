@@ -2,7 +2,7 @@
 #include "WindowHandle.h"
 #include "Logger.h"
 
-void UIButton::update(float dt)
+void UIButton::update(const float& dt)
 {
 	auto cursor_over_button = [&]() {
 		sf::FloatRect bounds = m_Sprite.getGlobalBounds();
@@ -17,12 +17,18 @@ void UIButton::update(float dt)
 				m_HoldSpriteActive = true;
 				set_sprite("hold-" + m_ButtonAsset);
 			}
-		} else m_Hold = false;
+		}
+		else if (m_Hold) {
+			m_HoldSpriteActive = false;
+			m_Hold = false;
+			set_sprite(m_ButtonAsset);
+		}
 	}
 	else {
 		if (m_Hold && cursor_over_button()) {
 			m_PressTime = std::chrono::duration_cast<std::chrono::milliseconds>(
 						  std::chrono::system_clock::now().time_since_epoch());
+			m_ButtonEventHandled = false;
 			LOG_INFO("Button", m_ButtonAsset, "pressed.");
 		}
 
@@ -36,15 +42,30 @@ void UIButton::update(float dt)
 
 bool UIButton::pressed_within(float within_time)
 {
-	auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(
-						std::chrono::system_clock::now().time_since_epoch());
+	if (!m_ButtonEventHandled) {
+		
+		auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch());
 
-	float pressed_ago = (current_time - m_PressTime).count() / 1000.f;
-	return pressed_ago > within_time && pressed_ago < within_time + 1.f;
+		float pressed_ago = (current_time - m_PressTime).count() / 1000.f;
+		bool was_pressed = pressed_ago > within_time && pressed_ago < within_time + 1.f;
+
+		if (was_pressed)
+			m_ButtonEventHandled = true;
+
+		return was_pressed;
+	}
+	else return false;
 }
 
-UIButton::UIButton(AssetsManager* assets_manager, const std::string& asset_id, vec2f scale)
-	: Entity(assets_manager), m_ButtonAsset(asset_id)
+void UIButton::center_x()
+{
+	vec2f b_size = get_size();
+	set_position(vec2f(0.5f - b_size.x / 2.f, get_position().y));
+}
+
+UIButton::UIButton(const std::string& asset_id, const vec2f& scale)
+	: m_ButtonAsset(asset_id), m_PressTime(0)
 {
 	set_sprite(asset_id);
 	set_scale(scale);

@@ -7,14 +7,16 @@ class UIButton : public Entity
 {
 public:
 	bool pressed_within(float within_time);
-	UIButton(AssetsManager* assets_manager, const std::string& asset_id, vec2f scale);
+	void center_x();
+	UIButton(const std::string& asset_id, const vec2f& scale);
 	virtual ~UIButton();
 
 private:
-	void update(float dt);
+	void update(const float& dt);
 
 	bool m_Hold = false;
 	bool m_HoldSpriteActive = false;
+	bool m_ButtonEventHandled = false;
 	std::chrono::milliseconds m_PressTime;
 	std::string m_ButtonAsset;
 };

@@ -1,6 +1,8 @@
 #include "AssetsManager.h"
 #include "Logger.h"
 
+std::unordered_map<std::string, sf::Texture*> AssetsManager::m_Textures;
+
 bool AssetsManager::load_texture(const std::string& file_path, const std::string& asset_id, bool smooth)
 {
     sf::Texture* texture = new sf::Texture();
@@ -19,11 +21,7 @@ sf::Texture* AssetsManager::get_texture(const std::string& asset_id)
     return m_Textures.at(asset_id);
 }
 
-AssetsManager::AssetsManager()
-{
-}
-
-AssetsManager::~AssetsManager()
+void AssetsManager::free_memory()
 {
     for (auto& t : m_Textures)
         delete t.second;

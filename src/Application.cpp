@@ -37,23 +37,28 @@ Application::~Application()
 		delete StatesManager::m_AppStates.top();
 		StatesManager::m_AppStates.pop();
 	}
+	AssetsManager::free_memory();
 }
 
 bool Application::init_game()
 {
 	uint8_t load_ok = 1;
-	load_ok *= m_AssetsManager.load_texture("player-spritesheet.png", "player", true);
-	load_ok *= m_AssetsManager.load_texture("wall-sprite.png", "wall", false);
-	load_ok *= m_AssetsManager.load_texture("play-btn.png", "play-button", false);
-	load_ok *= m_AssetsManager.load_texture("play-btn-hold.png", "hold-play-button", false);
-	load_ok *= m_AssetsManager.load_texture("title-logo.png", "title", false);
+	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player", true);
+	load_ok *= AssetsManager::load_texture("wall-sprite.png", "wall", false);
+	load_ok *= AssetsManager::load_texture("play-btn.png", "play-button", false);
+	load_ok *= AssetsManager::load_texture("play-btn-hold.png", "hold-play-button", false);
+	load_ok *= AssetsManager::load_texture("options-btn.png", "options-button", false);
+	load_ok *= AssetsManager::load_texture("options-btn-hold.png", "hold-options-button", false);
+	load_ok *= AssetsManager::load_texture("exit-btn.png", "exit-button", false);
+	load_ok *= AssetsManager::load_texture("exit-btn-hold.png", "hold-exit-button", false);
+	load_ok *= AssetsManager::load_texture("title-logo.png", "title", false);
 
 	if (!load_ok) {
 		m_InitErrorMessage = "Failed to load game resources";
 		return false;
 	}
 
-	StatesManager::create_active_state(new StateMainMenu(&m_AssetsManager));
+	StatesManager::create_active_state(new StateMainMenu());
 	return true;
 }
 
@@ -69,7 +74,7 @@ void Application::handle_events()
 	}
 }
 
-void Application::update_all(float dt)
+void Application::update_all(const float& dt)
 {
 	if (!m_AppStatesPtr->top()->m_DestroyState) {
 		m_AppStatesPtr->top()->update_entities(dt);
@@ -96,7 +101,7 @@ void Application::draw_all()
 		m_SkipNextRender = false;
 }
 
-void Application::update_window_title(float dt)
+void Application::update_window_title(const float& dt)
 {
 	if ((m_TitleUpdateTimer += dt) >= 0.2f) {
 		m_Window.setTitle(m_AppName + " - FPS: " + std::to_string(static_cast<int>(1.f / dt)));

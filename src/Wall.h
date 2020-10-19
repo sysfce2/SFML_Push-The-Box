@@ -4,8 +4,8 @@
 class Wall : public Entity
 {
 private:
-	void update(float dt);
+	void update(const float& dt);
 public:
-	Wall(AssetsManager* assets_manager);
+	Wall();
 	virtual ~Wall();
 };

@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\MenuTitle.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\AssetsManager.h" />
@@ -168,11 +169,13 @@
     <ClInclude Include="src\State.h" />
     <ClInclude Include="src\StateMainMenu.h" />
     <ClInclude Include="src\StatesManager.h" />
+    <ClInclude Include="src\TileMap.h" />
     <ClInclude Include="src\Wall.h" />
     <ClInclude Include="src\UIButton.h" />
     <ClInclude Include="src\WindowHandle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\MenuTitle.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\AssetsManager.cpp" />
@@ -183,6 +186,7 @@
     <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\StateMainMenu.cpp" />
     <ClCompile Include="src\StatesManager.cpp" />
+    <ClCompile Include="src\TileMap.cpp" />
     <ClCompile Include="src\UIButton.cpp" />
     <ClCompile Include="src\Wall.cpp" />
     <ClCompile Include="src\WindowHandle.cpp" />

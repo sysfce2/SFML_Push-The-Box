@@ -1,11 +1,10 @@
 #include "Wall.h"
 
-void Wall::update(float dt)
+void Wall::update(const float& dt)
 {
 }
 
-Wall::Wall(AssetsManager* assets_manager)
-	: Entity(assets_manager)
+Wall::Wall()
 {
 	set_sprite("wall");
 	set_position(vec2f(200.f, 200.f));
