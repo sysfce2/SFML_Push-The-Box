@@ -37,20 +37,19 @@ void UIButton::update(const float& dt)
 	}
 }
 
-bool UIButton::pressed_within(float within_time)
+bool UIButton::was_pressed()
 {
 	if (!m_ButtonEventHandled) {
-		
 		auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(
 			std::chrono::system_clock::now().time_since_epoch());
 
 		float pressed_ago = (current_time - m_PressTime).count() / 1000.f;
-		bool was_pressed = pressed_ago > within_time && pressed_ago < within_time + 1.f;
+		bool pressed = pressed_ago > 0.1f && pressed_ago < 1.f;
 
-		if (was_pressed)
+		if (pressed)
 			m_ButtonEventHandled = true;
 
-		return was_pressed;
+		return pressed;
 	}
 	else return false;
 }

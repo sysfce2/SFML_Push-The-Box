@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "WindowHandle.h"
+#include "AssetsManager.h"
 
 void Entity::render(sf::RenderTarget& target, vec2f camera_offset)
 {

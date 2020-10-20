@@ -30,8 +30,11 @@ StateMainMenu::StateMainMenu()
 
 void StateMainMenu::update(const float& dt)
 {
-	if (m_PlayButton->pressed_within(0.1f))
+	if (m_PlayButton->was_pressed())
 		StatesManager::create_active_state(new StatePlaying());
+
+	if (m_ExitButton->was_pressed())
+		destroy_state();
 }
 
 StateMainMenu::~StateMainMenu()

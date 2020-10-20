@@ -1,10 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "AssetsManager.h"
 
 using vec2f = sf::Vector2f;
 
-class Entity
+class Entity // TODO: add unique id
 {
 public:
 	friend class State;

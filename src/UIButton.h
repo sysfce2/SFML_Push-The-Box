@@ -6,7 +6,7 @@
 class UIButton : public Entity
 {
 public:
-	bool pressed_within(float within_time);
+	bool was_pressed();
 	void center_x();
 	UIButton(const std::string& asset_id, const vec2f& scale);
 	virtual ~UIButton();
