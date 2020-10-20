@@ -6,20 +6,18 @@ void UIButton::update(const float& dt)
 {
 	auto cursor_over_button = [&]() {
 		sf::FloatRect bounds = m_Sprite.getGlobalBounds();
-		sf::Vector2i mouse_pos = sf::Mouse::getPosition(*WindowHandle::get_handle());
-		return bounds.contains((float)mouse_pos.x, (float)mouse_pos.y);
+		sf::Vector2i mouse = sf::Mouse::getPosition(*WindowHandle::get_handle());
+		return bounds.contains((float)mouse.x, (float)mouse.y);
 	};
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (cursor_over_button()) {
-			m_Hold = true;
-			if (!m_HoldSpriteActive) {
-				m_HoldSpriteActive = true;
+			if (!m_Hold) {
+				m_Hold = true;
 				set_sprite("hold-" + m_ButtonAsset);
 			}
 		}
 		else if (m_Hold) {
-			m_HoldSpriteActive = false;
 			m_Hold = false;
 			set_sprite(m_ButtonAsset);
 		}
@@ -27,16 +25,15 @@ void UIButton::update(const float& dt)
 	else {
 		if (m_Hold && cursor_over_button()) {
 			m_PressTime = std::chrono::duration_cast<std::chrono::milliseconds>(
-						  std::chrono::system_clock::now().time_since_epoch());
+				std::chrono::system_clock::now().time_since_epoch());
 			m_ButtonEventHandled = false;
 			LOG_INFO("Button", m_ButtonAsset, "pressed.");
 		}
 
-		if (m_HoldSpriteActive) {
-			m_HoldSpriteActive = false;
+		if (m_Hold) {
+			m_Hold = false;
 			set_sprite(m_ButtonAsset);
 		}
-		m_Hold = false;
 	}
 }
 

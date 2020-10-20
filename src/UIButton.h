@@ -15,7 +15,6 @@ private:
 	void update(const float& dt);
 
 	bool m_Hold = false;
-	bool m_HoldSpriteActive = false;
 	bool m_ButtonEventHandled = false;
 	std::chrono::milliseconds m_PressTime;
 	std::string m_ButtonAsset;
