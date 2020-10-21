@@ -1,10 +1,12 @@
 #pragma once
 #include "State.h"
 #include "Player.h"
-#include "Wall.h"
+#include "TileMap.h"
 
 class StatePlaying : public State
 {
+public:
+	friend class TileMap;
 private:
 	void update(const float& dt);
 public:
@@ -12,6 +14,7 @@ public:
 	virtual ~StatePlaying();
 
 private:
-	const float m_CameraBorderDistance = 0.15f;
+	const float m_CameraBorderDistance = 0.25f;
 	Player* m_Player;
+	TileMap* m_TileMap;
 };

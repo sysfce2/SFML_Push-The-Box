@@ -25,7 +25,6 @@ void Application::run(uint16_t fps_limit)
 			draw_all();
 			sf::Time frame_end = clock.getElapsedTime();
 			m_FrameTime = frame_end.asSeconds() - frame_start.asSeconds();
-			update_window_title(m_FrameTime);
 		}
 	}
 	else LOG_ERROR("Game initialization error:", m_InitErrorMessage);
@@ -44,7 +43,8 @@ bool Application::init_game()
 {
 	uint8_t load_ok = 1;
 	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player", true);
-	load_ok *= AssetsManager::load_texture("wall-sprite.png", "wall", false);
+	load_ok *= AssetsManager::load_texture("wall-sprite.png", "wall", true);
+	load_ok *= AssetsManager::load_texture("box-sprite.png", "box", true);
 	load_ok *= AssetsManager::load_texture("play-btn.png", "play-button", false);
 	load_ok *= AssetsManager::load_texture("play-btn-hold.png", "hold-play-button", false);
 	load_ok *= AssetsManager::load_texture("options-btn.png", "options-button", false);
@@ -99,12 +99,4 @@ void Application::draw_all()
 	}
 	else
 		m_SkipNextRender = false;
-}
-
-void Application::update_window_title(const float& dt)
-{
-	if ((m_TitleUpdateTimer += dt) >= 0.2f) {
-		m_Window.setTitle(m_AppName + " - FPS: " + std::to_string(static_cast<int>(1.f / dt)));
-		m_TitleUpdateTimer = 0.f;
-	}
 }

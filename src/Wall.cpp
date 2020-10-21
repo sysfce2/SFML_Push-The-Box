@@ -4,10 +4,10 @@ void Wall::update(const float& dt)
 {
 }
 
-Wall::Wall()
+Wall::Wall(const vec2f& position_px)
 {
 	set_sprite("wall");
-	set_position(vec2f(200.f, 200.f));
+	set_position_px(position_px);
 	set_scale(vec2f(1.5f, 1.5f));
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "StatePlaying.h"
+#include "Logger.h"
 
 using KB = sf::Keyboard;
 
@@ -25,11 +26,14 @@ void StatePlaying::update(const float& dt)
 
 StatePlaying::StatePlaying()
 {
+	m_TileMap = new TileMap();
+	m_TileMap->load_level("test-level.txt");
+
+	for (auto tile : m_TileMap->m_Tiles)
+		make_entity(tile);
+
 	m_Player = new Player();
 	make_entity(m_Player);
-	auto wall1 = make_entity(new Wall());
-	wall1->set_position(vec2f(.6f, .6f));
-	wall1->set_scale(vec2f(1.5f, 1.5f));
 }
 
 StatePlaying::~StatePlaying()

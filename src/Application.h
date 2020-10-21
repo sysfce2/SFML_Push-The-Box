@@ -12,7 +12,6 @@ private:
 	void handle_events();
 	void update_all(const float& dt);
 	void draw_all();
-	void update_window_title(const float& dt);
 public:
 	void run(uint16_t fps_limit);
 	Application(uint16_t screen_width, uint16_t screen_height, const std::string& app_name);
@@ -28,5 +27,4 @@ private:
 
 	bool m_SkipNextRender = false;
 	float m_FrameTime = 0.f;
-	float m_TitleUpdateTimer = 0.f;
 };

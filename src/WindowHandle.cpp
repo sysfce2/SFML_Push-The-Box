@@ -1,5 +1,6 @@
 #include "WindowHandle.h"
 
+const float WindowHandle::AspectRatioX = 9.f / 16.f;
 sf::Window* WindowHandle::m_Handle;
 sf::Vector2f WindowHandle::m_ScreenRatio;
 uint16_t WindowHandle::m_Width;
