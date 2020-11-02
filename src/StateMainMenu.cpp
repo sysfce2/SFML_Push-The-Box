@@ -5,10 +5,6 @@
 StateMainMenu::StateMainMenu()
 {
 	m_Title = new MenuTitle();
-	m_Title->set_sprite("title");
-	m_Title->set_position(vec2f(0.f, .1f));
-	m_Title->set_scale(vec2f(3.f, 3.f));
-	m_Title->center_x();
 	make_entity(m_Title);
 
 	m_PlayButton = new UIButton("play-button", vec2f(3.f, 3.f));

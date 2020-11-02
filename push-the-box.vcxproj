@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Floor.h" />
     <ClInclude Include="src\Box.h" />
     <ClInclude Include="src\MenuTitle.h" />
     <ClInclude Include="src\Player.h" />
@@ -177,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Box.cpp" />
+    <ClCompile Include="src\Floor.cpp" />
     <ClCompile Include="src\MenuTitle.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Application.cpp" />

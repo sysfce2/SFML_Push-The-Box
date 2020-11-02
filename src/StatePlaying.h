@@ -1,7 +1,8 @@
 #pragma once
 #include "State.h"
-#include "Player.h"
-#include "TileMap.h"
+
+class TileMap;
+class Player;
 
 class StatePlaying : public State
 {

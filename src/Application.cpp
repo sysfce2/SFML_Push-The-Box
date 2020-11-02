@@ -45,6 +45,7 @@ bool Application::init_game()
 	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player", true);
 	load_ok *= AssetsManager::load_texture("wall-sprite.png", "wall", true);
 	load_ok *= AssetsManager::load_texture("box-sprite.png", "box", true);
+	load_ok *= AssetsManager::load_texture("floor.png", "floor", true);
 	load_ok *= AssetsManager::load_texture("play-btn.png", "play-button", false);
 	load_ok *= AssetsManager::load_texture("play-btn-hold.png", "hold-play-button", false);
 	load_ok *= AssetsManager::load_texture("options-btn.png", "options-button", false);

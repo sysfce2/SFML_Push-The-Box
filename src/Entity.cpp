@@ -8,7 +8,7 @@ vec2f unitsToPx(vec2f units) {
 	return { units.x * 0.001f * WindowHandle::width(), units.y * 0.001f * WindowHandle::width() };
 }
 
-void Entity::render(sf::RenderTarget& target, vec2f camera_offset)
+void Entity::render(sf::RenderTarget& target, const vec2f& camera_offset)
 {
 	if (m_VisibleSprite) {
 		vec2f draw_pos(m_PositionPx.x - camera_offset.x * WindowHandle::width(),
@@ -67,27 +67,27 @@ void Entity::set_position_px(const vec2f& position)
 	m_PositionPx = position;
 }
 
-const vec2f Entity::get_position()
+vec2f Entity::get_position() const
 {
 	return m_Position;
 }
 
-const vec2f Entity::get_position_px()
+vec2f Entity::get_position_px() const
 {
 	return m_PositionPx;
 }
 
-const vec2f Entity::get_size()
+vec2f Entity::get_size() const
 {
 	return m_Size;
 }
 
-const vec2f Entity::get_size_px()
+vec2f Entity::get_size_px() const
 {
 	return m_SizePx;
 }
 
-const vec2f Entity::get_scale()
+vec2f Entity::get_scale() const
 {
 	return m_Scale;
 }

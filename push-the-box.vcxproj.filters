@@ -66,6 +66,9 @@
     <ClInclude Include="src\Box.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="src\Floor.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -114,6 +117,9 @@
       <Filter>State</Filter>
     </ClCompile>
     <ClCompile Include="src\Box.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Floor.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

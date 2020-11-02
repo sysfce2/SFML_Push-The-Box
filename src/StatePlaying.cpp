@@ -1,5 +1,7 @@
 #pragma once
 #include "StatePlaying.h"
+#include "TileMap.h"
+#include "Player.h"
 #include "Logger.h"
 
 using KB = sf::Keyboard;
@@ -32,7 +34,10 @@ StatePlaying::StatePlaying()
 	for (auto tile : m_TileMap->m_Tiles)
 		make_entity(tile);
 
-	m_Player = new Player();
+	for (auto box : m_TileMap->m_Boxes)
+		make_entity(box);
+
+	m_Player = m_TileMap->m_Player;
 	make_entity(m_Player);
 }
 
