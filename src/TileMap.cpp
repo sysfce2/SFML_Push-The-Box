@@ -24,7 +24,8 @@ bool TileMap::load_level(const std::string file_path)
 					tiles.emplace_back(t_Wall);
 				}
 				else if (c == 'b') {
-					m_Boxes.emplace_back(new Box(place_pos));
+					TileBox tb = { new Box(place_pos), tile_pos };
+					m_Boxes.emplace_back(tb);
 					m_Tiles.emplace_back(new Floor(place_pos));
 					tiles.emplace_back(t_Box);
 				}
@@ -77,11 +78,6 @@ bool TileMap::load_level(const std::string file_path)
 vec2f TileMap::get_tile_size() const
 {
 	return m_TileSize;
-}
-
-Tile** TileMap::get_map() const
-{
-	return m_Map;
 }
 
 TileMap::TileMap()

@@ -1,6 +1,9 @@
 #pragma once
 #include "Entity.h"
 #include "TileMap.h"
+#include "Box.h"
+
+using vec2i = sf::Vector2i;
 
 enum Direction : uint8_t {
 	Up = 1,
@@ -26,10 +29,11 @@ public:
 private:
 	void update(const float& dt);
 	void move(Direction direction);
-	bool can_move(uint16_t tile_x, uint16_t tile_y);
+	bool can_move(vec2i offset);
 
 	AnimationState m_AnimationState = Standing;
 	TileMap* m_TileMap;
+	Box* m_PushedBox = nullptr;
 	vec2f m_DestinationPos;
 	vec2u m_TilePosition;
 	float m_MovementSpeed = 250.f;

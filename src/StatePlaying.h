@@ -15,7 +15,7 @@ public:
 	virtual ~StatePlaying();
 
 private:
-	const float m_CameraBorderDistance = 0.25f;
+	const float m_CameraBorderDistance = 0.4f;
 	Player* m_Player;
 	TileMap* m_TileMap;
 };

@@ -13,13 +13,19 @@ enum Tile : uint8_t {
 	t_Box = 2
 };
 
+struct TileBox {
+	Box* box;
+	vec2u tile_pos;
+};
+
 class TileMap
 {
 public:
 	friend class StatePlaying;
 	bool load_level(const std::string file_path);
 	vec2f get_tile_size() const;
-	Tile** get_map() const;
+	Tile** m_Map;
+	std::vector<TileBox> m_Boxes;
 
 	TileMap();
 	virtual ~TileMap();
@@ -29,7 +35,5 @@ private:
 	vec2u m_LevelSize = { 0, 0 };
 	vec2f m_TileSize;
 	std::vector<Entity*> m_Tiles;
-	std::vector<Box*> m_Boxes;
-	Tile** m_Map;
 	Player* m_Player = nullptr;
 };
