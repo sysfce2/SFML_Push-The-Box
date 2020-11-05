@@ -10,7 +10,7 @@ vec2f unitsToPx(vec2f units) {
 
 void Entity::render(sf::RenderTarget& target, const vec2f& camera_offset)
 {
-	if (m_VisibleSprite) {
+	if (m_Visible) {
 		vec2f draw_pos(m_PositionPx.x - camera_offset.x * WindowHandle::width(),
 			m_PositionPx.y - camera_offset.y * WindowHandle::height());
 		m_Sprite.setPosition(draw_pos);
@@ -59,6 +59,11 @@ void Entity::move_units(const vec2f& units_offset)
 {
 	vec2f in_px = unitsToPx(units_offset);
 	set_position_px(vec2f(m_PositionPx.x + in_px.x, m_PositionPx.y + in_px.y));
+}
+
+void Entity::destroy()
+{
+	m_Active = false;
 }
 
 void Entity::set_position_px(const vec2f& position)

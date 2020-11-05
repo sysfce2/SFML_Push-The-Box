@@ -3,10 +3,10 @@
 
 std::unordered_map<std::string, sf::Texture*> AssetsManager::m_Textures;
 
-bool AssetsManager::load_texture(const std::string& file_path, const std::string& asset_id, bool smooth)
+bool AssetsManager::load_texture(const std::string& file_name, const std::string& asset_id, bool smooth)
 {
     sf::Texture* texture = new sf::Texture();
-    if (texture->loadFromFile(file_path)) {
+    if (texture->loadFromFile("assets/" + file_name)) {
         if (smooth)
             texture->setSmooth(true);
         m_Textures[asset_id] = texture;

@@ -1,18 +1,18 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <chrono>
-#include "Entity.h"
+#include "UIElement.h"
 
-class UIButton : public Entity
+class UIButton : public UIElement
 {
 public:
 	bool was_pressed();
-	void center_x();
+	bool is_hold() const;
 	UIButton(const std::string& asset_id, const vec2f& scale);
 	virtual ~UIButton();
 
 private:
-	void update(const float& dt);
+	void update(const float& dt) override;
 
 	bool m_Hold = false;
 	bool m_ButtonEventHandled = false;

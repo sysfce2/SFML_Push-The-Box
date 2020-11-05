@@ -21,8 +21,17 @@ Entity* State::make_entity(Entity* entity)
 
 void State::update_entities(const float& dt)
 {
-	for (auto& ent : m_Entities)
-		ent->update(dt);
+	auto it = m_Entities.begin();
+	while (it != m_Entities.end()) {
+		if ((*it)->m_Active) {
+			(*it)->update(dt);
+			it++;
+		}
+		else {
+			delete* it;
+			m_Entities.erase(it);
+		}	
+	}	
 }
 
 void State::render(sf::RenderTarget& target)

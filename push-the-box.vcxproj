@@ -161,7 +161,6 @@
   <ItemGroup>
     <ClInclude Include="src\Floor.h" />
     <ClInclude Include="src\Box.h" />
-    <ClInclude Include="src\MenuTitle.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\AssetsManager.h" />
@@ -175,11 +174,12 @@
     <ClInclude Include="src\Wall.h" />
     <ClInclude Include="src\UIButton.h" />
     <ClInclude Include="src\WindowHandle.h" />
+    <ClInclude Include="src\UIElement.h" />
+    <ClInclude Include="src\StateLevelSelect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\Floor.cpp" />
-    <ClCompile Include="src\MenuTitle.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\AssetsManager.cpp" />
@@ -194,6 +194,8 @@
     <ClCompile Include="src\UIButton.cpp" />
     <ClCompile Include="src\Wall.cpp" />
     <ClCompile Include="src\WindowHandle.cpp" />
+    <ClCompile Include="src\UIElement.cpp" />
+    <ClCompile Include="src\StateLevelSelect.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

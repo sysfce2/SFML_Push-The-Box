@@ -6,7 +6,7 @@ class AssetsManager
 {
 public:
 	friend class Application;
-	static bool load_texture(const std::string& file_path, const std::string& asset_id, bool smooth = false);
+	static bool load_texture(const std::string& file_name, const std::string& asset_id, bool smooth = false);
 	static sf::Texture* get_texture(const std::string& asset_id);
 
 private:

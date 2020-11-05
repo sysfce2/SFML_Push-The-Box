@@ -44,15 +44,29 @@ bool Application::init_game()
 	uint8_t load_ok = 1;
 	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player", true);
 	load_ok *= AssetsManager::load_texture("wall-sprite.png", "wall", true);
-	load_ok *= AssetsManager::load_texture("box-sprite.png", "box", true);
 	load_ok *= AssetsManager::load_texture("floor.png", "floor", true);
+	load_ok *= AssetsManager::load_texture("target.png", "target", true);
+	load_ok *= AssetsManager::load_texture("box.png", "box", true);
+	load_ok *= AssetsManager::load_texture("box-gold.png", "box-gold", true);
+
+	load_ok *= AssetsManager::load_texture("title-logo.png", "title", false);
 	load_ok *= AssetsManager::load_texture("play-btn.png", "play-button", false);
 	load_ok *= AssetsManager::load_texture("play-btn-hold.png", "hold-play-button", false);
 	load_ok *= AssetsManager::load_texture("options-btn.png", "options-button", false);
 	load_ok *= AssetsManager::load_texture("options-btn-hold.png", "hold-options-button", false);
 	load_ok *= AssetsManager::load_texture("exit-btn.png", "exit-button", false);
 	load_ok *= AssetsManager::load_texture("exit-btn-hold.png", "hold-exit-button", false);
-	load_ok *= AssetsManager::load_texture("title-logo.png", "title", false);
+
+	load_ok *= AssetsManager::load_texture("menu-btn.png", "menu-button", false);
+	load_ok *= AssetsManager::load_texture("menu-btn-hold.png", "hold-menu-button", false);
+	load_ok *= AssetsManager::load_texture("back-btn.png", "back-button", false);
+	load_ok *= AssetsManager::load_texture("back-btn-hold.png", "hold-back-button", false);
+
+	load_ok *= AssetsManager::load_texture("play-level-btn.png", "play-level-button", false);
+	load_ok *= AssetsManager::load_texture("play-level-btn-hold.png", "hold-play-level-button", false);
+	load_ok *= AssetsManager::load_texture("completed.png", "completed", false);
+	load_ok *= AssetsManager::load_texture("not-completed.png", "not-completed", false);
+	
 
 	if (!load_ok) {
 		m_InitErrorMessage = "Failed to load game resources";

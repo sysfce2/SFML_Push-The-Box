@@ -27,7 +27,7 @@ public:
 	Player(TileMap* tile_map);
 	virtual ~Player();
 private:
-	void update(const float& dt);
+	void update(const float& dt) override;
 	void move(Direction direction);
 	bool can_move(vec2i offset);
 

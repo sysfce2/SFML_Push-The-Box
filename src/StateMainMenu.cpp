@@ -1,10 +1,12 @@
 #include "StateMainMenu.h"
 #include "StatesManager.h"
-#include "StatePlaying.h"
+#include "StateLevelSelect.h"
 
 StateMainMenu::StateMainMenu()
 {
-	m_Title = new MenuTitle();
+	m_Title = new UIElement("title", vec2f(3.f, 3.f));
+	m_Title->set_position(vec2f(0.f, 0.1f));
+	m_Title->center_x();
 	make_entity(m_Title);
 
 	m_PlayButton = new UIButton("play-button", vec2f(3.f, 3.f));
@@ -27,7 +29,7 @@ StateMainMenu::StateMainMenu()
 void StateMainMenu::update(const float& dt)
 {
 	if (m_PlayButton->was_pressed())
-		StatesManager::create_active_state(new StatePlaying());
+		StatesManager::create_active_state(new StateLevelSelect());
 
 	if (m_ExitButton->was_pressed())
 		destroy_state();

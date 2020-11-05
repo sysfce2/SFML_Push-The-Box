@@ -8,8 +8,11 @@ void Player::update(const float& dt)
 	vec2f movement = { 0.f, 0.f };
 
 	if (m_AnimationState == Standing){
-		if (m_PushedBox != nullptr)
+		if (m_PushedBox != nullptr) {
+			m_PushedBox->m_CheckForTarget = true;
 			m_PushedBox = nullptr;
+		}
+			
 		if (KB::isKeyPressed(KB::Right)) move(Right);
 		else if (KB::isKeyPressed(KB::Left)) move(Left);
 		else if (KB::isKeyPressed(KB::Up)) move(Up);
@@ -106,10 +109,11 @@ bool Player::can_move(vec2i offset)
 		m_TileMap->m_Map[first.x][first.y] = t_None;
 		m_TileMap->m_Map[second.x][second.y] = t_Box;
 
-		for (auto& tb : m_TileMap->m_Boxes) {
-			if (tb.tile_pos == vec2u(first.x, first.y)) {
-				tb.tile_pos = vec2u(second.x, second.y);
-				m_PushedBox = tb.box;
+		for (Box* box : m_TileMap->m_Boxes) {
+			if (box->m_TilePos == vec2u(first.x, first.y)) {
+				box->m_TilePos = vec2u(second.x, second.y);
+				m_PushedBox = box;
+				break;
 			}
 		}
 	}

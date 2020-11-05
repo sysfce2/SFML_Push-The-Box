@@ -54,17 +54,14 @@ bool UIButton::was_pressed()
 	else return false;
 }
 
-void UIButton::center_x()
+bool UIButton::is_hold() const
 {
-	vec2f b_size = get_size();
-	set_position(vec2f(0.5f - b_size.x / 2.f, get_position().y));
+	return m_Hold;
 }
 
 UIButton::UIButton(const std::string& asset_id, const vec2f& scale)
-	: m_ButtonAsset(asset_id), m_PressTime(0)
+	: UIElement(asset_id, scale), m_ButtonAsset(asset_id), m_PressTime(0)
 {
-	set_sprite(asset_id);
-	set_scale(scale);
 }
 
 UIButton::~UIButton()

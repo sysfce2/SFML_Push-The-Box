@@ -24,18 +24,23 @@ void StatePlaying::update(const float& dt)
 	else if (m_Player->get_position().y - m_CameraOffset.y < m_CameraBorderDistance) {
 		m_CameraOffset.y = m_Player->get_position().y - m_CameraBorderDistance;
 	}
+
+	if (m_TileMap->m_Targets.size() == m_TileMap->m_BoxesOnTargets) {
+		// level finished
+		destroy_state();
+	}
 }
 
-StatePlaying::StatePlaying()
+StatePlaying::StatePlaying(const std::string& level_path)
 {
 	m_TileMap = new TileMap();
-	m_TileMap->load_level("test-level.txt");
+	m_TileMap->load_level(level_path);
 
 	for (auto tile : m_TileMap->m_Tiles)
 		make_entity(tile);
 
-	for (auto tb : m_TileMap->m_Boxes)
-		make_entity(tb.box);
+	for (auto box : m_TileMap->m_Boxes)
+		make_entity(box);
 
 	m_Player = m_TileMap->m_Player;
 	make_entity(m_Player);
