@@ -176,6 +176,7 @@
     <ClInclude Include="src\WindowHandle.h" />
     <ClInclude Include="src\UIElement.h" />
     <ClInclude Include="src\StateLevelSelect.h" />
+    <ClInclude Include="src\UIText.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Box.cpp" />
@@ -196,6 +197,7 @@
     <ClCompile Include="src\WindowHandle.cpp" />
     <ClCompile Include="src\UIElement.cpp" />
     <ClCompile Include="src\StateLevelSelect.cpp" />
+    <ClCompile Include="src\UIText.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

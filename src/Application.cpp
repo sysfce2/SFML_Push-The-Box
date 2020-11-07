@@ -43,13 +43,14 @@ bool Application::init_game()
 {
 	uint8_t load_ok = 1;
 	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player", true);
-	load_ok *= AssetsManager::load_texture("wall-sprite.png", "wall", true);
+	load_ok *= AssetsManager::load_texture("wall.png", "wall", true);
 	load_ok *= AssetsManager::load_texture("floor.png", "floor", true);
 	load_ok *= AssetsManager::load_texture("target.png", "target", true);
 	load_ok *= AssetsManager::load_texture("box.png", "box", true);
 	load_ok *= AssetsManager::load_texture("box-gold.png", "box-gold", true);
 
 	load_ok *= AssetsManager::load_texture("title-logo.png", "title", false);
+	load_ok *= AssetsManager::load_texture("menu-state.png", "menu-state", false);
 	load_ok *= AssetsManager::load_texture("play-btn.png", "play-button", false);
 	load_ok *= AssetsManager::load_texture("play-btn-hold.png", "hold-play-button", false);
 	load_ok *= AssetsManager::load_texture("options-btn.png", "options-button", false);
@@ -64,8 +65,11 @@ bool Application::init_game()
 
 	load_ok *= AssetsManager::load_texture("play-level-btn.png", "play-level-button", false);
 	load_ok *= AssetsManager::load_texture("play-level-btn-hold.png", "hold-play-level-button", false);
+	load_ok *= AssetsManager::load_texture("select-state.png", "select-state", false);
 	load_ok *= AssetsManager::load_texture("completed.png", "completed", false);
 	load_ok *= AssetsManager::load_texture("not-completed.png", "not-completed", false);
+
+	load_ok *= AssetsManager::load_font("joystix.ttf", "joystix");
 	
 
 	if (!load_ok) {

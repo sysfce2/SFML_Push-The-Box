@@ -11,6 +11,7 @@ public:
 	virtual ~StateMainMenu();
 
 private:
+	UIElement* m_Background;
 	UIElement* m_Title;
 	UIButton* m_PlayButton;
 	UIButton* m_OptionsButton;

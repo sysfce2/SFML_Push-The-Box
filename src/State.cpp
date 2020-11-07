@@ -15,7 +15,9 @@ State::~State()
 
 Entity* State::make_entity(Entity* entity)
 {
-	m_Entities.push_back(entity);
+	m_Entities.emplace_back(entity);
+	for (auto& child_ent : entity->m_ChildEntities)
+		m_Entities.emplace_back(child_ent);
 	return entity;
 }
 

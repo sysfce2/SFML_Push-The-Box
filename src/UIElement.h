@@ -3,11 +3,11 @@
 
 class UIElement : public Entity
 {
-private:
+protected:
 	void update(const float& dt) override;
 public:
-	void center_x(UIElement* base = nullptr);
-	void center_y(UIElement* base = nullptr);
+	void center_x();
+	void center_y();
 	UIElement(const std::string& asset_id, const vec2f& scale);
 	virtual ~UIElement();
 };

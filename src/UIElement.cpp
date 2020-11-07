@@ -4,38 +4,32 @@ void UIElement::update(const float& dt)
 {
 }
 
-void UIElement::center_x(UIElement* base)
+void UIElement::center_x()
 {
-	if (base == nullptr) {
-		vec2f t_size = get_size();
-		set_position(vec2f(.5f - t_size.x / 2.f, get_position().y));
-	}
+	if (m_AttachedEntity == nullptr)
+		set_position(vec2f(.5f - get_size().x / 2.f, get_position().y));
 	else {
-		vec2f base_center = base->get_position();
-		base_center.x += base->get_size().x / 2.f;
-		vec2f t_size = get_size();
-		set_position(vec2f(base_center.x - t_size.x / 2.f, get_position().y));
+		vec2f base_center = { m_AttachedEntity->get_size().x / 2.f, 0.f };
+		set_position(vec2f(base_center.x - get_size().x / 2.f, get_position().y));
 	}
 }
 
-void UIElement::center_y(UIElement* base)
+void UIElement::center_y()
 {
-	if (base == nullptr) {
-		vec2f t_size = get_size();
-		set_position(vec2f(get_position().x, .5f - t_size.y / 2.f ));
-	}
+	if (m_AttachedEntity == nullptr) 
+		set_position(vec2f(get_position().x, .5f - get_size().y / 2.f));
 	else {
-		vec2f base_center = base->get_position();
-		base_center.y += base->get_size().y / 2.f;
-		vec2f t_size = get_size();
-		set_position(vec2f(get_position().x, base_center.y - t_size.y / 2.f));
+		vec2f base_center = { 0.f, m_AttachedEntity->get_size().y / 2.f };
+		set_position(vec2f(get_position().x, base_center.y - get_size().y / 2.f));
 	}
 }
 
 UIElement::UIElement(const std::string& asset_id, const vec2f& scale)
 {
-	set_sprite(asset_id);
-	set_scale(scale);
+	if (asset_id.size() > 0) {
+		set_sprite(asset_id);
+		set_scale(scale);
+	}
 }
 
 UIElement::~UIElement()

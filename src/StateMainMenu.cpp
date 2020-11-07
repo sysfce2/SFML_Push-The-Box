@@ -4,6 +4,9 @@
 
 StateMainMenu::StateMainMenu()
 {
+	m_Background = new UIElement("menu-state", vec2f(1.f, 1.f));
+	make_entity(m_Background);
+
 	m_Title = new UIElement("title", vec2f(3.f, 3.f));
 	m_Title->set_position(vec2f(0.f, 0.1f));
 	m_Title->center_x();

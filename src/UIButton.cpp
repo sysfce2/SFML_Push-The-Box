@@ -4,35 +4,37 @@
 
 void UIButton::update(const float& dt)
 {
-	auto cursor_over_button = [&]() {
-		sf::FloatRect bounds = m_Sprite.getGlobalBounds();
-		sf::Vector2i mouse = sf::Mouse::getPosition(*WindowHandle::get_handle());
-		return bounds.contains((float)mouse.x, (float)mouse.y);
-	};
+	if (m_Visible) {
+		auto cursor_over_button = [&]() {
+			sf::FloatRect bounds = m_Sprite->getGlobalBounds();
+			sf::Vector2i mouse = sf::Mouse::getPosition(*WindowHandle::get_handle());
+			return bounds.contains((float)mouse.x, (float)mouse.y);
+		};
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-		if (cursor_over_button()) {
-			if (!m_Hold) {
-				m_Hold = true;
-				set_sprite("hold-" + m_ButtonAsset);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (cursor_over_button()) {
+				if (!m_Hold) {
+					m_Hold = true;
+					set_sprite("hold-" + m_ButtonAsset);
+				}
+			}
+			else if (m_Hold) {
+				m_Hold = false;
+				set_sprite(m_ButtonAsset);
 			}
 		}
-		else if (m_Hold) {
-			m_Hold = false;
-			set_sprite(m_ButtonAsset);
-		}
-	}
-	else {
-		if (m_Hold && cursor_over_button()) {
-			m_PressTime = std::chrono::duration_cast<std::chrono::milliseconds>(
-				std::chrono::system_clock::now().time_since_epoch());
-			m_ButtonEventHandled = false;
-			LOG_INFO("Button", m_ButtonAsset, "pressed.");
-		}
+		else {
+			if (m_Hold && cursor_over_button()) {
+				m_PressTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+					std::chrono::system_clock::now().time_since_epoch());
+				m_ButtonEventHandled = false;
+				LOG_INFO("Button", m_ButtonAsset, "pressed.");
+			}
 
-		if (m_Hold) {
-			m_Hold = false;
-			set_sprite(m_ButtonAsset);
+			if (m_Hold) {
+				m_Hold = false;
+				set_sprite(m_ButtonAsset);
+			}
 		}
 	}
 }
