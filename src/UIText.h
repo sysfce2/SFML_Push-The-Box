@@ -17,5 +17,7 @@ public:
 	UIText(const std::string& text, const std::string& font, uint8_t font_size);
 	virtual ~UIText();
 private:
+	vec2f m_Margin;
 	sf::Text* m_Text = nullptr;
+	bool m_AntiAliasing = false;
 };

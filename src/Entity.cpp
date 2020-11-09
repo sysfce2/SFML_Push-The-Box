@@ -2,20 +2,16 @@
 #include "WindowHandle.h"
 #include "AssetsManager.h"
 #include "Logger.h"
-
-// 1000 units = 1 screen width
-vec2f unitsToPx(vec2f units) {
-	return { units.x * 0.001f * WindowHandle::width(), units.y * 0.001f * WindowHandle::width() };
-}
+#include <math.h>
 
 void Entity::render(sf::RenderTarget& target, const vec2f& camera_offset)
 {
 	if (m_Visible && m_Sprite != nullptr) {
-		vec2f attach_pos = { 0.f, 0.f };
+		vec2f position = get_position_px();
+		vec2f camera_pos = { camera_offset.x * WindowHandle::width(), camera_offset.y * WindowHandle::height() };
+		vec2f draw_pos = position - camera_pos;
 		if (m_AttachedEntity != nullptr)
-			attach_pos = m_AttachedEntity->get_position_px();
-		vec2f draw_pos = { attach_pos.x + m_PositionPx.x - camera_offset.x * WindowHandle::width(),
-			attach_pos.y + m_PositionPx.y - camera_offset.y * WindowHandle::height() };
+			draw_pos += m_AttachedEntity->get_position_px();
 		m_Sprite->setPosition(draw_pos);
 		target.draw(*m_Sprite);
 	}
@@ -34,7 +30,7 @@ void Entity::set_sprite(const std::string& asset_id, int x, int y, int w, int h)
 
 	m_Sprite = new sf::Sprite();
 	m_Sprite->setTexture(*texture);
-	m_Sprite->setScale(m_Scale);
+	set_scale(m_Scale);
 
 	if (h > 0) {
 		m_Sprite->setTextureRect(sf::IntRect(x, y, w, h));
@@ -63,16 +59,10 @@ void Entity::set_scale(const vec2f& scale)
 	m_Scale = scale;
 }
 
-void Entity::set_origin(const vec2f& origin) // TODO: delete?
+void Entity::move_px(const vec2f& offset)
 {
-	if (m_Sprite != nullptr)
-		m_Sprite->setOrigin(vec2f(m_SizePx.x * origin.x, m_SizePx.y * origin.y));
-}
-
-void Entity::move_units(const vec2f& units_offset) // TODO: reimpelement
-{
-	vec2f in_px = unitsToPx(units_offset);
-	set_position_px(vec2f(m_PositionPx.x + in_px.x, m_PositionPx.y + in_px.y));
+	vec2f offset_scaled = { offset.x * WindowHandle::get_ratio().x, offset.y * WindowHandle::get_ratio().y };
+	set_position_px(m_PositionPx + offset_scaled);
 }
 
 void Entity::attach_position(Entity* other)

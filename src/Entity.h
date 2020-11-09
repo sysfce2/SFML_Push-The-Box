@@ -20,8 +20,7 @@ public:
 	void set_position(const vec2f& position);
 	void set_position_px(const vec2f& position);
 	void set_scale(const vec2f& scale);
-	void set_origin(const vec2f& origin);
-	void move_units(const vec2f& units_offset);
+	void move_px(const vec2f& offset);
 	void attach_position(Entity* other);
 	void detach_position();
 	void destroy();
@@ -36,16 +35,17 @@ public:
 	Entity();
 	virtual ~Entity();
 
-protected:
-	bool m_Visible = true;
+private:
 	bool m_Active = true;
-	sf::Sprite* m_Sprite = nullptr;
+	vec2f m_Scale = { 1.f, 1.f };
+	vec2f m_SpriteSize = { 0.f, 0.f };
+	std::vector<Entity*> m_ChildEntities;
+protected:
 	vec2f m_PositionPx = { 0.f, 0.f };
 	vec2f m_Position = { 0.f, 0.f };
 	vec2f m_SizePx = { 0.f, 0.f };
 	vec2f m_Size = { 0.f, 0.f };
-	vec2f m_Scale = { 1.f, 1.f };
-	vec2f m_SpriteSize = { 0.f, 0.f };
-	std::vector<Entity*> m_ChildEntities;
+	bool m_Visible = true;
+	sf::Sprite* m_Sprite = nullptr;
 	Entity* m_AttachedEntity = nullptr;
 };

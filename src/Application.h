@@ -14,11 +14,12 @@ private:
 	void draw_all();
 public:
 	void run(uint16_t fps_limit);
-	Application(uint16_t screen_width, uint16_t screen_height, const std::string& app_name);
+	Application(uint16_t screen_width, uint16_t screen_height, const std::string& app_name, bool fullscreen = false);
 	~Application();
 
 private:
 	StateStack* m_AppStatesPtr;
+	bool m_FullScreen = false;
 	uint16_t m_ScreenWidth;
 	uint16_t m_ScreenHeight;
 	std::string m_AppName;

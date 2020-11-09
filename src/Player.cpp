@@ -6,6 +6,7 @@ using KB = sf::Keyboard;
 void Player::update(const float& dt)
 {
 	vec2f movement = { 0.f, 0.f };
+	vec2f position = get_position_px();
 
 	if (m_AnimationState == Standing){
 		if (m_PushedBox != nullptr) {
@@ -20,37 +21,37 @@ void Player::update(const float& dt)
 	}
 	else if (m_AnimationState == MovingUp) {
 		movement.y = -m_MovementSpeed * dt;
-		if (m_PositionPx.y + movement.y < m_DestinationPos.y) {
-			movement.y = m_DestinationPos.y - m_PositionPx.y;
+		if (position.y + movement.y < m_DestinationPos.y) {
+			movement.y = m_DestinationPos.y - position.y;
 			m_AnimationState = Standing;
 		}
 	}
 	else if (m_AnimationState == MovingRight) {
 		movement.x = m_MovementSpeed * dt;
-		if (m_PositionPx.x + movement.x > m_DestinationPos.x) {
-			movement.x = m_DestinationPos.x - m_PositionPx.x;
+		if (position.x + movement.x > m_DestinationPos.x) {
+			movement.x = m_DestinationPos.x - position.x;
 			m_AnimationState = Standing;
 		}
 	}
 	else if (m_AnimationState == MovingDown) {
 		movement.y = m_MovementSpeed * dt;
-		if (m_PositionPx.y + movement.y > m_DestinationPos.y) {
-			movement.y = m_DestinationPos.y - m_PositionPx.y;
+		if (position.y + movement.y > m_DestinationPos.y) {
+			movement.y = m_DestinationPos.y - position.y;
 			m_AnimationState = Standing;
 		}
 	}
 	else if (m_AnimationState == MovingLeft) {
 		movement.x = -m_MovementSpeed * dt;
-		if (m_PositionPx.x + movement.x < m_DestinationPos.x) {
-			movement.x = m_DestinationPos.x - m_PositionPx.x;
+		if (position.x + movement.x < m_DestinationPos.x) {
+			movement.x = m_DestinationPos.x - position.x;
 			m_AnimationState = Standing;
 		}
 	}
 
 	if (movement.x != 0.f || movement.y != 0.f) {
-		move_units(movement);
+		move_px(movement);
 		if (m_PushedBox != nullptr)
-			m_PushedBox->move_units(movement);
+			m_PushedBox->move_px(movement);
 	}
 }
 

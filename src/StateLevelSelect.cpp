@@ -10,10 +10,13 @@ SelectFrame::SelectFrame(const vec2f& position, bool completed, const std::strin
 	: UIElement(completed ? "completed" : "not-completed", def_scale)
 {
 	set_position(position);
-	m_LevelNumber = new UIText(std::to_string(number), "joystix", 26);
+	m_LevelNumber = new UIText(std::to_string(number), "invasion", 32);
 	m_LevelNumber->attach_position(this);
-	m_LevelNumber->set_position(vec2f(0.01f, 0.01f));
-	m_PlayButton = new UIButton("play-level-button", def_scale);
+	m_LevelNumber->set_position(vec2f(0.015f, 0.f));
+	m_LevelNumber->center_y();
+	if (completed)
+		m_LevelNumber->set_color(sf::Color(105, 91, 0, 255));
+	m_PlayButton = new UIButton("play-btn", def_scale);
 	m_PlayButton->attach_position(this);
 	m_PlayButton->set_position(vec2f(0.075f, 0.0f));
 	m_PlayButton->center_y();
@@ -26,7 +29,6 @@ SelectFrame::~SelectFrame()
 {
 }
 
-
 void StateLevelSelect::update(const float& dt)
 {
 	for (auto& b : m_Easy)
@@ -37,11 +39,15 @@ void StateLevelSelect::update(const float& dt)
 		destroy_state();
 }
 
-
 StateLevelSelect::StateLevelSelect()
 {
 	UIElement* state_background = new UIElement("select-state", vec2f(1.f, 1.f));
 	make_entity(state_background);
+	UIText* select_title = new UIText("SELECT LEVEL", "invasion", 54);
+	select_title->set_color(sf::Color(229, 198, 0, 255));
+	select_title->set_position(vec2f(0.f, .03f));
+	select_title->center_x();
+	make_entity(select_title);
 
 	SelectFrame* pattern = new SelectFrame(vec2f(0.f, 0.f), true, "easy", 1);
 	vec2f pattern_size = pattern->get_size();
@@ -51,7 +57,7 @@ StateLevelSelect::StateLevelSelect()
 	for (uint16_t i = 0; i < 5; i++) {
 		for (uint16_t j = 0; j < 6; j++) {
 			uint16_t level_number = i * 6 + j + 1;
-			bool completed = false;
+			bool completed = level_number == 1;
 			SelectFrame* frame = new SelectFrame(place_pos, completed, "easy", level_number);
 			m_Easy.emplace_back(frame);
 			make_entity(frame);
@@ -61,7 +67,7 @@ StateLevelSelect::StateLevelSelect()
 		place_pos.y += place_offset.y + pattern_size.y;
 	}
 
-	back_button = new UIButton("back-button", vec2f(3.f, 3.f));
+	back_button = new UIButton("BACK", vec2f(3.f, 3.f), 50);
 	back_button->set_position(vec2f(0.f, 0.85f));
 	back_button->center_x();
 	make_entity(back_button);

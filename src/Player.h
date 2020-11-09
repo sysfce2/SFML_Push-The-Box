@@ -36,6 +36,6 @@ private:
 	Box* m_PushedBox = nullptr;
 	vec2f m_DestinationPos;
 	vec2u m_TilePosition;
-	float m_MovementSpeed = 250.f;
+	float m_MovementSpeed = 300.f;
 };
 

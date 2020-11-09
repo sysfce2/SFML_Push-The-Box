@@ -3,11 +3,14 @@
 #include "Logger.h"
 #include <algorithm>
 
-Application::Application(uint16_t screen_width, uint16_t screen_height, const std::string& app_name)
+Application::Application(uint16_t screen_width, uint16_t screen_height, const std::string& app_name, bool fullscreen)
 	:	m_ScreenWidth(screen_width), m_ScreenHeight(screen_height), m_AppName(app_name),
-		m_Window(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, sf::Style::Close),
-		m_AppStatesPtr(&StatesManager::m_AppStates)
+		m_AppStatesPtr(&StatesManager::m_AppStates), m_FullScreen(fullscreen)
 {
+	sf::Uint32 style = sf::Style::Close;
+	if (fullscreen)
+		style |= sf::Style::Fullscreen;
+	m_Window.create(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, style);
 	WindowHandle::set_handle(&m_Window);
 	Logger::init();
 }
@@ -42,35 +45,31 @@ Application::~Application()
 bool Application::init_game()
 {
 	uint8_t load_ok = 1;
-	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player", true);
-	load_ok *= AssetsManager::load_texture("wall.png", "wall", true);
-	load_ok *= AssetsManager::load_texture("floor.png", "floor", true);
-	load_ok *= AssetsManager::load_texture("target.png", "target", true);
-	load_ok *= AssetsManager::load_texture("box.png", "box", true);
-	load_ok *= AssetsManager::load_texture("box-gold.png", "box-gold", true);
-
 	load_ok *= AssetsManager::load_texture("title-logo.png", "title", false);
 	load_ok *= AssetsManager::load_texture("menu-state.png", "menu-state", false);
-	load_ok *= AssetsManager::load_texture("play-btn.png", "play-button", false);
-	load_ok *= AssetsManager::load_texture("play-btn-hold.png", "hold-play-button", false);
-	load_ok *= AssetsManager::load_texture("options-btn.png", "options-button", false);
-	load_ok *= AssetsManager::load_texture("options-btn-hold.png", "hold-options-button", false);
-	load_ok *= AssetsManager::load_texture("exit-btn.png", "exit-button", false);
-	load_ok *= AssetsManager::load_texture("exit-btn-hold.png", "hold-exit-button", false);
+	load_ok *= AssetsManager::load_texture("button.png", "button", false);
+	load_ok *= AssetsManager::load_texture("button-pressed.png", "button-pressed", false);
 
-	load_ok *= AssetsManager::load_texture("menu-btn.png", "menu-button", false);
-	load_ok *= AssetsManager::load_texture("menu-btn-hold.png", "hold-menu-button", false);
-	load_ok *= AssetsManager::load_texture("back-btn.png", "back-button", false);
-	load_ok *= AssetsManager::load_texture("back-btn-hold.png", "hold-back-button", false);
-
-	load_ok *= AssetsManager::load_texture("play-level-btn.png", "play-level-button", false);
-	load_ok *= AssetsManager::load_texture("play-level-btn-hold.png", "hold-play-level-button", false);
+	load_ok *= AssetsManager::load_texture("play-btn.png", "play-btn", false);
+	load_ok *= AssetsManager::load_texture("play-btn-pressed.png", "play-btn-pressed", false);
 	load_ok *= AssetsManager::load_texture("select-state.png", "select-state", false);
 	load_ok *= AssetsManager::load_texture("completed.png", "completed", false);
 	load_ok *= AssetsManager::load_texture("not-completed.png", "not-completed", false);
 
+	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player", true);
+	load_ok *= AssetsManager::load_texture("wall.png", "wall0", true);
+	load_ok *= AssetsManager::load_texture("wall1.png", "wall1", true);
+	load_ok *= AssetsManager::load_texture("target.png", "target", true);
+	load_ok *= AssetsManager::load_texture("box.png", "box", true);
+	load_ok *= AssetsManager::load_texture("box-gold.png", "box-gold", true);
+	load_ok *= AssetsManager::load_texture("floor.png", "floor0", true);
+	load_ok *= AssetsManager::load_texture("floor1.png", "floor1", true);
+	load_ok *= AssetsManager::load_texture("floor2.png", "floor2", true);
+	load_ok *= AssetsManager::load_texture("floor3.png", "floor3", true);
+	load_ok *= AssetsManager::load_texture("floor4.png", "floor4", true);
+
 	load_ok *= AssetsManager::load_font("joystix.ttf", "joystix");
-	
+	load_ok *= AssetsManager::load_font("INVASION2000.TTF", "invasion");
 
 	if (!load_ok) {
 		m_InitErrorMessage = "Failed to load game resources";

@@ -2,9 +2,13 @@
 #include "WindowHandle.h"
 #include "Logger.h"
 
+const std::string DEFAULT_FONT = "invasion";
+const sf::Color DEFAULT_COLOR = sf::Color(105, 91, 0, 255);
+
 void UIButton::update(const float& dt)
 {
 	if (m_Visible) {
+		vec2f scale = get_scale();
 		auto cursor_over_button = [&]() {
 			sf::FloatRect bounds = m_Sprite->getGlobalBounds();
 			sf::Vector2i mouse = sf::Mouse::getPosition(*WindowHandle::get_handle());
@@ -15,12 +19,16 @@ void UIButton::update(const float& dt)
 			if (cursor_over_button()) {
 				if (!m_Hold) {
 					m_Hold = true;
-					set_sprite("hold-" + m_ButtonAsset);
+					set_sprite(m_ButtonAsset + "-pressed");
+					if (m_ButtonText != nullptr)
+						m_ButtonText->move_px(vec2f(-scale.x, scale.y));
 				}
 			}
 			else if (m_Hold) {
 				m_Hold = false;
 				set_sprite(m_ButtonAsset);
+				if (m_ButtonText != nullptr)
+					m_ButtonText->move_px(vec2f(scale.x, -scale.y));
 			}
 		}
 		else {
@@ -28,12 +36,14 @@ void UIButton::update(const float& dt)
 				m_PressTime = std::chrono::duration_cast<std::chrono::milliseconds>(
 					std::chrono::system_clock::now().time_since_epoch());
 				m_ButtonEventHandled = false;
-				LOG_INFO("Button", m_ButtonAsset, "pressed.");
+				LOG_INFO("Button", m_ButtonName, "pressed.");
 			}
 
 			if (m_Hold) {
 				m_Hold = false;
 				set_sprite(m_ButtonAsset);
+				if (m_ButtonText != nullptr)
+					m_ButtonText->move_px(vec2f(scale.x, -scale.y));
 			}
 		}
 	}
@@ -61,9 +71,19 @@ bool UIButton::is_hold() const
 	return m_Hold;
 }
 
-UIButton::UIButton(const std::string& asset_id, const vec2f& scale)
-	: UIElement(asset_id, scale), m_ButtonAsset(asset_id), m_PressTime(0)
+UIButton::UIButton(const std::string& button_name, const vec2f& scale, uint8_t font_size)
+	: UIElement(font_size > 0 ? "button" : button_name, scale),
+	  m_ButtonAsset(font_size > 0 ? "button" : button_name),
+	  m_ButtonName(button_name), m_PressTime(0), m_FontSize(font_size)
 {
+	if (font_size > 0) {
+		m_ButtonText = new UIText(button_name, DEFAULT_FONT, font_size);
+		m_ButtonText->attach_position(this);
+		m_ButtonText->center_x();
+		m_ButtonText->center_y();
+		m_ButtonText->set_color(DEFAULT_COLOR);
+		add_child_entity(m_ButtonText);
+	}
 }
 
 UIButton::~UIButton()
