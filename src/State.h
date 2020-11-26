@@ -4,6 +4,7 @@
 #include <stack>
 #include "Entity.h"
 
+class State;
 using StateStack = std::stack<State*>;
 
 class State

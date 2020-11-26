@@ -21,7 +21,7 @@ bool TileMap::load_level(const std::string& file_path)
 		file.read(reinterpret_cast<char*>(&player_pos), sizeof(vec2u));
 		if (level_size.x * level_size.y != file_size - sizeof(vec2u) * 2)
 			return false;
-		srand(time(NULL));
+		srand((unsigned)time(NULL));
 		vec2f place_pos = { 0.f, 0.f };
 		m_TileSize = Wall(place_pos, 0).get_size_px();
 		m_Map = new Tile * [level_size.x];

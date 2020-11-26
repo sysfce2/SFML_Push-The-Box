@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "TileMap.h"
 #include "Box.h"
+#include "Animation.h"
 
 using vec2i = sf::Vector2i;
 
@@ -29,10 +30,13 @@ public:
 private:
 	void update(const float& dt) override;
 	void move(Direction direction);
+	void animate(AnimationState an_state);
 	bool can_move(vec2i offset);
 
+	uint8_t m_StandingWait = 0;
 	AnimationState m_AnimationState = Standing;
-	TileMap* m_TileMap;
+	Animation* m_Animation = nullptr;
+	TileMap* m_TileMap = nullptr;
 	Box* m_PushedBox = nullptr;
 	vec2f m_DestinationPos;
 	vec2u m_TilePosition;

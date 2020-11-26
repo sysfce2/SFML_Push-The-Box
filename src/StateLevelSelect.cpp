@@ -43,7 +43,7 @@ StateLevelSelect::StateLevelSelect()
 {
 	UIElement* state_background = new UIElement("select-state", vec2f(1.f, 1.f));
 	make_entity(state_background);
-	UIText* select_title = new UIText("SELECT LEVEL", "invasion", 54);
+	UIText* select_title = new UIText("WYBIERZ POZIOM", "joystix", 54);
 	select_title->set_color(sf::Color(229, 198, 0, 255));
 	select_title->set_position(vec2f(0.f, .03f));
 	select_title->center_x();
@@ -67,7 +67,7 @@ StateLevelSelect::StateLevelSelect()
 		place_pos.y += place_offset.y + pattern_size.y;
 	}
 
-	back_button = new UIButton("BACK", vec2f(3.f, 3.f), 50);
+	back_button = new UIButton(L"WRÓÆ", vec2f(3.f, 3.f), 48);
 	back_button->set_position(vec2f(0.f, 0.85f));
 	back_button->center_x();
 	make_entity(back_button);

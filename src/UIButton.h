@@ -10,6 +10,7 @@ public:
 	bool was_pressed();
 	bool is_hold() const;
 	UIButton(const std::string& button_name, const vec2f& scale, uint8_t font_size = 0);
+	UIButton(const std::wstring& button_name, const vec2f& scale, uint8_t font_size);
 	virtual ~UIButton();
 
 private:
@@ -20,6 +21,6 @@ private:
 	bool m_ButtonEventHandled = false;
 	std::chrono::milliseconds m_PressTime;
 	std::string m_ButtonAsset;
-	std::string m_ButtonName;
+	std::wstring m_ButtonName;
 	UIText* m_ButtonText = nullptr;
 };

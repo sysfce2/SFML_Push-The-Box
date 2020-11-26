@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Floor.h" />
     <ClInclude Include="src\Box.h" />
     <ClInclude Include="src\Player.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="src\UIText.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Box.cpp" />
     <ClCompile Include="src\Floor.cpp" />
     <ClCompile Include="src\Player.cpp" />

@@ -20,7 +20,7 @@ void UIText::render(sf::RenderTarget& target, const vec2f& camera_offset)
 	}
 }
 
-void UIText::set_text(const std::string& text, const std::string& font, uint8_t font_size)
+void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t font_size)
 {
 	if (m_Text != nullptr)
 		delete m_Text;
@@ -44,6 +44,12 @@ void UIText::set_color(sf::Color color)
 }
 
 UIText::UIText(const std::string& text, const std::string& font, uint8_t font_size)
+	: UIElement(std::string(), vec2f(1.f, 1.f))
+{
+	set_text(std::wstring(text.begin(), text.end()), font, font_size);
+}
+
+UIText::UIText(const std::wstring& text, const std::string& font, uint8_t font_size)
 	: UIElement(std::string(), vec2f(1.f, 1.f))
 {
 	set_text(text, font, font_size);

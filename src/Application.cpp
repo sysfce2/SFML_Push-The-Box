@@ -56,7 +56,7 @@ bool Application::init_game()
 	load_ok *= AssetsManager::load_texture("completed.png", "completed", false);
 	load_ok *= AssetsManager::load_texture("not-completed.png", "not-completed", false);
 
-	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player", true);
+	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player-ss", true);
 	load_ok *= AssetsManager::load_texture("wall.png", "wall0", true);
 	load_ok *= AssetsManager::load_texture("wall1.png", "wall1", true);
 	load_ok *= AssetsManager::load_texture("target.png", "target", true);
@@ -70,6 +70,7 @@ bool Application::init_game()
 
 	load_ok *= AssetsManager::load_font("joystix.ttf", "joystix");
 	load_ok *= AssetsManager::load_font("INVASION2000.TTF", "invasion");
+	load_ok *= AssetsManager::load_font("PressStart2P.TTF", "PS2P");
 
 	if (!load_ok) {
 		m_InitErrorMessage = "Failed to load game resources";

@@ -75,6 +75,9 @@
     <ClInclude Include="src\UIText.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="src\Animation.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -133,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="src\UIText.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>Entity</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

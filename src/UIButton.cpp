@@ -2,7 +2,7 @@
 #include "WindowHandle.h"
 #include "Logger.h"
 
-const std::string DEFAULT_FONT = "invasion";
+const std::string DEFAULT_FONT = "joystix";
 const sf::Color DEFAULT_COLOR = sf::Color(105, 91, 0, 255);
 
 void UIButton::update(const float& dt)
@@ -36,7 +36,6 @@ void UIButton::update(const float& dt)
 				m_PressTime = std::chrono::duration_cast<std::chrono::milliseconds>(
 					std::chrono::system_clock::now().time_since_epoch());
 				m_ButtonEventHandled = false;
-				LOG_INFO("Button", m_ButtonName, "pressed.");
 			}
 
 			if (m_Hold) {
@@ -74,8 +73,24 @@ bool UIButton::is_hold() const
 UIButton::UIButton(const std::string& button_name, const vec2f& scale, uint8_t font_size)
 	: UIElement(font_size > 0 ? "button" : button_name, scale),
 	  m_ButtonAsset(font_size > 0 ? "button" : button_name),
-	  m_ButtonName(button_name), m_PressTime(0), m_FontSize(font_size)
+	  m_ButtonName(std::wstring(button_name.begin(), button_name.end())),
+	  m_PressTime(0), m_FontSize(font_size)
 {
+	if (font_size > 0) {
+		m_ButtonText = new UIText(button_name, DEFAULT_FONT, font_size);
+		m_ButtonText->attach_position(this);
+		m_ButtonText->center_x();
+		m_ButtonText->center_y();
+		m_ButtonText->set_color(DEFAULT_COLOR);
+		add_child_entity(m_ButtonText);
+	}
+}
+
+UIButton::UIButton(const std::wstring& button_name, const vec2f& scale, uint8_t font_size)
+	: UIElement("button", scale), m_ButtonAsset("button"),
+	m_ButtonName(button_name), m_PressTime(0), m_FontSize(font_size)
+{
+	int i = 1;
 	if (font_size > 0) {
 		m_ButtonText = new UIText(button_name, DEFAULT_FONT, font_size);
 		m_ButtonText->attach_position(this);

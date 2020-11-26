@@ -8,15 +8,15 @@ class Entity
 {
 public:
 	friend class State;
-	friend class StateMainMenu;
-	friend class SatePlaying;
+	friend class Animation;
 
 	vec2f get_position() const;
 	vec2f get_position_px() const;
 	vec2f get_size() const;
 	vec2f get_size_px() const;
 	vec2f get_scale() const;
-	void set_sprite(const std::string& asset_id, int x = -1, int y = -1, int w = -1, int h = -1);
+	void set_sprite(const std::string& asset_id, uint32_t x = 0, uint32_t y = 0, uint32_t w = 0, uint32_t h = 0);
+	void set_sprite(sf::Sprite* sprite, bool size_changed);
 	void set_position(const vec2f& position);
 	void set_position_px(const vec2f& position);
 	void set_scale(const vec2f& scale);

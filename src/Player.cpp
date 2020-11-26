@@ -5,6 +5,7 @@ using KB = sf::Keyboard;
 
 void Player::update(const float& dt)
 {
+	m_Animation->update(dt);
 	vec2f movement = { 0.f, 0.f };
 	vec2f position = get_position_px();
 
@@ -13,38 +14,43 @@ void Player::update(const float& dt)
 			m_PushedBox->m_CheckForTarget = true;
 			m_PushedBox = nullptr;
 		}
+
+		if (m_StandingWait < 1)
+			if (++m_StandingWait == 1)
+				m_Animation->start_stop();
+
 			
-		if (KB::isKeyPressed(KB::Right)) move(Right);
+		if (KB::isKeyPressed(KB::Right))     move(Right);
 		else if (KB::isKeyPressed(KB::Left)) move(Left);
-		else if (KB::isKeyPressed(KB::Up)) move(Up);
+		else if (KB::isKeyPressed(KB::Up))   move(Up);
 		else if (KB::isKeyPressed(KB::Down)) move(Down);
 	}
 	else if (m_AnimationState == MovingUp) {
 		movement.y = -m_MovementSpeed * dt;
 		if (position.y + movement.y < m_DestinationPos.y) {
 			movement.y = m_DestinationPos.y - position.y;
-			m_AnimationState = Standing;
+			animate(Standing);
 		}
 	}
 	else if (m_AnimationState == MovingRight) {
 		movement.x = m_MovementSpeed * dt;
 		if (position.x + movement.x > m_DestinationPos.x) {
 			movement.x = m_DestinationPos.x - position.x;
-			m_AnimationState = Standing;
+			animate(Standing);
 		}
 	}
 	else if (m_AnimationState == MovingDown) {
 		movement.y = m_MovementSpeed * dt;
 		if (position.y + movement.y > m_DestinationPos.y) {
 			movement.y = m_DestinationPos.y - position.y;
-			m_AnimationState = Standing;
+			animate(Standing);
 		}
 	}
 	else if (m_AnimationState == MovingLeft) {
 		movement.x = -m_MovementSpeed * dt;
 		if (position.x + movement.x < m_DestinationPos.x) {
 			movement.x = m_DestinationPos.x - position.x;
-			m_AnimationState = Standing;
+			animate(Standing);
 		}
 	}
 
@@ -60,34 +66,63 @@ void Player::move(Direction direction)
 	switch (direction) {
 	case Up:
 		if (can_move({ 0, -1 })) {
-			m_AnimationState = MovingUp;
+			animate(MovingUp);
 			m_DestinationPos.y -= m_TileMap->get_tile_size().y;
 			m_TilePosition.y--;
 		}
 		break;
 	case Right:
 		if (can_move({ 1, 0 })) {
-			m_AnimationState = MovingRight;
+			animate(MovingRight);
 			m_DestinationPos.x += m_TileMap->get_tile_size().x;
 			m_TilePosition.x++;
 		}
 		break;
 	case Down:
 		if (can_move({ 0, 1 })) {
-			m_AnimationState = MovingDown;
+			animate(MovingDown);
 			m_DestinationPos.y += m_TileMap->get_tile_size().y;
 			m_TilePosition.y++;
 		}
 		break;
 	case Left:
 		if (can_move({ -1, 0 })) {
-			m_AnimationState = MovingLeft;
+			animate(MovingLeft);
 			m_DestinationPos.x -= m_TileMap->get_tile_size().x;
 			m_TilePosition.x--;
 		}
 		break;
 	}
 
+}
+
+void Player::animate(AnimationState an_state)
+{
+	const uint8_t fps = 8;
+	switch (an_state) {
+	case Standing:
+		m_AnimationState = Standing;
+		m_StandingWait = 0;
+		break;
+	case MovingUp:
+		m_AnimationState = MovingUp;
+		m_Animation->play_animation("MovingUp", fps, AN_REPEAT);
+		break;
+	case MovingRight:
+		m_AnimationState = MovingRight;
+		m_Animation->play_animation("MovingRight", fps, AN_REPEAT);
+		break;
+	case MovingDown:
+		m_AnimationState = MovingDown;
+		m_Animation->play_animation("MovingDown", fps, AN_REPEAT);
+		break;
+	case MovingLeft:
+		m_AnimationState = MovingLeft;
+		m_Animation->play_animation("MovingLeft", fps, AN_REPEAT);
+		break;
+	default:
+		break;
+	}
 }
 
 bool Player::can_move(vec2i offset)
@@ -125,11 +160,19 @@ bool Player::can_move(vec2i offset)
 Player::Player(TileMap* tile_map)
 	: m_TileMap(tile_map)
 {
-	set_sprite("player", 48, 64 * 2, 48, 64);
+	set_sprite("player-ss", 0, 0, 64, 64);
 	set_scale(vec2f(1.5f, 1.5f));
+	m_Animation = new Animation(this);
+	m_Animation->load_sprite_sheet("player-ss");
+	m_Animation->new_animation("MovingDown", 0, 0, 64, 64, 9);
+	m_Animation->new_animation("MovingUp", 0, 64, 64, 64, 9);
+	m_Animation->new_animation("MovingRight", 0, 128, 64, 64, 9);
+	m_Animation->new_animation("MovingLeft", 0, 192, 64, 64, 9);
+	animate(Standing);
 }
 
 Player::~Player()
 {
 	LOG_WARN("Player object deleted");
+	delete m_Animation;
 }

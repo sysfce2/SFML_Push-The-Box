@@ -22,7 +22,7 @@ void Entity::add_child_entity(Entity* entity)
 	m_ChildEntities.emplace_back(entity);
 }
 
-void Entity::set_sprite(const std::string& asset_id, int x, int y, int w, int h)
+void Entity::set_sprite(const std::string& asset_id, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	sf::Texture* texture = AssetsManager::get_texture(asset_id);
 	if (m_Sprite != nullptr)
@@ -32,7 +32,7 @@ void Entity::set_sprite(const std::string& asset_id, int x, int y, int w, int h)
 	m_Sprite->setTexture(*texture);
 	set_scale(m_Scale);
 
-	if (h > 0) {
+	if (w > 0 && h > 0) {
 		m_Sprite->setTextureRect(sf::IntRect(x, y, w, h));
 		m_SpriteSize = { (float)w, (float)h };
 	}
@@ -40,6 +40,16 @@ void Entity::set_sprite(const std::string& asset_id, int x, int y, int w, int h)
 
 	m_SizePx = { m_SpriteSize.x * WindowHandle::get_ratio().x, m_SpriteSize.y * WindowHandle::get_ratio().y };
 	m_Size = { m_SizePx.x / WindowHandle::width(), m_SizePx.y / WindowHandle::height() };
+}
+
+void Entity::set_sprite(sf::Sprite* sprite, bool size_changed)
+{
+	m_Sprite = sprite;
+	if (size_changed) {
+		m_SpriteSize = { (float)sprite->getTexture()->getSize().x, (float)sprite->getTexture()->getSize().y };
+		m_SizePx = { m_SpriteSize.x * WindowHandle::get_ratio().x, m_SpriteSize.y * WindowHandle::get_ratio().y };
+		m_Size = { m_SizePx.x / WindowHandle::width(), m_SizePx.y / WindowHandle::height() };
+	}
 }
 
 void Entity::set_position(const vec2f& position)
@@ -117,5 +127,6 @@ Entity::Entity()
 
 Entity::~Entity()
 {
-	delete m_Sprite;
+	if (m_Sprite != nullptr)
+		delete m_Sprite;
 }

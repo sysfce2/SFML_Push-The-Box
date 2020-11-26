@@ -2,6 +2,8 @@
 #include "StatesManager.h"
 #include "StateLevelSelect.h"
 
+const uint8_t btn_font_size = 48;
+
 StateMainMenu::StateMainMenu()
 {
 	m_Background = new UIElement("menu-state", vec2f(1.f, 1.f));
@@ -12,17 +14,17 @@ StateMainMenu::StateMainMenu()
 	m_Title->center_x();
 	make_entity(m_Title);
 
-	m_PlayButton = new UIButton("PLAY", vec2f(3.f, 3.f), 50);
+	m_PlayButton = new UIButton("GRAJ", vec2f(3.f, 3.f), btn_font_size);
 	m_PlayButton->set_position(vec2f(0.f, .4f));
 	m_PlayButton->center_x();
 	make_entity(m_PlayButton);
 
-	m_OptionsButton = new UIButton("OPTIONS", vec2f(3.f, 3.f), 50);
+	m_OptionsButton = new UIButton("OPCJE", vec2f(3.f, 3.f), btn_font_size);
 	m_OptionsButton->set_position(vec2f(0.f, .55f));
 	m_OptionsButton->center_x();
 	make_entity(m_OptionsButton);
 
-	m_ExitButton = new UIButton("EXIT", vec2f(3.f, 3.f), 50);
+	m_ExitButton = new UIButton(L"WYJD", vec2f(3.f, 3.f), btn_font_size);
 	m_ExitButton->set_position(vec2f(0.f, .70f));
 	m_ExitButton->center_x();
 	make_entity(m_ExitButton);
