@@ -96,7 +96,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\kreed\source\repos\push-the-box\vendor\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\kreed\source\repos\push-the-box\src;C:\Users\kreed\source\repos\push-the-box\vendor\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,7 +113,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\kreed\source\repos\push-the-box\vendor\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\kreed\source\repos\push-the-box\src;C:\Users\kreed\source\repos\push-the-box\vendor\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,47 +159,47 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Animation.h" />
-    <ClInclude Include="src\Floor.h" />
-    <ClInclude Include="src\Box.h" />
-    <ClInclude Include="src\Player.h" />
-    <ClInclude Include="src\Application.h" />
-    <ClInclude Include="src\AssetsManager.h" />
-    <ClInclude Include="src\Entity.h" />
-    <ClInclude Include="src\StatePlaying.h" />
-    <ClInclude Include="src\Logger.h" />
-    <ClInclude Include="src\State.h" />
-    <ClInclude Include="src\StateMainMenu.h" />
-    <ClInclude Include="src\StatesManager.h" />
-    <ClInclude Include="src\TileMap.h" />
-    <ClInclude Include="src\Wall.h" />
-    <ClInclude Include="src\UIButton.h" />
-    <ClInclude Include="src\WindowHandle.h" />
-    <ClInclude Include="src\UIElement.h" />
-    <ClInclude Include="src\StateLevelSelect.h" />
-    <ClInclude Include="src\UIText.h" />
+    <ClInclude Include="src\Core\Application.h" />
+    <ClInclude Include="src\Core\AssetsManager.h" />
+    <ClInclude Include="src\Core\Logger.h" />
+    <ClInclude Include="src\Core\Window.h" />
+    <ClInclude Include="src\EntityState\Animation.h" />
+    <ClInclude Include="src\EntityState\Entity.h" />
+    <ClInclude Include="src\EntityState\State.h" />
+    <ClInclude Include="src\EntityState\StatesManager.h" />
+    <ClInclude Include="src\GameApp\Box.h" />
+    <ClInclude Include="src\GameApp\Floor.h" />
+    <ClInclude Include="src\GameApp\Player.h" />
+    <ClInclude Include="src\GameApp\StateLevelSelect.h" />
+    <ClInclude Include="src\GameApp\StateMainMenu.h" />
+    <ClInclude Include="src\GameApp\StatePlaying.h" />
+    <ClInclude Include="src\GameApp\TileMap.h" />
+    <ClInclude Include="src\GameApp\Wall.h" />
+    <ClInclude Include="src\UI\UIButton.h" />
+    <ClInclude Include="src\UI\UIElement.h" />
+    <ClInclude Include="src\UI\UIText.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Animation.cpp" />
-    <ClCompile Include="src\Box.cpp" />
-    <ClCompile Include="src\Floor.cpp" />
-    <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\AssetsManager.cpp" />
-    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\Core\Application.cpp" />
+    <ClCompile Include="src\Core\AssetsManager.cpp" />
+    <ClCompile Include="src\Core\Logger.cpp" />
+    <ClCompile Include="src\Core\Window.cpp" />
+    <ClCompile Include="src\EntityState\Animation.cpp" />
+    <ClCompile Include="src\EntityState\Entity.cpp" />
+    <ClCompile Include="src\EntityState\State.cpp" />
+    <ClCompile Include="src\EntityState\StatesManager.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
-    <ClCompile Include="src\StatePlaying.cpp" />
-    <ClCompile Include="src\Logger.cpp" />
-    <ClCompile Include="src\State.cpp" />
-    <ClCompile Include="src\StateMainMenu.cpp" />
-    <ClCompile Include="src\StatesManager.cpp" />
-    <ClCompile Include="src\TileMap.cpp" />
-    <ClCompile Include="src\UIButton.cpp" />
-    <ClCompile Include="src\Wall.cpp" />
-    <ClCompile Include="src\WindowHandle.cpp" />
-    <ClCompile Include="src\UIElement.cpp" />
-    <ClCompile Include="src\StateLevelSelect.cpp" />
-    <ClCompile Include="src\UIText.cpp" />
+    <ClCompile Include="src\GameApp\Box.cpp" />
+    <ClCompile Include="src\GameApp\Floor.cpp" />
+    <ClCompile Include="src\GameApp\Player.cpp" />
+    <ClCompile Include="src\GameApp\StateLevelSelect.cpp" />
+    <ClCompile Include="src\GameApp\StateMainMenu.cpp" />
+    <ClCompile Include="src\GameApp\StatePlaying.cpp" />
+    <ClCompile Include="src\GameApp\TileMap.cpp" />
+    <ClCompile Include="src\GameApp\Wall.cpp" />
+    <ClCompile Include="src\UI\UIButton.cpp" />
+    <ClCompile Include="src\UI\UIElement.cpp" />
+    <ClCompile Include="src\UI\UIText.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

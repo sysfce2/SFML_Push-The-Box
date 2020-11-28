@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "Application.h"
+#include "Core/Application.h"
 
 int main() {
 	Application app(1280, 720, "Push The Box");

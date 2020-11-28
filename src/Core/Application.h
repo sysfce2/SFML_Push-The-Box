@@ -1,0 +1,31 @@
+#pragma once
+#include <SFML/Graphics.hpp>
+#include "EntityState/StatesManager.h"
+#include "Core/AssetsManager.h"
+#include "GameApp/StatePlaying.h"
+#include "GameApp/StateMainMenu.h"
+
+class Application
+{
+private:
+	bool init_game();
+	void handle_events();
+	void update_all(const float& dt);
+	void draw_all();
+public:
+	void run(uint16_t fps_limit);
+	Application(uint16_t screen_width, uint16_t screen_height, const std::string& app_name, bool fullscreen = false);
+	~Application();
+
+private:
+	StateStack* m_AppStatesPtr;
+	bool m_FullScreen = false;
+	uint16_t m_ScreenWidth;
+	uint16_t m_ScreenHeight;
+	std::string m_AppName;
+	std::string m_InitErrorMessage;
+	sf::RenderWindow m_Window;
+
+	bool m_SkipNextRender = false;
+	float m_FrameTime = 0.f;
+};
