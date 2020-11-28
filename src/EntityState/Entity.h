@@ -20,7 +20,8 @@ public:
 	void set_position(const vec2f& position);
 	void set_position_px(const vec2f& position);
 	void set_scale(const vec2f& scale);
-	void move_px(const vec2f& offset);
+	void shift(const vec2f& offset);
+	void shift_px(const vec2f& offset);
 	void attach_position(Entity* other);
 	void detach_position();
 	void destroy();

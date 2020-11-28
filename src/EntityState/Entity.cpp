@@ -2,7 +2,6 @@
 #include "Core/Window.h"
 #include "Core/AssetsManager.h"
 #include "Core/Logger.h"
-#include <math.h>
 
 void Entity::render(sf::RenderTarget& target, const vec2f& camera_offset)
 {
@@ -75,7 +74,12 @@ void Entity::set_scale(const vec2f& scale)
 	m_Scale = scale;
 }
 
-void Entity::move_px(const vec2f& offset)
+void Entity::shift(const vec2f& offset)
+{
+	set_position(m_Position + offset);
+}
+
+void Entity::shift_px(const vec2f& offset)
 {
 	vec2f offset_scaled = { offset.x * Window::res_scale().x, offset.y * Window::res_scale().y };
 	set_position_px(m_PositionPx + offset_scaled);

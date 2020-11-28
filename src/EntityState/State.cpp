@@ -8,32 +8,26 @@ State::State()
 
 State::~State()
 {
-	for (auto& ent : m_Entities)
-		delete ent;
 	m_Entities.clear();
 }
 
 Entity* State::make_entity(Entity* entity)
 {
 	m_Entities.emplace_back(entity);
-	for (auto& child_ent : entity->m_ChildEntities)
-		m_Entities.emplace_back(child_ent);
+	for (auto& child : entity->m_ChildEntities)
+		m_Entities.emplace_back(child);
 	return entity;
 }
 
 void State::update_entities(const float& dt)
 {
 	auto it = m_Entities.begin();
-	while (it != m_Entities.end()) {
+	while (it != m_Entities.end())
 		if ((*it)->m_Active) {
 			(*it)->update(dt);
 			it++;
 		}
-		else {
-			delete* it;
-			m_Entities.erase(it);
-		}	
-	}	
+		else m_Entities.erase(it);
 }
 
 void State::render(sf::RenderTarget& target)

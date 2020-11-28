@@ -48,7 +48,7 @@ void Animation::update(const float& dt)
     }
 }
 
-bool Animation::load_sprite_sheet(const std::string& texture_name)
+bool Animation::set_sprite_sheet(const std::string& texture_name)
 {
     m_SpriteSheet = AssetsManager::get_texture(texture_name);
     return m_SpriteSheet != nullptr;

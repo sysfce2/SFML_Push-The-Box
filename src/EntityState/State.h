@@ -24,6 +24,6 @@ protected:
 private:
 	bool m_DestroyState = false;
 protected:
-	std::vector<Entity*> m_Entities;
+	std::vector<std::unique_ptr<Entity>> m_Entities;
 	vec2f m_CameraOffset = { 0.f, 0.f };
 };

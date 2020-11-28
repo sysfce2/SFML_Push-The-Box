@@ -15,7 +15,7 @@ bool PushTheBox::on_init()
 	load_ok *= AssetsManager::load_texture("completed.png", "completed", false);
 	load_ok *= AssetsManager::load_texture("not-completed.png", "not-completed", false);
 
-	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player-ss", true);
+	load_ok *= AssetsManager::load_texture("player-spritesheet.png", "player-sprite-sheet", true);
 	load_ok *= AssetsManager::load_texture("wall.png", "wall0", true);
 	load_ok *= AssetsManager::load_texture("wall1.png", "wall1", true);
 	load_ok *= AssetsManager::load_texture("target.png", "target", true);

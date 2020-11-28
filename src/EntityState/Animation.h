@@ -13,7 +13,7 @@ class Animation
 {
 public:
 	void update(const float& dt);
-	bool load_sprite_sheet(const std::string& texture_name);
+	bool set_sprite_sheet(const std::string& texture_name);
 	bool play_animation(const std::string& name, uint8_t fps,
 		               uint8_t mode = AN_ONCE, uint8_t repeat_from = 0);
 	bool new_animation(const std::string& name, uint16_t x, uint16_t y,

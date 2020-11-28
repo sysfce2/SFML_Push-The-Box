@@ -3,22 +3,16 @@
 #include "TileMap.h"
 #include "Box.h"
 #include "EntityState/Animation.h"
+#include <unordered_map>
 
 using vec2i = sf::Vector2i;
 
-enum Direction : uint8_t {
-	Up = 1,
-	Right = 2,
-	Down = 3,
-	Left = 4
+enum class Direction {
+	Up,	Right, Down, Left
 };
 
-enum AnimationState : uint8_t {
-	Standing = 0,
-	MovingUp = 1,
-	MovingRight = 2,
-	MovingDown = 3,
-	MovingLeft = 4
+enum class AnState {
+	Standing, MovingUp,	MovingRight, MovingDown, MovingLeft
 };
 
 class Player : public Entity
@@ -29,12 +23,13 @@ public:
 	virtual ~Player();
 private:
 	void update(const float& dt) override;
-	void move(Direction direction);
-	void animate(AnimationState an_state);
-	bool can_move(vec2i offset);
+	void walk(Direction direction);
+	void animate(AnState an_state);
+	bool can_walk(vec2i offset);
 
-	uint8_t m_StandingWait = 0;
-	AnimationState m_AnimationState = Standing;
+	bool m_StopWalking = true;
+	std::unordered_map<AnState, std::string> m_AnName;
+	AnState m_AnimationState = AnState::Standing;
 	Animation* m_Animation = nullptr;
 	TileMap* m_TileMap = nullptr;
 	Box* m_PushedBox = nullptr;

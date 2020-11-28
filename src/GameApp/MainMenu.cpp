@@ -29,8 +29,9 @@ MainMenu::MainMenu()
 	m_ExitButton->center_x();
 	make_entity(m_ExitButton);
 
-	UIText* footer = new UIText(L"PROJEKT Z C++ - WYKONANIE DAMIAN ¯UK - 2020", "joystix", 20);
+	UIText* footer = new UIText(L"PROJEKT Z C++ WYKONA£ DAMIAN ¯UK", "joystix", 20);
 	footer->set_position(vec2f(.42f, .945f));
+	footer->center_x();
 	make_entity(footer);
 }
 
