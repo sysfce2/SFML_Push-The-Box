@@ -1,12 +1,12 @@
 #pragma once
-#include "StatePlaying.h"
+#include "GamePlay.h"
 #include "TileMap.h"
 #include "Player.h"
 #include "Core/Logger.h"
 
 using KB = sf::Keyboard;
 
-void StatePlaying::update(const float& dt)
+void GamePlay::update(const float& dt)
 {	
 	if (KB::isKeyPressed(KB::Escape))
 		destroy_state();
@@ -33,7 +33,7 @@ void StatePlaying::update(const float& dt)
 	}
 }
 
-StatePlaying::StatePlaying(const std::string& level_path)
+GamePlay::GamePlay(const std::string& level_path)
 {
 	m_TileMap = new TileMap();
 	
@@ -53,6 +53,6 @@ StatePlaying::StatePlaying(const std::string& level_path)
 	}
 }
 
-StatePlaying::~StatePlaying()
+GamePlay::~GamePlay()
 {
 }

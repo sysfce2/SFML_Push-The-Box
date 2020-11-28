@@ -170,9 +170,9 @@
     <ClInclude Include="src\GameApp\Box.h" />
     <ClInclude Include="src\GameApp\Floor.h" />
     <ClInclude Include="src\GameApp\Player.h" />
-    <ClInclude Include="src\GameApp\StateLevelSelect.h" />
-    <ClInclude Include="src\GameApp\StateMainMenu.h" />
-    <ClInclude Include="src\GameApp\StatePlaying.h" />
+    <ClInclude Include="src\GameApp\LevelSelection.h" />
+    <ClInclude Include="src\GameApp\MainMenu.h" />
+    <ClInclude Include="src\GameApp\GamePlay.h" />
     <ClInclude Include="src\GameApp\TileMap.h" />
     <ClInclude Include="src\GameApp\Wall.h" />
     <ClInclude Include="src\UI\UIButton.h" />
@@ -192,9 +192,9 @@
     <ClCompile Include="src\GameApp\Box.cpp" />
     <ClCompile Include="src\GameApp\Floor.cpp" />
     <ClCompile Include="src\GameApp\Player.cpp" />
-    <ClCompile Include="src\GameApp\StateLevelSelect.cpp" />
-    <ClCompile Include="src\GameApp\StateMainMenu.cpp" />
-    <ClCompile Include="src\GameApp\StatePlaying.cpp" />
+    <ClCompile Include="src\GameApp\LevelSelection.cpp" />
+    <ClCompile Include="src\GameApp\MainMenu.cpp" />
+    <ClCompile Include="src\GameApp\GamePlay.cpp" />
     <ClCompile Include="src\GameApp\TileMap.cpp" />
     <ClCompile Include="src\GameApp\Wall.cpp" />
     <ClCompile Include="src\UI\UIButton.cpp" />

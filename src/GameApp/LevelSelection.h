@@ -7,7 +7,7 @@
 class SelectFrame : public UIElement
 {
 public:
-	friend class StateLevelSelect;
+	friend class LevelSelection;
 	SelectFrame(const vec2f& position, bool completed, const std::string& type, uint16_t number);
 	virtual ~SelectFrame();
 private:
@@ -16,12 +16,12 @@ private:
 	std::string m_LevelPath;
 };
 
-class StateLevelSelect : public State {
+class LevelSelection : public State {
 private:
 	void update(const float& dt) override;
 public:
-	StateLevelSelect();
-	virtual ~StateLevelSelect();
+	LevelSelection();
+	virtual ~LevelSelection();
 private:
 	std::vector<SelectFrame*> m_Easy;
 	vec2f m_SelectFormSize;

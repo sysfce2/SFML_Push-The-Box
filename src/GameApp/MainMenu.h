@@ -2,13 +2,13 @@
 #include "UI/UIElement.h"
 #include "UI/UIButton.h"
 
-class StateMainMenu : public State
+class MainMenu : public State
 {
 private:
 	void update(const float& dt) override;
 public:
-	StateMainMenu();
-	virtual ~StateMainMenu();
+	MainMenu();
+	virtual ~MainMenu();
 
 private:
 	UIElement* m_Background;

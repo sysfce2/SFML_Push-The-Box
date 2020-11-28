@@ -1,10 +1,10 @@
-#include "StateMainMenu.h"
+#include "MainMenu.h"
 #include "EntityState/StatesManager.h"
-#include "StateLevelSelect.h"
+#include "LevelSelection.h"
 
 const uint8_t btn_font_size = 48;
 
-StateMainMenu::StateMainMenu()
+MainMenu::MainMenu()
 {
 	m_Background = new UIElement("menu-state", vec2f(1.f, 1.f));
 	make_entity(m_Background);
@@ -34,15 +34,15 @@ StateMainMenu::StateMainMenu()
 	make_entity(footer);
 }
 
-void StateMainMenu::update(const float& dt)
+void MainMenu::update(const float& dt)
 {
 	if (m_PlayButton->was_pressed())
-		StatesManager::create_active_state(new StateLevelSelect());
+		StatesManager::create_active_state(new LevelSelection());
 
 	if (m_ExitButton->was_pressed())
 		destroy_state();
 }
 
-StateMainMenu::~StateMainMenu()
+MainMenu::~MainMenu()
 {
 }

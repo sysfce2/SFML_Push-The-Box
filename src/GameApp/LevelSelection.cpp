@@ -1,6 +1,6 @@
-#include "StateLevelSelect.h"
+#include "LevelSelection.h"
 #include "EntityState/StatesManager.h"
-#include "StatePlaying.h"
+#include "GamePlay.h"
 #include "Core/Window.h"
 #include "Core/Logger.h"
 
@@ -29,17 +29,17 @@ SelectFrame::~SelectFrame()
 {
 }
 
-void StateLevelSelect::update(const float& dt)
+void LevelSelection::update(const float& dt)
 {
 	for (auto& b : m_Easy)
 		if (b->m_PlayButton->was_pressed())
-			StatesManager::create_active_state(new StatePlaying(b->m_LevelPath));
+			StatesManager::create_active_state(new GamePlay(b->m_LevelPath));
 
 	if (back_button->was_pressed())
 		destroy_state();
 }
 
-StateLevelSelect::StateLevelSelect()
+LevelSelection::LevelSelection()
 {
 	UIElement* state_background = new UIElement("select-state", vec2f(1.f, 1.f));
 	make_entity(state_background);
@@ -74,7 +74,7 @@ StateLevelSelect::StateLevelSelect()
 	delete pattern;
 }
 
-StateLevelSelect::~StateLevelSelect()
+LevelSelection::~LevelSelection()
 {
 }
 

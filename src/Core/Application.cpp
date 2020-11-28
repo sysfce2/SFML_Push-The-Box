@@ -77,7 +77,7 @@ bool Application::init_game()
 		return false;
 	}
 
-	StatesManager::create_active_state(new StateMainMenu());
+	StatesManager::create_active_state(new MainMenu());
 	return true;
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "EntityState/Entity.h"
-#include "StatePlaying.h"
+#include "GamePlay.h"
 #include "Box.h"
 
 class Player;
@@ -14,7 +14,7 @@ enum Tile : uint8_t {
 class TileMap
 {
 public:
-	friend class StatePlaying;
+	friend class GamePlay;
 	bool load_level(const std::string& file_path);
 	vec2f get_tile_size() const;
 	Tile** m_Map;

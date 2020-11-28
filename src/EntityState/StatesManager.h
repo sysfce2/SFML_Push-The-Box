@@ -7,8 +7,8 @@ class StatesManager
 public:
 	friend class Application;
 	friend class State;
-	friend class StateMainMenu;
-	friend class StateLevelSelect;
+	friend class MainMenu;
+	friend class LevelSelection;
 private:
 	static StateStack m_AppStates;
 	static void create_active_state(State* state);

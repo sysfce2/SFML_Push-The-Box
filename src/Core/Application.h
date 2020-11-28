@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "EntityState/StatesManager.h"
 #include "Core/AssetsManager.h"
-#include "GameApp/StatePlaying.h"
-#include "GameApp/StateMainMenu.h"
+#include "GameApp/GamePlay.h"
+#include "GameApp/MainMenu.h"
 
 class Application
 {
