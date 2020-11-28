@@ -173,6 +173,7 @@
     <ClInclude Include="src\GameApp\LevelSelection.h" />
     <ClInclude Include="src\GameApp\MainMenu.h" />
     <ClInclude Include="src\GameApp\GamePlay.h" />
+    <ClInclude Include="src\GameApp\PushTheBox.h" />
     <ClInclude Include="src\GameApp\TileMap.h" />
     <ClInclude Include="src\GameApp\Wall.h" />
     <ClInclude Include="src\UI\UIButton.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="src\GameApp\LevelSelection.cpp" />
     <ClCompile Include="src\GameApp\MainMenu.cpp" />
     <ClCompile Include="src\GameApp\GamePlay.cpp" />
+    <ClCompile Include="src\GameApp\PushTheBox.cpp" />
     <ClCompile Include="src\GameApp\TileMap.cpp" />
     <ClCompile Include="src\GameApp\Wall.cpp" />
     <ClCompile Include="src\UI\UIButton.cpp" />

@@ -1,9 +1,8 @@
 #pragma once
-#include <iostream>
-#include "Core/Application.h"
+#include "GameApp/PushTheBox.h"
 
 int main() {
-	Application app(1280, 720, "Push The Box");
-	app.run(250);
+	PushTheBox game;
+	game.run(250);
 	return 0;
 }

@@ -20,6 +20,7 @@
     <ClInclude Include="src\GameApp\LevelSelection.h" />
     <ClInclude Include="src\GameApp\MainMenu.h" />
     <ClInclude Include="src\GameApp\GamePlay.h" />
+    <ClInclude Include="src\GameApp\PushTheBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -42,5 +43,6 @@
     <ClCompile Include="src\GameApp\LevelSelection.cpp" />
     <ClCompile Include="src\GameApp\MainMenu.cpp" />
     <ClCompile Include="src\GameApp\GamePlay.cpp" />
+    <ClCompile Include="src\GameApp\PushTheBox.cpp" />
   </ItemGroup>
 </Project>
