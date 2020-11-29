@@ -14,7 +14,3 @@ Floor::Floor(const vec2f& place_pos, uint8_t v, bool is_target)
 	set_position_px(place_pos);
 	set_scale(vec2f(1.5f, 1.5f));
 }
-
-Floor::~Floor()
-{
-}

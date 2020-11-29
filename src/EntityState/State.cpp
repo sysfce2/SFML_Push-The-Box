@@ -30,7 +30,7 @@ void State::update_entities(const float& dt)
 		else m_Entities.erase(it);
 }
 
-void State::render(sf::RenderTarget& target)
+void State::render_entities(sf::RenderTarget& target)
 {
 	for (auto& ent : m_Entities)
 		ent->render(target, m_CameraOffset);

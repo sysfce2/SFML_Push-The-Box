@@ -16,4 +16,5 @@ private:
 	UIButton* m_PlayButton;
 	UIButton* m_OptionsButton;
 	UIButton* m_ExitButton;
+	UIElement* m_Footer;
 };

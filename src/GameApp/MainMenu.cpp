@@ -29,16 +29,16 @@ MainMenu::MainMenu()
 	m_ExitButton->center_x();
 	make_entity(m_ExitButton);
 
-	UIText* footer = new UIText(L"PROJEKT Z C++ WYKONA£ DAMIAN ¯UK", "joystix", 20);
-	footer->set_position(vec2f(.42f, .945f));
-	footer->center_x();
-	make_entity(footer);
+	m_Footer = new UIText(L"PROJEKT Z C++ WYKONA£ DAMIAN ¯UK", "joystix", 20);
+	m_Footer->set_position(vec2f(.42f, .945f));
+	m_Footer->center_x();
+	make_entity(m_Footer);
 }
 
 void MainMenu::update(const float& dt)
 {
 	if (m_PlayButton->was_pressed())
-		StatesManager::create_active_state(new LevelSelection());
+		StatesManager::get().create_active_state(new LevelSelection());
 
 	if (m_ExitButton->was_pressed())
 		destroy_state();

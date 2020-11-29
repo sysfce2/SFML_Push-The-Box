@@ -1,4 +1,5 @@
 #include "Box.h"
+#include "TileMap.h"
 
 void Box::update(const float& dt)
 {
@@ -6,10 +7,10 @@ void Box::update(const float& dt)
 		m_CheckForTarget = false;
 		bool found = false;
 
-		for (const auto& target : *m_TargetsPtr) {
+		for (const auto& target : TileMap::s_Targets) {
 			if (target == m_TilePos) {
 				if (!m_IsOnTarget)
-					(*m_BoxesOnTargetsPtr)++;
+					TileMap::s_BoxesOnTargets++;
 				set_sprite("box-gold");
 				found = true;
 				break;
@@ -17,7 +18,7 @@ void Box::update(const float& dt)
 		}
 		
 		if (m_IsOnTarget && !found) {
-			(*m_BoxesOnTargetsPtr)--;
+			TileMap::s_BoxesOnTargets--;
 			set_sprite("box");
 		}
 
@@ -25,14 +26,9 @@ void Box::update(const float& dt)
 	}
 }
 
-Box::Box(const vec2f& place_pos, vec2u tile_pos, std::vector<vec2u>* tp, uint16_t* btp)
-	: m_TilePos(tile_pos), m_TargetsPtr(tp), m_BoxesOnTargetsPtr(btp)
+Box::Box(const vec2f& place_pos, vec2u tile_pos) : m_TilePos(tile_pos)
 {
 	set_sprite("box");
 	set_position_px(place_pos);
 	set_scale(vec2f(1.5f, 1.5f));
-}
-
-Box::~Box()
-{
 }

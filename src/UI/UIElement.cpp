@@ -31,7 +31,3 @@ UIElement::UIElement(const std::string& asset_id, const vec2f& scale)
 		set_scale(scale);
 	}
 }
-
-UIElement::~UIElement()
-{
-}

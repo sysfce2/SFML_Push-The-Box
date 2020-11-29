@@ -11,10 +11,10 @@ public:
 	static sf::Vector2f res_scale();
 	static uint16_t width();
 	static uint16_t height();
-	static const float AspectRatio;
 private:
 	static void set_handle(sf::Window* window_handle);
 	static void update_res_scale();
+
 	static sf::Window* m_Handle;
 	static sf::Vector2f m_ResScale;
 	static uint16_t m_Width;

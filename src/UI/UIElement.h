@@ -9,5 +9,5 @@ public:
 	void center_x();
 	void center_y();
 	UIElement(const std::string& asset_id, const vec2f& scale);
-	virtual ~UIElement();
+	virtual ~UIElement() = default;;
 };

@@ -24,7 +24,7 @@ void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t
 {
 	if (m_Text != nullptr)
 		delete m_Text;
-	sf::Font* font_ptr = AssetsManager::get_font(font);
+	sf::Font* font_ptr = AssetsManager::get().get_font(font);
 	m_Text = new sf::Text();
 	m_Text->setFont(*font_ptr);
 	m_Text->setCharacterSize(font_size);

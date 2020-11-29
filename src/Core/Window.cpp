@@ -1,6 +1,5 @@
 #include "Core/Window.h"
 
-const float Window::AspectRatio = 9.f / 16.f;
 sf::Window* Window::m_Handle;
 sf::Vector2f Window::m_ResScale;
 uint16_t Window::m_Width;

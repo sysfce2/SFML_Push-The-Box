@@ -1,6 +1,6 @@
 #include "Core/AssetsManager.h"
 #include "Core/Logger.h"
-
+AssetsManager* AssetsManager::s_Instance = nullptr;
 std::unordered_map<std::string, sf::Texture*> AssetsManager::m_Textures;
 std::unordered_map<std::string, sf::Font*> AssetsManager::m_Fonts;
 

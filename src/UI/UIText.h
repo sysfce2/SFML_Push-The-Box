@@ -14,9 +14,9 @@ public:
 	UIText(const std::wstring& text, const std::string& font, uint8_t font_size);
 	virtual ~UIText();
 
-	// Deleted methods
-	void set_scale(const vec2f& scale) = delete;
-	void set_sprite(const std::string& asset_id, int x, int y, int w, int h) = delete;
+	// Deleted entity methods
+	Entity& set_scale(const vec2f& scale) = delete;
+	Entity& set_sprite(const std::string& asset_id, int x, int y, int w, int h) = delete;
 private:
 	vec2f m_Margin;
 	sf::Text* m_Text = nullptr;

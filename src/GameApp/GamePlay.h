@@ -12,10 +12,10 @@ private:
 	void update(const float& dt) override;
 public:
 	GamePlay(const std::string& level_path);
-	virtual ~GamePlay();
+	virtual ~GamePlay() = default;
 
 private:
 	const float m_CameraBorderDistance = 0.4f;
-	Player* m_Player;
-	TileMap* m_TileMap;
+	Player* m_Player = nullptr;
+	TileMap* m_TileMap = nullptr;
 };

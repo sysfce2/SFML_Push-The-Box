@@ -22,7 +22,6 @@ protected:
 	std::string m_InitErrorMessage;
 	std::string m_RuntimeErrorMessage;
 private:
-	StateStack* m_AppStatesPtr;
 	uint16_t m_ScreenWidth;
 	uint16_t m_ScreenHeight;
 	std::string m_AppName;

@@ -15,25 +15,25 @@ public:
 	vec2f get_size() const;
 	vec2f get_size_px() const;
 	vec2f get_scale() const;
-	void set_sprite(sf::Sprite* sprite, bool size_changed);
-	void set_sprite(const std::string& asset_id, uint32_t x = 0, uint32_t y = 0, uint32_t w = 0, uint32_t h = 0);
-	void set_position(const vec2f& position);
-	void set_position_px(const vec2f& position);
-	void set_scale(const vec2f& scale);
-	void shift(const vec2f& offset);
-	void shift_px(const vec2f& offset);
-	void attach_position(Entity* other);
-	void detach_position();
+	Entity& set_sprite(sf::Sprite* sprite, bool size_changed);
+	Entity& set_sprite(const std::string& asset_id, uint32_t x = 0, uint32_t y = 0, uint32_t w = 0, uint32_t h = 0);
+	Entity& set_position(const vec2f& position);
+	Entity& set_position_px(const vec2f& position);
+	Entity& set_scale(const vec2f& scale);
+	Entity& shift(const vec2f& offset);
+	Entity& shift_px(const vec2f& offset);
+	Entity& attach_position(Entity* other);
+	Entity& detach_position();
 	void destroy();
 
 protected:
 	virtual void update(const float& dt) = 0;
 	virtual void render(sf::RenderTarget& target, const vec2f& camera_offset = { 0.f, 0.f });
-	void add_child_entity(Entity* entity);
+	Entity& add_child_entity(Entity* entity);
 
 public:
 	Entity(const Entity& entity) = delete;
-	Entity();
+	Entity() = default;
 	virtual ~Entity();
 
 private:

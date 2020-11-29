@@ -3,8 +3,7 @@
 #include "Core/Logger.h"
 #include <algorithm>
 
-Application::Application(const std::string& app_name) 
-	: m_AppStatesPtr(&StatesManager::m_AppStates), m_AppName(app_name)
+Application::Application(const std::string& app_name) : m_AppName(app_name)
 {
 	// TODO: JSON window config load
 	m_ScreenWidth = 1280;
@@ -20,12 +19,13 @@ Application::Application(const std::string& app_name)
 void Application::run(uint16_t fps_limit)
 {
 	if (!m_IsRunning && on_init()) {
-		sf::Clock clock;
 		m_Window.setFramerateLimit(fps_limit);
 		m_IsRunning = true;
+		sf::Time frame_start, frame_end;
+		sf::Clock clock;
 
 		while (m_Window.isOpen()) {
-			sf::Time frame_start = clock.getElapsedTime();
+			frame_start = clock.getElapsedTime();
 			if (!on_update(m_FrameTime)) {
 				m_Window.close();
 				LOG_ERROR("Game runtime error:", m_RuntimeErrorMessage);
@@ -33,24 +33,24 @@ void Application::run(uint16_t fps_limit)
 			handle_sfml_events();
 			update_active_state(m_FrameTime);
 			render_active_state();
-			sf::Time frame_end = clock.getElapsedTime();
+			frame_end = clock.getElapsedTime();
 			m_FrameTime = frame_end.asSeconds() - frame_start.asSeconds();
 		}
 	}
 	else {
-		if (m_IsRunning)
-			m_InitErrorMessage = "game is already running!";
+		if (m_IsRunning) m_InitErrorMessage = "game is already running!";
 		LOG_ERROR("Game initialization error:", m_InitErrorMessage);
 	}
 }
 
 Application::~Application()
 {
-	while (!StatesManager::m_AppStates.empty()) {
-		delete StatesManager::m_AppStates.top();
-		StatesManager::m_AppStates.pop();
+	auto& app_states = StatesManager::get().m_AppStates;
+	while (!app_states.empty()) {
+		delete app_states.top();
+		app_states.pop();
 	}
-	AssetsManager::free_memory();
+	AssetsManager::get().free_memory();
 }
 
 void Application::handle_sfml_events()
@@ -66,17 +66,18 @@ void Application::handle_sfml_events()
 
 void Application::update_active_state(const float& dt)
 {
-	if (!m_AppStatesPtr->top()->m_DestroyState) {
-		m_AppStatesPtr->top()->update_entities(dt);
-		m_AppStatesPtr->top()->update(dt);
+	auto& app_states = StatesManager::get().m_AppStates;
+	if (!app_states.top()->m_DestroyState) {
+		app_states.top()->update_entities(dt);
+		app_states.top()->update(dt);
 	}
 	else {
-		delete m_AppStatesPtr->top();
-		m_AppStatesPtr->pop();
+		delete app_states.top();
+		app_states.pop();
 		m_SkipNextRender = true;
 	}
 
-	if (m_AppStatesPtr->size() == 0)
+	if (app_states.size() == 0)
 		m_Window.close();
 }
 
@@ -84,7 +85,7 @@ void Application::render_active_state()
 {
 	if (!m_SkipNextRender) {
 		m_Window.clear();
-		m_AppStatesPtr->top()->render(m_Window);
+		StatesManager::get().m_AppStates.top()->render_entities(m_Window);
 		m_Window.display();
 	}
 	else

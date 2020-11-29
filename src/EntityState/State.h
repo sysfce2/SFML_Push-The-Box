@@ -4,9 +4,6 @@
 #include <stack>
 #include "EntityState/Entity.h"
 
-class State;
-using StateStack = std::stack<State*>;
-
 class State
 {
 public:
@@ -15,7 +12,7 @@ public:
 protected:
 	Entity* make_entity(Entity* entity);
 	void update_entities(const float& dt);
-	void render(sf::RenderTarget& target);
+	void render_entities(sf::RenderTarget& target);
 	void destroy_state();
 	virtual void update(const float& dt) = 0;
 

@@ -27,8 +27,7 @@ void GamePlay::update(const float& dt)
 		m_CameraOffset.y = player_pos.y - m_CameraBorderDistance;
 	}
 
-	if (m_TileMap->m_Targets.size() == m_TileMap->m_BoxesOnTargets) {
-		// level finished
+	if (m_TileMap->s_Targets.size() == m_TileMap->s_BoxesOnTargets) {
 		destroy_state();
 	}
 }
@@ -51,8 +50,4 @@ GamePlay::GamePlay(const std::string& level_path)
 		LOG_ERROR("Can't find game level:", level_path);
 		destroy_state();
 	}
-}
-
-GamePlay::~GamePlay()
-{
 }

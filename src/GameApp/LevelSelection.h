@@ -9,7 +9,7 @@ class SelectFrame : public UIElement
 public:
 	friend class LevelSelection;
 	SelectFrame(const vec2f& position, bool completed, const std::string& type, uint16_t number);
-	virtual ~SelectFrame();
+	virtual ~SelectFrame() = default;
 private:
 	UIButton* m_PlayButton;
 	UIText* m_LevelNumber;
@@ -21,7 +21,7 @@ private:
 	void update(const float& dt) override;
 public:
 	LevelSelection();
-	virtual ~LevelSelection();
+	virtual ~LevelSelection() = default;
 private:
 	std::vector<SelectFrame*> m_Easy;
 	vec2f m_SelectFormSize;

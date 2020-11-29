@@ -16,8 +16,8 @@ void Player::update(const float& dt)
 			m_PushedBox = nullptr;
 		}
 		if (m_StopWalking) {
-			m_Animation->start_stop();
 			m_StopWalking = false;
+			m_Animation->stop();
 		}
 		if (KB::isKeyPressed(KB::Right))     walk(Direction::Right);
 		else if (KB::isKeyPressed(KB::Left)) walk(Direction::Left);
@@ -111,19 +111,19 @@ bool Player::can_walk(vec2i offset)
 	if (first.x < 0 || first.y < 0)
 		return false;
 
-	if (m_TileMap->m_Map[first.x][first.y] == t_Wall)
+	if (m_TileMap->m_Map[first.x][first.y] == Tile::Wall)
 		return false;
 
 	vec2i second = { (int)m_TilePosition.x + offset.x * 2, (int)m_TilePosition.y + offset.y * 2 };
 	if (second.x < 0 || second.y < 0)
 		return false;
 
-	if (m_TileMap->m_Map[first.x][first.y] == t_Box) {
-		if (m_TileMap->m_Map[second.x][second.y] != t_None)
+	if (m_TileMap->m_Map[first.x][first.y] == Tile::Box) {
+		if (m_TileMap->m_Map[second.x][second.y] != Tile::None)
 			return false;
 
-		m_TileMap->m_Map[first.x][first.y] = t_None;
-		m_TileMap->m_Map[second.x][second.y] = t_Box;
+		m_TileMap->m_Map[first.x][first.y] = Tile::None;
+		m_TileMap->m_Map[second.x][second.y] = Tile::Box;
 
 		for (Box* box : m_TileMap->m_Boxes)
 			if (box->m_TilePos == vec2u(first.x, first.y)) {
@@ -135,8 +135,7 @@ bool Player::can_walk(vec2i offset)
 	return true;
 }
 
-Player::Player(TileMap* tile_map)
-	: m_TileMap(tile_map)
+Player::Player(TileMap* tile_map) : m_TileMap(tile_map)
 {
 	set_sprite("player-sprite-sheet", 0, 0, 64, 64);
 	set_scale(vec2f(1.5f, 1.5f));

@@ -6,7 +6,17 @@ class StatesManager
 {
 public:
 	friend class Application;
-	static void create_active_state(State* state);
+	void create_active_state(State* state);
+
+	inline static StatesManager& get() {
+		if (s_Instance == nullptr) {}
+			s_Instance = new StatesManager();
+		return *s_Instance;
+	}
+
+	StatesManager();
+	virtual ~StatesManager();
 private:
-	static StateStack m_AppStates;
+	static StatesManager* s_Instance;
+	static std::stack<State*> m_AppStates;
 };
