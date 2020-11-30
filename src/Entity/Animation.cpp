@@ -1,4 +1,4 @@
-#include "EntityState/Animation.h"
+#include "Entity/Animation.h"
 #include "Core/AssetsManager.h"
 #include "Core/Window.h"
 #include "Core/Logger.h"

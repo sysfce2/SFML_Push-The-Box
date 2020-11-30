@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "EntityState/StatesManager.h"
+#include "State/StatesManager.h"
 #include "Core/AssetsManager.h"
 
 class Application

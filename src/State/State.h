@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <stack>
-#include "EntityState/Entity.h"
+#include "Entity/Entity.h"
 
 class State
 {

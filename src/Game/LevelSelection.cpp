@@ -1,6 +1,6 @@
 #include "LevelSelection.h"
 #include "GamePlay.h"
-#include "EntityState/StatesManager.h"
+#include "State/StatesManager.h"
 #include "Core/Window.h"
 #include "Core/Logger.h"
 

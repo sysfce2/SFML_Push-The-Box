@@ -1,5 +1,5 @@
 #pragma once
-#include "EntityState/State.h"
+#include "State/State.h"
 
 class TileMap;
 class Player;

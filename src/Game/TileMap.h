@@ -1,5 +1,5 @@
 #pragma once
-#include "EntityState/Entity.h"
+#include "Entity/Entity.h"
 #include "GamePlay.h"
 #include "Box.h"
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "GameApp/PushTheBox.h"
+#include "Game/PushTheBox.h"
 
 int main() {
 	PushTheBox game;

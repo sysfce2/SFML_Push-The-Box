@@ -1,8 +1,8 @@
 #pragma once
-#include "EntityState/Entity.h"
+#include "Entity/Entity.h"
 #include "TileMap.h"
 #include "Box.h"
-#include "EntityState/Animation.h"
+#include "Entity/Animation.h"
 #include <unordered_map>
 
 using vec2i = sf::Vector2i;

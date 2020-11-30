@@ -1,4 +1,4 @@
-#include "EntityState/Entity.h"
+#include "Entity/Entity.h"
 #include "Core/Window.h"
 #include "Core/AssetsManager.h"
 #include "Core/Logger.h"
