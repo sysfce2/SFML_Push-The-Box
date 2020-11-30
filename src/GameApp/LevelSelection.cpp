@@ -13,11 +13,9 @@ SelectFrame::SelectFrame(const vec2f& position, bool completed, const std::strin
 {
 	set_position(position);
 	m_LevelNumber = new UIText(std::to_string(number), "invasion", 32);
-	m_LevelNumber->attach_position(this).set_position(vec2f(0.015f, 0.f));
-	m_LevelNumber->center_y();
+	m_LevelNumber->attach_position(this).set_position(vec2f(0.015f, 0.f)).center_y();
 	m_PlayButton = new UIButton("play-btn", DEFAULT_SCALE);
-	m_PlayButton->attach_position(this).set_position(vec2f(0.075f, 0.0f));
-	m_PlayButton->center_y();
+	m_PlayButton->attach_position(this).set_position(vec2f(0.075f, 0.0f)).center_y();
 	m_LevelPath = "levels/" + type + "/" + type + std::to_string(number) + ".lvl";
 	if (completed) m_LevelNumber->set_color(sf::Color(105, 91, 0, 255));
 	add_child_entity(m_LevelNumber);
@@ -40,13 +38,12 @@ LevelSelection::LevelSelection()
 	make_entity(state_background);
 	UIText* select_title = new UIText("WYBIERZ POZIOM", "joystix", 54);
 	select_title->set_color(HEADER_COLOR);
-	select_title->set_position(vec2f(0.f, .03f));
-	select_title->center_x();
+	select_title->set_position(vec2f(0.f, .03f)).center_x();
 	make_entity(select_title);
 
 	SelectFrame* frame = new SelectFrame(vec2f(0.f, 0.f), true, "easy", 1);
-	vec2f pattern_size = frame->get_size();
-	vec2f place_offset = vec2f((1.f - pattern_size.x * 6.f) / 7.f, .03f);
+	vec2f frame_size = frame->get_size();
+	vec2f place_offset = vec2f((1.f - frame_size.x * 6.f) / 7.f, .03f);
 	vec2f place_pos = vec2f(place_offset.x, .18f);
 
 	for (uint16_t i = 0; i < 5; i++) {
@@ -56,14 +53,13 @@ LevelSelection::LevelSelection()
 			frame = new SelectFrame(place_pos, completed, "easy", level_number);
 			m_Easy.emplace_back(frame);
 			make_entity(frame);
-			place_pos.x += place_offset.x + pattern_size.x;
+			place_pos.x += place_offset.x + frame_size.x;
 		}
 		place_pos.x = place_offset.x;
-		place_pos.y += place_offset.y + pattern_size.y;
+		place_pos.y += place_offset.y + frame_size.y;
 	}
 
 	back_button = new UIButton(L"WRÓÆ", vec2f(3.f, 3.f), 48);
-	back_button->set_position(vec2f(0.f, 0.85f));
-	back_button->center_x();
+	back_button->set_position(vec2f(0.f, 0.85f)).center_x();
 	make_entity(back_button);
 }

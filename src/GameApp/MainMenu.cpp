@@ -10,28 +10,23 @@ MainMenu::MainMenu()
 	make_entity(m_Background);
 
 	m_Title = new UIElement("title", vec2f(3.5f, 3.5f));
-	m_Title->set_position(vec2f(0.f, 0.1f));
-	m_Title->center_x();
+	m_Title->set_position(vec2f(0.f, 0.1f)).center_x();
 	make_entity(m_Title);
 
 	m_PlayButton = new UIButton("GRAJ", vec2f(3.f, 3.f), btn_font_size);
-	m_PlayButton->set_position(vec2f(0.f, .4f));
-	m_PlayButton->center_x();
+	m_PlayButton->set_position(vec2f(0.f, .4f)).center_x();
 	make_entity(m_PlayButton);
 
 	m_OptionsButton = new UIButton("OPCJE", vec2f(3.f, 3.f), btn_font_size);
-	m_OptionsButton->set_position(vec2f(0.f, .55f));
-	m_OptionsButton->center_x();
+	m_OptionsButton->set_position(vec2f(0.f, .55f)).center_x();
 	make_entity(m_OptionsButton);
 
 	m_ExitButton = new UIButton(L"WYJD", vec2f(3.f, 3.f), btn_font_size);
-	m_ExitButton->set_position(vec2f(0.f, .70f));
-	m_ExitButton->center_x();
+	m_ExitButton->set_position(vec2f(0.f, .70f)).center_x();
 	make_entity(m_ExitButton);
 
 	m_Footer = new UIText(L"PROJEKT Z C++ WYKONA£ DAMIAN ¯UK", "joystix", 20);
-	m_Footer->set_position(vec2f(.42f, .945f));
-	m_Footer->center_x();
+	m_Footer->set_position(vec2f(.42f, .945f)).center_x();
 	make_entity(m_Footer);
 }
 

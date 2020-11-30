@@ -8,11 +8,11 @@
 using vec2i = sf::Vector2i;
 
 enum class Direction {
-	Up,	Right, Down, Left
+	Up, Right, Down, Left
 };
 
 enum class AnState {
-	Standing, MovingUp,	MovingRight, MovingDown, MovingLeft
+	Standing, MovingUp, MovingRight, MovingDown, MovingLeft
 };
 
 class Player : public Entity
@@ -37,4 +37,3 @@ private:
 	vec2u m_TilePosition;
 	float m_MovementSpeed = 300.f;
 };
-

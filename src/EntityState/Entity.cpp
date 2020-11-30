@@ -93,6 +93,28 @@ Entity& Entity::shift_px(const vec2f& offset)
 	return *this;
 }
 
+Entity& Entity::center_x()
+{
+	if (m_AttachedToEntity == nullptr)
+		set_position(vec2f(.5f - get_size().x / 2.f, get_position().y));
+	else {
+		vec2f base_center = { m_AttachedToEntity->get_size().x / 2.f, 0.f };
+		set_position(vec2f(base_center.x - get_size().x / 2.f, get_position().y));
+	}
+	return *this;
+}
+
+Entity& Entity::center_y()
+{
+	if (m_AttachedToEntity == nullptr)
+		set_position(vec2f(get_position().x, .5f - get_size().y / 2.f));
+	else {
+		vec2f base_center = { 0.f, m_AttachedToEntity->get_size().y / 2.f };
+		set_position(vec2f(get_position().x, base_center.y - get_size().y / 2.f));
+	}
+	return *this;
+}
+
 Entity& Entity::attach_position(Entity* other)
 {
 	m_AttachedToEntity = other;
@@ -103,36 +125,6 @@ Entity& Entity::detach_position()
 {
 	m_AttachedToEntity = nullptr;
 	return *this;
-}
-
-void Entity::destroy()
-{
-	m_Active = false;
-}
-
-vec2f Entity::get_position() const
-{
-	return m_Position;
-}
-
-vec2f Entity::get_position_px() const
-{
-	return m_PositionPx;
-}
-
-vec2f Entity::get_size() const
-{
-	return m_Size;
-}
-
-vec2f Entity::get_size_px() const
-{
-	return m_SizePx;
-}
-
-vec2f Entity::get_scale() const
-{
-	return m_Scale;
 }
 
 Entity::~Entity()
