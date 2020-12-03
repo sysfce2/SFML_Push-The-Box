@@ -1,7 +1,7 @@
 #include "Core/Window.h"
 
 sf::Window* Window::m_Handle;
-sf::Vector2f Window::m_ResScale;
+vec2f Window::m_ResScale;
 uint16_t Window::m_Width;
 uint16_t Window::m_Height;
 
@@ -16,7 +16,7 @@ void Window::set_handle(sf::Window* window_handle)
 void Window::update_res_scale()
 {
 	sf::Vector2u win_size = m_Handle->getSize();
-	m_ResScale = sf::Vector2f(win_size.x / WIDTH_MODEL, win_size.y / HEIGHT_MODEL);
+	m_ResScale = { win_size.x / WIDTH_MODEL, win_size.y / HEIGHT_MODEL };
 }
 
 sf::Window* Window::get_handle()
@@ -24,9 +24,14 @@ sf::Window* Window::get_handle()
 	return m_Handle;
 }
 
-sf::Vector2f Window::res_scale()
+vec2f Window::res_scale()
 {
 	return m_ResScale;
+}
+
+vec2f Window::size()
+{
+	return vec2f(m_Width, m_Height);
 }
 
 uint16_t Window::width()

@@ -127,7 +127,7 @@ bool Player::can_walk(vec2i offset)
 
 		for (Box* box : m_TileMap->m_Boxes)
 			if (box->m_TilePos == vec2u(first.x, first.y)) {
-				box->m_TilePos = vec2u(second.x, second.y);
+				box->m_TilePos = { (unsigned)second.x, (unsigned)second.y };
 				m_PushedBox = box;
 				break;
 			}
@@ -137,8 +137,8 @@ bool Player::can_walk(vec2i offset)
 
 Player::Player(TileMap* tile_map) : m_TileMap(tile_map)
 {
-	set_sprite("player-sprite-sheet", 0, 0, 64, 64);
-	set_scale(vec2f(1.5f, 1.5f));
+	set_sprite("player-sprite-sheet", { 0, 0 }, { 64, 64 });
+	set_scale({ 1.5f, 1.5f });
 	m_Animation = new Animation(this);
 	m_Animation->set_sprite_sheet("player-sprite-sheet");
 	m_Animation->new_animation("MovingDown", 0, 0, 64, 64, 9);

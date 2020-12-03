@@ -40,7 +40,7 @@ bool TileMap::load_level(const std::string& file_path)
 					m_Map[i][j] = Tile::None;
 				}
 				else if (tile_type == 2) {
-					m_Boxes.emplace_back(new Box(place_pos, vec2u(i, j)));
+					m_Boxes.emplace_back(new Box(place_pos, { i, j }));
 					m_Tiles.emplace_back(new Floor(place_pos, rand_int));
 					m_Map[i][j] = Tile::Box;
 				}
@@ -60,10 +60,9 @@ bool TileMap::load_level(const std::string& file_path)
 		}
 
 		m_Player = new Player(this);
-		vec2f offset = { (m_TileSize.x - m_Player->get_size_px().x) / 2,
-			(m_TileSize.y - m_Player->get_size_px().y) / 2 };
-		place_pos = { player_pos.x * m_TileSize.x, player_pos.y * m_TileSize.y };
-		m_Player->set_position_px(vec2f(place_pos.x + offset.x, place_pos.y + offset.y));
+		vec2f offset = (m_TileSize - m_Player->get_size_px()) / 2.f;
+		vec2f place_px = (vec2f)player_pos * m_TileSize;
+		m_Player->set_position_px(place_px + offset);
 		m_Player->m_DestinationPos = m_Player->get_position_px();
 		m_Player->m_TilePosition = player_pos;
 		m_LevelSize = level_size;

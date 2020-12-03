@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "Vector2.h"
 #define WIDTH_MODEL   1280.f
 #define HEIGHT_MODEL  720.f
 
@@ -8,7 +8,8 @@ class Window
 public:
 	friend class Application;
 	static sf::Window* get_handle();
-	static sf::Vector2f res_scale();
+	static vec2f res_scale();
+	static vec2f size();
 	static uint16_t width();
 	static uint16_t height();
 private:
@@ -16,7 +17,7 @@ private:
 	static void update_res_scale();
 
 	static sf::Window* m_Handle;
-	static sf::Vector2f m_ResScale;
+	static vec2f m_ResScale;
 	static uint16_t m_Width;
 	static uint16_t m_Height;
 };

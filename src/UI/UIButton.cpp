@@ -21,7 +21,7 @@ void UIButton::update(const float& dt)
 				m_Pressed = true;
 				m_AnyPressed = true;
 				if (m_ButtonText != nullptr)
-					m_ButtonText->shift_px(vec2f(-get_scale().x, get_scale().y));
+					m_ButtonText->shift_px({ -get_scale().x, get_scale().y });
 			}
 		}
 		else {
@@ -35,7 +35,7 @@ void UIButton::update(const float& dt)
 				m_Pressed = false;
 				m_AnyPressed = false;
 				if (m_ButtonText != nullptr)
-					m_ButtonText->shift_px(vec2f(get_scale().x, -get_scale().y));
+					m_ButtonText->shift_px({ get_scale().x, -get_scale().y });
 			}
 		}
 	}
@@ -71,9 +71,7 @@ UIButton::UIButton(const std::string& button_name, const vec2f& scale, uint8_t f
 {
 	if (font_size > 0) {
 		m_ButtonText = new UIText(button_name, DEFAULT_FONT, font_size);
-		m_ButtonText->attach_position(this);
-		m_ButtonText->center_x();
-		m_ButtonText->center_y();
+		m_ButtonText->attach_position(this).center_x().center_y();
 		m_ButtonText->set_color(DEFAULT_COLOR);
 		add_child_entity(m_ButtonText);
 	}
@@ -83,14 +81,10 @@ UIButton::UIButton(const std::wstring& button_name, const vec2f& scale, uint8_t 
 	: UIElement("button", scale), m_ButtonAsset("button"),
 	  m_ButtonName(button_name), m_PressTime(0), m_FontSize(font_size)
 {
-	if (font_size > 0) {
-		m_ButtonText = new UIText(button_name, DEFAULT_FONT, font_size);
-		m_ButtonText->attach_position(this);
-		m_ButtonText->center_x();
-		m_ButtonText->center_y();
-		m_ButtonText->set_color(DEFAULT_COLOR);
-		add_child_entity(m_ButtonText);
-	}
+	m_ButtonText = new UIText(button_name, DEFAULT_FONT, font_size);
+	m_ButtonText->attach_position(this).center_x().center_y();
+	m_ButtonText->set_color(DEFAULT_COLOR);
+	add_child_entity(m_ButtonText);
 }
 
 UIButton::~UIButton()

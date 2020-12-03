@@ -1,9 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-
-// TODO: Make new vector class with operator overloading
-using vec2f = sf::Vector2f;
-using vec2u = sf::Vector2u;
+#include "Core/Vector2.h"
 
 class Entity
 {
@@ -12,8 +8,7 @@ public:
 	friend class Animation;
 
 	Entity& set_sprite(sf::Sprite* sprite, bool size_changed);
-	// TODO: Change x,y -> vec2u pos;  w,h -> vec2u size (new vector class)
-	Entity& set_sprite(const std::string& asset_id, uint32_t x = 0, uint32_t y = 0, uint32_t w = 0, uint32_t h = 0);
+	Entity& set_sprite(const std::string& asset_id, vec2i pos = { 0, 0 }, vec2i size = { 0,0 });
 	Entity& set_position(const vec2f& position);
 	Entity& set_position_px(const vec2f& position);
 	Entity& set_scale(const vec2f& scale);

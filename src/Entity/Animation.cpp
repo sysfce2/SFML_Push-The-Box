@@ -77,7 +77,7 @@ bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mod
         if (mode <= AN_BACKNFORTH) {
             if (m_Frames == 1u) m_PlayMode = AN_ONCE;
             else m_PlayMode = mode;
-            m_Frames = frames->size();
+            m_Frames = static_cast<uint32_t>(frames->size());
             m_CurrentAnimation = frames;
             m_RepeatFrom = repeat_from;
             m_FrameTime = 1.f / fps;

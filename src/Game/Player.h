@@ -5,8 +5,6 @@
 #include "Entity/Animation.h"
 #include <unordered_map>
 
-using vec2i = sf::Vector2i;
-
 enum class Direction {
 	Up, Right, Down, Left
 };

@@ -12,5 +12,5 @@ Floor::Floor(const vec2f& place_pos, uint8_t v, bool is_target)
 	else
 		set_sprite("floor" + std::to_string(v + 1));
 	set_position_px(place_pos);
-	set_scale(vec2f(1.5f, 1.5f));
+	set_scale({ 1.5f, 1.5f });
 }

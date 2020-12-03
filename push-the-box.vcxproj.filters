@@ -21,6 +21,7 @@
     <ClInclude Include="src\State\StatesManager.h" />
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Entity\Animation.h" />
+    <ClInclude Include="src\Core\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />

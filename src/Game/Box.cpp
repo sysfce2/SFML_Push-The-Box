@@ -30,5 +30,5 @@ Box::Box(const vec2f& place_pos, vec2u tile_pos) : m_TilePos(tile_pos)
 {
 	set_sprite("box");
 	set_position_px(place_pos);
-	set_scale(vec2f(1.5f, 1.5f));
+	set_scale({ 1.5f, 1.5f });
 }
