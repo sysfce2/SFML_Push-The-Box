@@ -16,12 +16,6 @@ void Entity::render(sf::RenderTarget& target, const vec2f& camera_offset)
 	}
 }
 
-Entity& Entity::add_child_entity(Entity* entity)
-{
-	m_ChildEntities.emplace_back(entity);
-	return *entity;
-}
-
 Entity& Entity::set_sprite(const std::string& asset_id, vec2i pos, vec2i size)
 {
 	sf::Texture* texture = AssetsManager::get().get_texture(asset_id);
@@ -30,16 +24,14 @@ Entity& Entity::set_sprite(const std::string& asset_id, vec2i pos, vec2i size)
 
 	m_Sprite = new sf::Sprite();
 	m_Sprite->setTexture(*texture);
-	set_scale(m_Scale);
 
 	if (size.x > 0 && size.y > 0) {
 		m_Sprite->setTextureRect(sf::IntRect(pos.x, pos.y, size.x, size.y));
 		m_SpriteSize = size;
 	}
 	else m_SpriteSize = { (float)texture->getSize().x, (float)texture->getSize().y };
+	set_scale(m_Scale);
 
-	m_SizePx = m_SpriteSize * Window::res_scale();
-	m_Size = m_SizePx / Window::size();
 	return *this;
 }
 
@@ -124,6 +116,37 @@ Entity& Entity::detach_position()
 {
 	m_AttachedToEntity = nullptr;
 	return *this;
+}
+
+void Entity::vanish(bool freeze)
+{
+	m_Visible = false;
+	m_Freezed = freeze;
+	for (auto& child : m_ChildEntities) {
+		child->m_Visible = false;
+		child->m_Freezed = freeze;
+	}
+}
+
+void Entity::appear(bool freeze)
+{
+	m_Visible = true;
+	m_Freezed = freeze;
+	for (auto& child : m_ChildEntities) {
+		child->m_Visible = true;
+		child->m_Freezed = freeze;
+	}
+}
+
+void Entity::destroy()
+{
+	m_Active = false;
+}
+
+Entity& Entity::add_child_entity(Entity* entity)
+{
+	m_ChildEntities.emplace_back(entity);
+	return *entity;
 }
 
 Entity::~Entity()

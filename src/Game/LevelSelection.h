@@ -16,6 +16,8 @@ private:
 	std::string m_LevelPath;
 };
 
+using Levels = std::vector<SelectFrame*>;
+
 class LevelSelection : public State {
 private:
 	void update(const float& dt) override;
@@ -23,7 +25,17 @@ public:
 	LevelSelection();
 	virtual ~LevelSelection() = default;
 private:
-	std::vector<SelectFrame*> m_Easy;
-	vec2f m_SelectFormSize;
-	UIButton* back_button;
+	void switch_scene(uint8_t scene);
+
+	uint8_t m_Scene = 0;
+	Levels m_Easy;
+	Levels m_Hard;
+	Levels m_Expert;
+	Levels* m_SelectedDifficulty = nullptr;
+
+	UIButton* m_EasyButton;
+	UIButton* m_HardButton;
+	UIButton* m_ExpertButton;
+	UIButton* m_BackButton;
+	UIText* m_HeaderText;
 };

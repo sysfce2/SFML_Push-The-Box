@@ -17,7 +17,7 @@ void UIButton::update(const float& dt)
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			if (!m_Pressed && !m_AnyPressed && cursor_over_button()) {
-				set_sprite(m_ButtonAsset + "-pressed");
+				set_sprite(m_PressedButtonSprite);
 				m_Pressed = true;
 				m_AnyPressed = true;
 				if (m_ButtonText != nullptr)
@@ -31,7 +31,7 @@ void UIButton::update(const float& dt)
 					std::chrono::system_clock::now().time_since_epoch());
 			}
 			if (m_Pressed) {
-				set_sprite(m_ButtonAsset);
+				set_sprite(m_ButtonSprite);
 				m_Pressed = false;
 				m_AnyPressed = false;
 				if (m_ButtonText != nullptr)
@@ -63,25 +63,33 @@ bool UIButton::is_pressed() const
 	return m_Pressed;
 }
 
-UIButton::UIButton(const std::string& button_name, const vec2f& scale, uint8_t font_size)
-	: UIElement(font_size > 0 ? "button" : button_name, scale),
-	  m_ButtonAsset(font_size > 0 ? "button" : button_name),
-	  m_ButtonName(std::wstring(button_name.begin(), button_name.end())),
+void UIButton::assign_sprite(const std::string& unpressed_sprite, const std::string& pressed_sprite)
+{
+	m_ButtonSprite = unpressed_sprite;
+	m_PressedButtonSprite = pressed_sprite;
+	set_sprite(m_ButtonSprite);
+	if (m_ButtonText != nullptr)
+		m_ButtonText->center_x().center_y();
+}
+
+UIButton::UIButton(const std::string& button_string, const vec2f& scale, uint8_t font_size)
+	: UIElement("button", scale), m_ButtonSprite("button"), m_PressedButtonSprite("button-pressed"),
+	  m_ButtonString(std::wstring(button_string.begin(), button_string.end())),
 	  m_PressTime(0), m_FontSize(font_size)
 {
 	if (font_size > 0) {
-		m_ButtonText = new UIText(button_name, DEFAULT_FONT, font_size);
+		m_ButtonText = new UIText(button_string, DEFAULT_FONT, font_size);
 		m_ButtonText->attach_position(this).center_x().center_y();
 		m_ButtonText->set_color(DEFAULT_COLOR);
 		add_child_entity(m_ButtonText);
 	}
 }
 
-UIButton::UIButton(const std::wstring& button_name, const vec2f& scale, uint8_t font_size)
-	: UIElement("button", scale), m_ButtonAsset("button"),
-	  m_ButtonName(button_name), m_PressTime(0), m_FontSize(font_size)
+UIButton::UIButton(const std::wstring& button_string, const vec2f& scale, uint8_t font_size)
+	: UIElement("button", scale), m_ButtonSprite("button"), m_PressedButtonSprite("button-pressed"),
+	  m_ButtonString(button_string), m_PressTime(0), m_FontSize(font_size)
 {
-	m_ButtonText = new UIText(button_name, DEFAULT_FONT, font_size);
+	m_ButtonText = new UIText(button_string, DEFAULT_FONT, font_size);
 	m_ButtonText->attach_position(this).center_x().center_y();
 	m_ButtonText->set_color(DEFAULT_COLOR);
 	add_child_entity(m_ButtonText);

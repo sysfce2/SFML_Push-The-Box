@@ -18,11 +18,13 @@ public:
 	Entity& center_y();
 	Entity& attach_position(Entity* other);
 	Entity& detach_position();
-	vec2f get_position()    const { return m_Position; }
-	vec2f get_position_px() const { return m_PositionPx; }
-	vec2f get_size()        const { return m_Size; }
-	vec2f get_size_px()     const { return m_SizePx; }
-	vec2f get_scale()       const { return m_Scale; }
+	inline vec2f get_position()    const { return m_Position; }
+	inline vec2f get_position_px() const { return m_PositionPx; }
+	inline vec2f get_size()        const { return m_Size; }
+	inline vec2f get_size_px()     const { return m_SizePx; }
+	inline vec2f get_scale()       const { return m_Scale; }
+	void vanish(bool freeze = false);
+	void appear(bool freeze = false);
 	void destroy();
 
 protected:
@@ -42,6 +44,7 @@ private:
 	std::vector<Entity*> m_ChildEntities;
 protected:
 	bool m_Visible = true;
+	bool m_Freezed = false;
 	vec2f m_PositionPx = { 0.f, 0.f };
 	vec2f m_Position = { 0.f, 0.f };
 	vec2f m_SizePx = { 0.f, 0.f };

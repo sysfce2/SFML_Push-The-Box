@@ -24,18 +24,28 @@ void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t
 {
 	if (m_Text != nullptr)
 		delete m_Text;
-	sf::Font* font_ptr = AssetsManager::get().get_font(font);
-	m_Text = new sf::Text();
-	m_Text->setFont(*font_ptr);
-	m_Text->setCharacterSize(font_size);
-	m_Text->setScale(Window::res_scale());
-	m_Text->setString(text);
-	m_SizePx = { (float)m_Text->getLocalBounds().width, (float)m_Text->getLocalBounds().height };
-	m_Size = m_SizePx / Window::size();
-	m_Margin.x = m_Text->getLocalBounds().left * Window::res_scale().x;
-	m_Margin.y = m_Text->getLocalBounds().top* Window::res_scale().y;
-	if (!m_AntiAliasing)
-		const_cast<sf::Texture&>(font_ptr->getTexture(font_size)).setSmooth(false);
+
+	if (font.length() > 0)
+		m_Font = AssetsManager::get().get_font(font);
+
+	if (font_size > 0)
+		m_FontSize = font_size;
+
+	if (m_Font != nullptr) {
+		m_Text = new sf::Text();
+		m_Text->setFont(*m_Font);
+		m_Text->setCharacterSize(m_FontSize);
+		m_Text->setScale(Window::res_scale());
+		m_Text->setString(text);
+		m_SizePx = { (float)m_Text->getLocalBounds().width, (float)m_Text->getLocalBounds().height };
+		m_Size = m_SizePx / Window::size();
+		m_Margin.x = m_Text->getLocalBounds().left * Window::res_scale().x;
+		m_Margin.y = m_Text->getLocalBounds().top * Window::res_scale().y;
+		if (!m_AntiAliasing)
+			const_cast<sf::Texture&>(m_Font->getTexture(m_FontSize)).setSmooth(false);
+	}
+	else
+		LOG_ERROR("Trying to set text with no proper font assigned. Font name:", font);
 }
 
 void UIText::set_color(sf::Color color)

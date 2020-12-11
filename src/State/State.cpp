@@ -24,7 +24,8 @@ void State::update_entities(const float& dt)
 	auto it = m_Entities.begin();
 	while (it != m_Entities.end())
 		if ((*it)->m_Active) {
-			(*it)->update(dt);
+			if (!(*it)->m_Freezed)
+				(*it)->update(dt);
 			it++;
 		}
 		else m_Entities.erase(it);
