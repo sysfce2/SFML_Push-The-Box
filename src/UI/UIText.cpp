@@ -10,9 +10,10 @@ void UIText::update(const float& dt)
 void UIText::render(sf::RenderTarget& target, const vec2f& camera_offset)
 {
 	if (m_Visible && m_Text != nullptr) {
-		vec2f position = get_position_px();
-		vec2f camera_pos = camera_offset * Window::size();
-		vec2f draw_pos = position - camera_pos - m_Margin;
+		vec2f draw_pos = get_position_px() - m_Margin;
+		if (m_UseCameraPosition)
+			draw_pos -= camera_offset * Window::size();
+
 		if (m_AttachedToEntity != nullptr)
 			draw_pos += m_AttachedToEntity->get_position_px();
 		m_Text->setPosition(draw_pos);
@@ -32,11 +33,13 @@ void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t
 		m_FontSize = font_size;
 
 	if (m_Font != nullptr) {
+		m_TextContent = text;
 		m_Text = new sf::Text();
 		m_Text->setFont(*m_Font);
 		m_Text->setCharacterSize(m_FontSize);
 		m_Text->setScale(Window::res_scale());
-		m_Text->setString(text);
+		m_Text->setString(m_TextContent);
+		m_Text->setFillColor(m_Color);
 		m_SizePx = { (float)m_Text->getLocalBounds().width, (float)m_Text->getLocalBounds().height };
 		m_Size = m_SizePx / Window::size();
 		m_Margin.x = m_Text->getLocalBounds().left * Window::res_scale().x;
@@ -50,7 +53,13 @@ void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t
 
 void UIText::set_color(sf::Color color)
 {
-	m_Text->setFillColor(color);
+	m_Color = color;
+	m_Text->setFillColor(m_Color);
+}
+
+void UIText::use_camera_position(bool use)
+{
+	m_UseCameraPosition = use;
 }
 
 UIText::UIText(const std::string& text, const std::string& font, uint8_t font_size)

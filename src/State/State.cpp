@@ -8,15 +8,53 @@ State::State()
 
 State::~State()
 {
+	for (auto& entity : m_Entities)
+		delete entity;
 	m_Entities.clear();
+	for (auto& layer : m_Layers)
+		delete layer.second;
+	m_Layers.clear();
 }
 
-Entity* State::make_entity(Entity* entity)
+Entity* State::make_entity(Entity* entity, uint16_t layers)
 {
-	m_Entities.emplace_back(entity);
-	for (auto& child : entity->m_ChildEntities)
-		m_Entities.emplace_back(child);
+	if (layers != 0x0)
+		for (uint16_t i = 0; i < MAX_LAYERS; i++) {
+			if ((layers & (1 << i)) >> i) {
+				uint16_t layer_id = 1 << i;
+				if (m_Layers.find(layer_id) == m_Layers.end())
+					m_Layers[layer_id] = new Layer();
+				Layer* layer = m_Layers[layer_id];
+				auto& entities = layer->m_LayerEntities;
+				if (!std::count(entities.begin(), entities.end(), entity))
+					layer->m_LayerEntities.emplace_back(entity);
+			}
+		}
+
+	if (!std::count(m_Entities.begin(), m_Entities.end(), entity)) {
+		m_Entities.emplace_back(entity);
+		for (auto& child : entity->m_ChildEntities)
+			m_Entities.emplace_back(child);
+	}
+
 	return entity;
+}
+
+Layer* State::layer(uint16_t layer_id)
+{
+	if (m_Layers.find(layer_id) == m_Layers.end())
+		m_Layers[layer_id] = new Layer();
+	return m_Layers.at(layer_id);
+}
+
+void State::set_main_layer(uint16_t new_layer_id)
+{	
+	Layer* new_layer = layer(new_layer_id);
+	new_layer->show();
+	if (m_MainLayer != nullptr)
+		m_MainLayer->hide();
+	m_MainLayer = new_layer;
+	m_MainLayerId = new_layer_id;
 }
 
 void State::update_entities(const float& dt)

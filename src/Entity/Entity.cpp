@@ -6,9 +6,10 @@
 void Entity::render(sf::RenderTarget& target, const vec2f& camera_offset)
 {
 	if (m_Visible && m_Sprite != nullptr) {
-		vec2f position = get_position_px();
-		vec2f camera_pos = camera_offset * Window::size();
-		vec2f draw_pos = position - camera_pos;
+		vec2f draw_pos = get_position_px();
+		if (!m_IsUIElement)
+			draw_pos -= camera_offset * Window::size();
+
 		if (m_AttachedToEntity != nullptr)
 			draw_pos += m_AttachedToEntity->get_position_px();
 		m_Sprite->setPosition(draw_pos);

@@ -48,12 +48,9 @@ bool UIButton::was_pressed()
 			std::chrono::system_clock::now().time_since_epoch());
 
 		float pressed_ago = (current_time - m_PressTime).count() / 1000.f;
-		bool pressed = pressed_ago > 0.1f && pressed_ago < 1.f;
+		m_ButtonEventHandled = pressed_ago > 0.1f && pressed_ago < 1.f;
 
-		if (pressed)
-			m_ButtonEventHandled = true;
-
-		return pressed;
+		return m_ButtonEventHandled;
 	}
 	else return false;
 }
@@ -93,8 +90,4 @@ UIButton::UIButton(const std::wstring& button_string, const vec2f& scale, uint8_
 	m_ButtonText->attach_position(this).center_x().center_y();
 	m_ButtonText->set_color(DEFAULT_COLOR);
 	add_child_entity(m_ButtonText);
-}
-
-UIButton::~UIButton()
-{
 }

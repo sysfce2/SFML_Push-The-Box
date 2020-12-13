@@ -4,19 +4,24 @@
 #include "UI/UIButton.h"
 #include "UI/UIText.h"
 
-class SelectFrame : public UIElement
+#define DIFFICULTY_SELECTION	LAYER_1
+#define EASY_LEVELS				LAYER_2
+#define HARD_LEVELS				LAYER_3
+#define EXPERT_LEVELS			LAYER_4
+
+class SelectBlock : public UIElement
 {
 public:
 	friend class LevelSelection;
-	SelectFrame(const vec2f& position, bool completed, const std::string& type, uint16_t number);
-	virtual ~SelectFrame() = default;
+	SelectBlock(const vec2f& position, uint16_t number);
+	virtual ~SelectBlock() = default;
 private:
 	UIButton* m_PlayButton;
-	UIText* m_LevelNumber;
-	std::string m_LevelPath;
+	UIText* m_NumberText;
+	uint16_t m_Number;
 };
 
-using Levels = std::vector<SelectFrame*>;
+using Levels = std::vector<SelectBlock*>;
 
 class LevelSelection : public State {
 private:
@@ -25,17 +30,14 @@ public:
 	LevelSelection();
 	virtual ~LevelSelection() = default;
 private:
-	void switch_scene(uint8_t scene);
+	void switch_layer(uint16_t layer);
 
-	uint8_t m_Scene = 0;
-	Levels m_Easy;
-	Levels m_Hard;
-	Levels m_Expert;
-	Levels* m_SelectedDifficulty = nullptr;
-
+	Levels m_Levels;
+	UIElement* m_Background;
+	UIText* m_HeaderText;
 	UIButton* m_EasyButton;
 	UIButton* m_HardButton;
 	UIButton* m_ExpertButton;
 	UIButton* m_BackButton;
-	UIText* m_HeaderText;
+	UIButton* m_EditorButton;
 };

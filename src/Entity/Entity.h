@@ -23,6 +23,7 @@ public:
 	inline vec2f get_size()        const { return m_Size; }
 	inline vec2f get_size_px()     const { return m_SizePx; }
 	inline vec2f get_scale()       const { return m_Scale; }
+	inline bool is_visible()	   const { return m_Visible; }
 	void vanish(bool freeze = false);
 	void appear(bool freeze = false);
 	void destroy();
@@ -43,6 +44,7 @@ private:
 	vec2f m_SpriteSize = { 0.f, 0.f };
 	std::vector<Entity*> m_ChildEntities;
 protected:
+	bool m_IsUIElement = false;
 	bool m_Visible = true;
 	bool m_Freezed = false;
 	vec2f m_PositionPx = { 0.f, 0.f };

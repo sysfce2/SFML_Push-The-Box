@@ -13,7 +13,7 @@ public:
 	void assign_sprite(const std::string& unpressed_sprite, const std::string& pressed_sprite);
 	UIButton(const std::string& button_name, const vec2f& scale, uint8_t font_size = 0);
 	UIButton(const std::wstring& button_name, const vec2f& scale, uint8_t font_size);
-	virtual ~UIButton();
+	virtual ~UIButton() = default;
 
 	static bool m_AnyPressed;
 private:

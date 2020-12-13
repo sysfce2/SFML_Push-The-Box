@@ -100,7 +100,7 @@ void Player::animate(AnState an_state)
 	const uint8_t fps = 8;
 	m_AnimationState = an_state;
 	if (an_state != AnState::Standing)
-		m_Animation->play_animation(m_AnName.at(an_state), fps, AN_REPEAT);
+		m_Animation->play_animation(m_AnName.at(an_state), fps, ANIMATE_REPEAT);
 	else
 		m_StopWalking = true;
 }

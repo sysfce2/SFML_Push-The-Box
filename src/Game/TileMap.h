@@ -3,12 +3,16 @@
 #include "GamePlay.h"
 #include "Box.h"
 
-class Player;
+#define FLOOR_FILE_ID	0
+#define WALL_FILE_ID	1
+#define BOX_FILE_ID		2
+#define TARGET_FILE_ID	3
 
 enum class Tile {
 	None, Wall, Box
 };
 
+class Player;
 class TileMap
 {
 public:

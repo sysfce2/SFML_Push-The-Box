@@ -10,7 +10,7 @@ void GamePlay::update(const float& dt)
 {	
 	if (KB::isKeyPressed(KB::Escape))
 		destroy_state();
-
+	
 	vec2f player_pos = m_Player->get_position();
 
 	if (player_pos.x - m_CameraOffset.x > 1.f - m_CameraBorderDistance) {
@@ -34,8 +34,10 @@ void GamePlay::update(const float& dt)
 
 GamePlay::GamePlay(const std::string& level_path)
 {
+	m_Background = new UIElement("gameplay-background", { 1.f, 1.f });
 	m_TileMap = new TileMap();
-	
+	make_entity(m_Background);
+
 	if (m_TileMap->load_level(level_path)) {
 		for (auto tile : m_TileMap->m_Tiles)
 			make_entity(tile);

@@ -1,6 +1,7 @@
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Logger.h"
+#include "UI/UITextBox.h"
 #include <algorithm>
 
 Application::Application(const std::string& app_name) : m_AppName(app_name)
@@ -60,6 +61,13 @@ void Application::handle_sfml_events()
 		switch (event.type) {
 		case sf::Event::Closed:
 			m_Window.close();
+			break;
+		case sf::Event::TextEntered:
+			UITextBox::m_WasKeyEntered = true;
+			UITextBox::m_KeyEntered = event.text.unicode;
+			break;
+		default:
+			UITextBox::m_WasKeyEntered = false;
 			break;
 		}
 }

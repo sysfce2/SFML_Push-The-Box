@@ -8,7 +8,7 @@ void Animation::update(const float& dt)
     if (!m_StopAnimation) {
         m_TimeElapsed += dt;
         switch (m_PlayMode) {
-        case AN_ONCE:
+        case ANIMATE_ONCE:
             if (m_CurrentFrame < m_Frames) {
                 if (m_TimeElapsed >= m_FrameTime) {
                     play_frame(m_CurrentFrame);
@@ -18,7 +18,7 @@ void Animation::update(const float& dt)
             }
             else m_StopAnimation = true;
             break;
-        case AN_REPEAT:
+        case ANIMATE_REPEAT:
             if (m_TimeElapsed >= m_FrameTime) {
                 play_frame(m_CurrentFrame);
                 m_TimeElapsed -= m_FrameTime;
@@ -27,7 +27,7 @@ void Animation::update(const float& dt)
                     m_CurrentFrame = m_RepeatFrom;
             }
             break;
-        case AN_BACKNFORTH:
+        case ANIMATE_BACKNFORTH:
             if (m_TimeElapsed >= m_FrameTime) {
                 play_frame(m_CurrentFrame);
                 m_TimeElapsed -= m_FrameTime;
@@ -74,18 +74,14 @@ bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mod
 {
     if (m_Animations.find(name) != m_Animations.end()) {
         AnimationFrames* frames = &m_Animations.at(name);
-        if (mode <= AN_BACKNFORTH) {
-            if (m_Frames == 1u) m_PlayMode = AN_ONCE;
+        if (mode <= ANIMATE_BACKNFORTH) {
+            if (m_Frames == 1u) m_PlayMode = ANIMATE_ONCE;
             else m_PlayMode = mode;
             m_Frames = static_cast<uint32_t>(frames->size());
-            m_CurrentAnimation = frames;
-            m_RepeatFrom = repeat_from;
-            m_FrameTime = 1.f / fps;
-            m_TimeElapsed = 0.f;
-            m_CurrentFrame = 1u;
-            m_PlayBackward = false;
-            m_StopAnimation = false;
-            m_EverPlayed = true;
+            m_CurrentAnimation = frames; m_RepeatFrom = repeat_from;
+            m_FrameTime = 1.f / fps; m_TimeElapsed = 0.f;
+            m_CurrentFrame = 1u; m_PlayBackward = false;
+            m_StopAnimation = false; m_EverPlayed = true;
             play_frame(0);
             return true;
         }

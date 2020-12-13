@@ -3,9 +3,9 @@
 #include <unordered_map>
 #include <vector>
 
-#define AN_ONCE       0x01
-#define AN_REPEAT     0x02
-#define AN_BACKNFORTH 0x03
+#define ANIMATE_ONCE       0x01
+#define ANIMATE_REPEAT     0x02
+#define ANIMATE_BACKNFORTH 0x03
 
 using AnimationFrames = std::vector<sf::Sprite*>;
 
@@ -14,7 +14,7 @@ class Animation
 public:
 	void update(const float& dt);
 	bool set_sprite_sheet(const std::string& texture_name);
-	bool play_animation(const std::string& name, uint8_t fps, uint8_t mode = AN_ONCE, uint32_t repeat_from = 0u);
+	bool play_animation(const std::string& name, uint8_t fps, uint8_t mode = ANIMATE_ONCE, uint32_t repeat_from = 0u);
 	bool new_animation(const std::string& name, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t frames);
 	void stop();
 	void pause();
@@ -31,7 +31,7 @@ private:
 	bool m_PlayBackward = false;
 	float m_FrameTime = 0.f;
 	float m_TimeElapsed = 0.f;
-	uint8_t m_PlayMode = AN_ONCE;
+	uint8_t m_PlayMode = ANIMATE_ONCE;
 	uint32_t m_Frames = 0u;
 	uint32_t m_CurrentFrame = 0u;
 	uint32_t m_RepeatFrom = 0u;

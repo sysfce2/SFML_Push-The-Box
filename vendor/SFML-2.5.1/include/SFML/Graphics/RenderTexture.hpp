@@ -260,7 +260,7 @@ private:
 ///
 /// Rendering to a texture can be useful in a variety of situations:
 /// \li precomputing a complex static texture (like a level's background from multiple tiles)
-/// \li applying post-effects to the whole scene with shaders
+/// \li applying post-effects to the whole layer with shaders
 /// \li creating a sprite from a 3D object rendered with OpenGL
 /// \li etc.
 ///

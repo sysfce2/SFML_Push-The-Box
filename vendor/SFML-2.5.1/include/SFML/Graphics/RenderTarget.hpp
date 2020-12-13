@@ -74,7 +74,7 @@ public:
     /// \brief Change the current active view
     ///
     /// The view is like a 2D camera, it controls which part of
-    /// the 2D scene is visible, and how it is viewed in the
+    /// the 2D layer is visible, and how it is viewed in the
     /// render target.
     /// The new view will affect everything that is drawn, until
     /// another view is set.

@@ -12,6 +12,13 @@ bool PushTheBox::on_init()
 
 	load_ok *= manager.load_texture("play-btn.png", "play-btn", false);
 	load_ok *= manager.load_texture("play-btn-pressed.png", "play-btn-pressed", false);
+
+	load_ok *= manager.load_texture("editor-btn.png", "editor-btn", false);
+	load_ok *= manager.load_texture("editor-btn-pressed.png", "editor-btn-pressed", false);
+	load_ok *= manager.load_texture("editor-level-name.png", "level-name", false);
+	load_ok *= manager.load_texture("cursor.png", "cursor", false);
+
+
 	load_ok *= manager.load_texture("select-state.png", "select-state", false);
 	load_ok *= manager.load_texture("completed.png", "completed", false);
 	load_ok *= manager.load_texture("not-completed.png", "not-completed", false);
@@ -27,6 +34,7 @@ bool PushTheBox::on_init()
 	load_ok *= manager.load_texture("floor2.png", "floor2", true);
 	load_ok *= manager.load_texture("floor3.png", "floor3", true);
 	load_ok *= manager.load_texture("floor4.png", "floor4", true);
+	load_ok *= manager.load_texture("gameplay-background.png", "gameplay-background", true);
 
 	load_ok *= manager.load_font("joystix.ttf", "joystix");
 	load_ok *= manager.load_font("INVASION2000.TTF", "invasion");

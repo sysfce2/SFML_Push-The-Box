@@ -168,6 +168,8 @@
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Entity\Animation.h" />
     <ClInclude Include="src\Entity\Entity.h" />
+    <ClInclude Include="src\Game\LevelEditor\LevelEditorMenu.h" />
+    <ClInclude Include="src\State\Layer.h" />
     <ClInclude Include="src\State\State.h" />
     <ClInclude Include="src\State\StatesManager.h" />
     <ClInclude Include="src\Game\Box.h" />
@@ -182,6 +184,7 @@
     <ClInclude Include="src\UI\UIButton.h" />
     <ClInclude Include="src\UI\UIElement.h" />
     <ClInclude Include="src\UI\UIText.h" />
+    <ClInclude Include="src\UI\UITextBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -190,6 +193,8 @@
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Entity\Animation.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
+    <ClCompile Include="src\Game\LevelEditor\LevelEditorMenu.cpp" />
+    <ClCompile Include="src\State\Layer.cpp" />
     <ClCompile Include="src\State\State.cpp" />
     <ClCompile Include="src\State\StatesManager.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
@@ -205,6 +210,7 @@
     <ClCompile Include="src\UI\UIButton.cpp" />
     <ClCompile Include="src\UI\UIElement.cpp" />
     <ClCompile Include="src\UI\UIText.cpp" />
+    <ClCompile Include="src\UI\UITextBox.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

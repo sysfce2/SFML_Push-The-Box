@@ -1,5 +1,6 @@
 #pragma once
 #include "State/State.h"
+#include "UI/UIElement.h"
 
 class TileMap;
 class Player;
@@ -16,6 +17,7 @@ public:
 
 private:
 	const float m_CameraBorderDistance = 0.4f;
+	UIElement* m_Background;
 	Player* m_Player = nullptr;
 	TileMap* m_TileMap = nullptr;
 };

@@ -22,6 +22,9 @@
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Entity\Animation.h" />
     <ClInclude Include="src\Core\Vector2.h" />
+    <ClInclude Include="src\Game\LevelEditor\LevelEditorMenu.h" />
+    <ClInclude Include="src\UI\UITextBox.h" />
+    <ClInclude Include="src\State\Layer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -45,5 +48,8 @@
     <ClCompile Include="src\State\StatesManager.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Entity\Animation.cpp" />
+    <ClCompile Include="src\Game\LevelEditor\LevelEditorMenu.cpp" />
+    <ClCompile Include="src\UI\UITextBox.cpp" />
+    <ClCompile Include="src\State\Layer.cpp" />
   </ItemGroup>
 </Project>

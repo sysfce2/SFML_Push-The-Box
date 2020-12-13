@@ -269,8 +269,8 @@ private:
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    Vector2f          m_center;              ///< Center of the view, in scene coordinates
-    Vector2f          m_size;                ///< Size of the view, in scene coordinates
+    Vector2f          m_center;              ///< Center of the view, in layer coordinates
+    Vector2f          m_size;                ///< Size of the view, in layer coordinates
     float             m_rotation;            ///< Angle of rotation of the view rectangle, in degrees
     FloatRect         m_viewport;            ///< Viewport rectangle, expressed as a factor of the render-target's size
     mutable Transform m_transform;           ///< Precomputed projection transform corresponding to the view
@@ -289,17 +289,17 @@ private:
 /// \class sf::View
 /// \ingroup graphics
 ///
-/// sf::View defines a camera in the 2D scene. This is a
+/// sf::View defines a camera in the 2D layer. This is a
 /// very powerful concept: you can scroll, rotate or zoom
-/// the entire scene without altering the way that your
+/// the entire layer without altering the way that your
 /// drawable objects are drawn.
 ///
 /// A view is composed of a source rectangle, which defines
-/// what part of the 2D scene is shown, and a target viewport,
+/// what part of the 2D layer is shown, and a target viewport,
 /// which defines where the contents of the source rectangle
 /// will be displayed on the render target (window or texture).
 ///
-/// The viewport allows to map the scene to a custom part
+/// The viewport allows to map the layer to a custom part
 /// of the render target, and can be used for split-screen
 /// or for displaying a minimap, for example. If the source
 /// rectangle doesn't have the same size as the viewport, its
