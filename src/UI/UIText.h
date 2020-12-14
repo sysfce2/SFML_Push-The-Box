@@ -5,7 +5,7 @@ class UIText : public UIElement
 {
 private:
 	void update(const float& dt) override;
-	void render(sf::RenderTarget& target, const vec2f& camera_offset) override;
+	void render(sf::RenderTarget& target, const vec2f& camera) override;
 public:
 	void set_text(const std::wstring& text, const std::string& font = "", uint8_t font_size = 0);
 	void set_color(sf::Color color);

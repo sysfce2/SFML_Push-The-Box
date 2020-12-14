@@ -35,5 +35,6 @@ private:
 	Player* m_Player = nullptr;
 	vec2u m_LevelSize;
 	vec2f m_TileSize;
+	vec2f m_TileScale = { 1.25f, 1.25f };
 	std::vector<Entity*> m_Tiles;
 };

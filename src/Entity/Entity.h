@@ -12,17 +12,20 @@ public:
 	Entity& set_position(const vec2f& position);
 	Entity& set_position_px(const vec2f& position);
 	Entity& set_scale(const vec2f& scale);
+	Entity& set_rotation(const float& rotation);
 	Entity& shift(const vec2f& offset);
 	Entity& shift_px(const vec2f& offset);
 	Entity& center_x();
 	Entity& center_y();
 	Entity& attach_position(Entity* other);
 	Entity& detach_position();
+	inline Entity* get_attached()  const { return m_AttachedToEntity; }
 	inline vec2f get_position()    const { return m_Position; }
 	inline vec2f get_position_px() const { return m_PositionPx; }
 	inline vec2f get_size()        const { return m_Size; }
 	inline vec2f get_size_px()     const { return m_SizePx; }
 	inline vec2f get_scale()       const { return m_Scale; }
+	inline float get_rotation()    const { return m_RotationAngle; }
 	inline bool is_visible()	   const { return m_Visible; }
 	void vanish(bool freeze = false);
 	void appear(bool freeze = false);
@@ -30,7 +33,7 @@ public:
 
 protected:
 	virtual void update(const float& dt) = 0;
-	virtual void render(sf::RenderTarget& target, const vec2f& camera_offset = { 0.f, 0.f });
+	virtual void render(sf::RenderTarget& target, const vec2f& camera = { 0.f, 0.f });
 	Entity& add_child_entity(Entity* entity);
 
 public:
@@ -47,6 +50,7 @@ protected:
 	bool m_IsUIElement = false;
 	bool m_Visible = true;
 	bool m_Freezed = false;
+	float m_RotationAngle = 0.f;
 	vec2f m_PositionPx = { 0.f, 0.f };
 	vec2f m_Position = { 0.f, 0.f };
 	vec2f m_SizePx = { 0.f, 0.f };

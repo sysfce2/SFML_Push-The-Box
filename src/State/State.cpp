@@ -1,5 +1,6 @@
 #include "State/State.h"
 #include "Core/Logger.h"
+#include "UI/UIButton.h"
 
 State::State()
 {
@@ -14,6 +15,7 @@ State::~State()
 	for (auto& layer : m_Layers)
 		delete layer.second;
 	m_Layers.clear();
+	LOG_WARN("A state was destroyed");
 }
 
 Entity* State::make_entity(Entity* entity, uint16_t layers)
@@ -72,11 +74,12 @@ void State::update_entities(const float& dt)
 void State::render_entities(sf::RenderTarget& target)
 {
 	for (auto& ent : m_Entities)
-		ent->render(target, m_CameraOffset);
+		ent->render(target, m_Camera);
 }
 
 void State::destroy_state()
 {
 	m_DestroyState = true;
+	UIButton::m_AnyPressed = false;
 }
 

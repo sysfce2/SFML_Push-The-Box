@@ -126,6 +126,10 @@ public:
 		return (x == vec.x) && (y == vec.y);
 	}
 
+	inline bool operator!=(const vec2& vec) const {
+		return (x != vec.x) || (y != vec.y);
+	}
+
 	inline friend std::ostream& operator<<(std::ostream& os, const vec2& vec) {
 		os << '(' << vec.x << ", " << vec.y << ')';
 		return os;

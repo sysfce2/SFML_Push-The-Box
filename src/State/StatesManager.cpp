@@ -5,6 +5,11 @@ StatesManager* StatesManager::s_Instance = nullptr;
 
 void StatesManager::create_active_state(State* state)
 {
+	if (m_AppStates.size() > 0 && m_AppStates.top()->m_DestroyState) {
+		delete m_AppStates.top();
+		m_AppStates.pop();
+	}
+
 	m_AppStates.emplace(state);
 }
 

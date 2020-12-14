@@ -3,15 +3,19 @@
 #include "Core/AssetsManager.h"
 #include "Core/Logger.h"
 
-void Entity::render(sf::RenderTarget& target, const vec2f& camera_offset)
+void Entity::render(sf::RenderTarget& target, const vec2f& camera)
 {
 	if (m_Visible && m_Sprite != nullptr) {
 		vec2f draw_pos = get_position_px();
 		if (!m_IsUIElement)
-			draw_pos -= camera_offset * Window::size();
+			draw_pos -= camera * Window::size();
 
-		if (m_AttachedToEntity != nullptr)
-			draw_pos += m_AttachedToEntity->get_position_px();
+		Entity* entity = get_attached();
+		while (entity != nullptr) {
+			draw_pos += entity->get_position_px();
+			entity = entity->get_attached();
+		}
+
 		m_Sprite->setPosition(draw_pos);
 		target.draw(*m_Sprite);
 	}
@@ -70,6 +74,13 @@ Entity& Entity::set_scale(const vec2f& scale)
 	m_SizePx = m_SpriteSize * draw_scale;
 	m_Size = m_SpriteSize * draw_scale / Window::size();
 	m_Scale = scale;
+	return *this;
+}
+
+Entity& Entity::set_rotation(const float& angle)
+{
+	m_RotationAngle = angle;
+	m_Sprite->setRotation(angle);
 	return *this;
 }
 

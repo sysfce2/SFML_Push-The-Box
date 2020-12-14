@@ -21,8 +21,6 @@ private:
 	uint16_t m_Number;
 };
 
-using Levels = std::vector<SelectBlock*>;
-
 class LevelSelection : public State {
 private:
 	void update(const float& dt) override;
@@ -32,7 +30,7 @@ public:
 private:
 	void switch_layer(uint16_t layer);
 
-	Levels m_Levels;
+	std::vector<SelectBlock*> m_Levels;
 	UIElement* m_Background;
 	UIText* m_HeaderText;
 	UIButton* m_EasyButton;

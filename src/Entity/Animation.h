@@ -7,7 +7,10 @@
 #define ANIMATE_REPEAT     0x02
 #define ANIMATE_BACKNFORTH 0x03
 
-using AnimationFrames = std::vector<sf::Sprite*>;
+struct AnimationFrames {
+	std::vector<sf::Sprite*> sprites;
+	vec2f animation_scale;
+};
 
 class Animation
 {

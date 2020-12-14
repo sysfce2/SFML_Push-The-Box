@@ -10,7 +10,8 @@ class UIButton : public UIElement
 public:
 	bool was_pressed();
 	bool is_pressed() const;
-	void assign_sprite(const std::string& unpressed_sprite, const std::string& pressed_sprite);
+	void set_symbol(UIElement* symbol);
+	void assign_button_sprite(const std::string& unpressed_sprite, const std::string& pressed_sprite);
 	UIButton(const std::string& button_name, const vec2f& scale, uint8_t font_size = 0);
 	UIButton(const std::wstring& button_name, const vec2f& scale, uint8_t font_size);
 	virtual ~UIButton() = default;
@@ -25,4 +26,5 @@ private:
 	std::string m_PressedButtonSprite;
 	std::wstring m_ButtonString;
 	UIText* m_ButtonText = nullptr;
+	UIElement* m_Symbol = nullptr;
 };

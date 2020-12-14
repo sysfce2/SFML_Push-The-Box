@@ -74,14 +74,24 @@ bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mod
 {
     if (m_Animations.find(name) != m_Animations.end()) {
         AnimationFrames* frames = &m_Animations.at(name);
+
         if (mode <= ANIMATE_BACKNFORTH) {
-            if (m_Frames == 1u) m_PlayMode = ANIMATE_ONCE;
-            else m_PlayMode = mode;
-            m_Frames = static_cast<uint32_t>(frames->size());
-            m_CurrentAnimation = frames; m_RepeatFrom = repeat_from;
-            m_FrameTime = 1.f / fps; m_TimeElapsed = 0.f;
-            m_CurrentFrame = 1u; m_PlayBackward = false;
-            m_StopAnimation = false; m_EverPlayed = true;
+            if (frames->animation_scale != m_AnimationOwner->m_Scale) {
+                frames->animation_scale = m_AnimationOwner->m_Scale;
+                for (auto& spr : m_Animations.at(name).sprites)
+                    spr->setScale(frames->animation_scale);
+            }
+
+            m_Frames = static_cast<uint32_t>(frames->sprites.size());
+            m_StopAnimation = m_Frames == 1u;
+            m_CurrentAnimation = frames; 
+            m_RepeatFrom = repeat_from;
+            m_FrameTime = 1.f / fps;
+            m_TimeElapsed = 0.f;
+            m_CurrentFrame = 1u; 
+            m_PlayBackward = false;
+            m_EverPlayed = true;
+            
             play_frame(0);
             return true;
         }
@@ -93,21 +103,22 @@ bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mod
 void Animation::play_frame(uint16_t frame)
 {
     if (frame >= 0 && frame < m_Frames)
-        m_AnimationOwner->set_sprite(m_CurrentAnimation->at(frame), false);
+        m_AnimationOwner->set_sprite(m_CurrentAnimation->sprites.at(frame), false);
 }
 
 bool Animation::new_animation(const std::string& name, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t frames)
 {
     if (m_SpriteSheet != nullptr) {
-        m_Animations[name] = std::vector<sf::Sprite*>();
+        m_Animations[name] = AnimationFrames();
         for (uint16_t i = x; i < x + w * frames; i += w) {
             vec2f scale = { m_AnimationOwner->m_Scale.x * Window::res_scale().x,
                             m_AnimationOwner->m_Scale.y * Window::res_scale().y };
+            m_Animations[name].animation_scale = m_AnimationOwner->m_Scale;
             sf::Sprite* spr = new sf::Sprite();
             spr->setTexture(*m_SpriteSheet);
             spr->setTextureRect(sf::IntRect(i, y, w, h));
             spr->setScale(scale);
-            m_Animations[name].emplace_back(spr);
+            m_Animations[name].sprites.emplace_back(spr);
         }
         return true;
     }
@@ -124,6 +135,6 @@ Animation::~Animation()
     if (m_EverPlayed) 
         m_AnimationOwner->m_Sprite = nullptr;
     for (auto& anim : m_Animations)
-        for (auto& spr : anim.second)
+        for (auto& spr : anim.second.sprites)
             delete spr;
 }

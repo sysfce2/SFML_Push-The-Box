@@ -27,7 +27,7 @@ bool TileMap::load_level(const std::string& file_path)
 		if (level_size.x * level_size.y != file_size - sizeof(vec2u) * 2)
 			return false;
 		
-		m_TileSize = Wall(place_pos, 0).get_size_px();
+		m_TileSize = Wall(place_pos, 0).set_scale(m_TileScale).get_size_px();
 		m_Map = new Tile * [level_size.x];
 
 		for (uint32_t i = 0; i < level_size.x; i++) {
@@ -39,21 +39,21 @@ bool TileMap::load_level(const std::string& file_path)
 				file.read(reinterpret_cast<char*>(&tile_type), sizeof(uint8_t));
 
 				if (tile_type == TARGET_FILE_ID) {
-					m_Tiles.emplace_back(new Floor(place_pos, rand_int, true));
+					m_Tiles.emplace_back(new Floor(place_pos, rand_int, true))->set_scale(m_TileScale);
 					s_Targets.emplace_back(vec2u(i, j));
 					m_Map[i][j] = Tile::None;
 				}
 				else if (tile_type == BOX_FILE_ID) {
-					m_Boxes.emplace_back(new Box(place_pos, { i, j }));
-					m_Tiles.emplace_back(new Floor(place_pos, rand_int));
+					m_Boxes.emplace_back(new Box(place_pos, { i, j }))->set_scale(m_TileScale);
+					m_Tiles.emplace_back(new Floor(place_pos, rand_int))->set_scale(m_TileScale);
 					m_Map[i][j] = Tile::Box;
 				}
 				else if (tile_type == WALL_FILE_ID) {
-					m_Tiles.emplace_back(new Wall(place_pos, rand_int));
+					m_Tiles.emplace_back(new Wall(place_pos, rand_int))->set_scale(m_TileScale);
 					m_Map[i][j] = Tile::Wall;
 				}
 				else if (tile_type == FLOOR_FILE_ID) {
-					m_Tiles.emplace_back(new Floor(place_pos, rand_int));
+					m_Tiles.emplace_back(new Floor(place_pos, rand_int))->set_scale(m_TileScale);
 					m_Map[i][j] = Tile::None;
 				}
 				else return false;
@@ -65,6 +65,7 @@ bool TileMap::load_level(const std::string& file_path)
 		}
 
 		m_Player = new Player(this);
+		m_Player->set_scale(m_TileScale);
 		vec2f offset = (m_TileSize - m_Player->get_size_px()) / 2.f;
 		vec2f place_px = (vec2f)player_pos * m_TileSize;
 		m_Player->set_position_px(place_px + offset);

@@ -29,5 +29,5 @@ protected:
 	uint16_t m_MainLayerId = 0x0;
 	std::vector<Entity*> m_Entities;
 	std::map<uint16_t, Layer*> m_Layers;
-	vec2f m_CameraOffset = { 0.f, 0.f };
+	vec2f m_Camera = { 0.f, 0.f };
 };

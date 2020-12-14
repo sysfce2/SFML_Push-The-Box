@@ -7,15 +7,19 @@ void UIText::update(const float& dt)
 {
 }
 
-void UIText::render(sf::RenderTarget& target, const vec2f& camera_offset)
+void UIText::render(sf::RenderTarget& target, const vec2f& camera)
 {
 	if (m_Visible && m_Text != nullptr) {
 		vec2f draw_pos = get_position_px() - m_Margin;
 		if (m_UseCameraPosition)
-			draw_pos -= camera_offset * Window::size();
+			draw_pos -= camera * Window::size();
 
-		if (m_AttachedToEntity != nullptr)
-			draw_pos += m_AttachedToEntity->get_position_px();
+		Entity* entity = get_attached();
+		while (entity != nullptr) {
+			draw_pos += entity->get_position_px();
+			entity = entity->get_attached();
+		}
+			
 		m_Text->setPosition(draw_pos);
 		target.draw(*m_Text);
 	}

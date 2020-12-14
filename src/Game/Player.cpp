@@ -3,6 +3,11 @@
 
 using KB = sf::Keyboard;
 
+bool PlayerControl::up_pressed = false;
+bool PlayerControl::down_pressed = false;
+bool PlayerControl::right_pressed = false;
+bool PlayerControl::left_pressed = false;
+
 void Player::update(const float& dt)
 {
 	m_Animation->update(dt);
@@ -19,10 +24,10 @@ void Player::update(const float& dt)
 			m_StopWalking = false;
 			m_Animation->stop();
 		}
-		if (KB::isKeyPressed(KB::Right))     walk(Direction::Right);
-		else if (KB::isKeyPressed(KB::Left)) walk(Direction::Left);
-		else if (KB::isKeyPressed(KB::Up))   walk(Direction::Up);
-		else if (KB::isKeyPressed(KB::Down)) walk(Direction::Down);
+		if (PlayerControl::up_pressed)	walk(Direction::Up);
+		else if (PlayerControl::right_pressed)	walk(Direction::Right);
+		else if (PlayerControl::down_pressed)	walk(Direction::Down);
+		else if (PlayerControl::left_pressed)	walk(Direction::Left);
 		break;
 	case AnState::MovingUp:
 		movement.y = -m_MovementSpeed * dt;
@@ -132,13 +137,16 @@ bool Player::can_walk(vec2i offset)
 				break;
 			}
 	}
+
+	if (m_Moves != nullptr)
+		(*m_Moves)++;
 	return true;
 }
 
 Player::Player(TileMap* tile_map) : m_TileMap(tile_map)
 {
 	set_sprite("player-sprite-sheet", { 0, 0 }, { 64, 64 });
-	set_scale({ 1.5f, 1.5f });
+	m_MovementSpeed *= get_scale().x;
 	m_Animation = new Animation(this);
 	m_Animation->set_sprite_sheet("player-sprite-sheet");
 	m_Animation->new_animation("MovingDown", 0, 0, 64, 64, 9);
@@ -149,6 +157,11 @@ Player::Player(TileMap* tile_map) : m_TileMap(tile_map)
 	m_AnName[AnState::MovingRight] = "MovingRight";
 	m_AnName[AnState::MovingDown] = "MovingDown";
 	m_AnName[AnState::MovingLeft] = "MovingLeft";
+}
+
+void Player::set_moves_ptr(uint32_t* moves_ptr)
+{
+	m_Moves = moves_ptr;
 }
 
 Player::~Player()
