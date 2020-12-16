@@ -3,20 +3,21 @@
 
 void Box::update(const float& dt)
 {
+	update_movements(dt);
 	if (m_CheckForTarget) {
 		m_CheckForTarget = false;
 		bool found = false;
 
 		for (const auto& target : TileMap::s_Targets) {
 			if (target == m_TilePos) {
-				if (!m_IsOnTarget)
+				if (!m_IsOnTarget) {
 					TileMap::s_BoxesOnTargets++;
-				set_sprite("box-gold");
+					set_sprite("box-gold");
+				}
 				found = true;
 				break;
 			}
 		}
-		
 		if (m_IsOnTarget && !found) {
 			TileMap::s_BoxesOnTargets--;
 			set_sprite("box");

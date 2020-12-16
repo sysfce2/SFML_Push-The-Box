@@ -2,112 +2,49 @@
 #include "Core/Logger.h"
 
 using KB = sf::Keyboard;
-
-bool PlayerControl::up_pressed = false;
-bool PlayerControl::down_pressed = false;
-bool PlayerControl::right_pressed = false;
-bool PlayerControl::left_pressed = false;
+constexpr uint16_t ANIMATION_FPS = 8;
+bool PlayerControl::go_up = false;
+bool PlayerControl::go_down = false;
+bool PlayerControl::go_right = false;
+bool PlayerControl::go_left = false;
 
 void Player::update(const float& dt)
 {
+	update_movements(dt);
 	m_Animation->update(dt);
-	vec2f movement = { 0.f, 0.f };
-	vec2f position = get_position_px();
 
-	switch (m_AnimationState) {
-	case AnState::Standing:
+	vec2f velocity = get_velocity_px();
+	if (velocity.x == 0.f && velocity.y == 0.f) {
+
 		if (m_PushedBox != nullptr) {
 			m_PushedBox->m_CheckForTarget = true;
 			m_PushedBox = nullptr;
 		}
-		if (m_StopWalking) {
-			m_StopWalking = false;
+		if (m_AnimationStopDelay++)
 			m_Animation->stop();
-		}
-		if (PlayerControl::up_pressed)	walk(Direction::Up);
-		else if (PlayerControl::right_pressed)	walk(Direction::Right);
-		else if (PlayerControl::down_pressed)	walk(Direction::Down);
-		else if (PlayerControl::left_pressed)	walk(Direction::Left);
-		break;
-	case AnState::MovingUp:
-		movement.y = -m_MovementSpeed * dt;
-		if (position.y + movement.y < m_DestinationPos.y) {
-			movement.y = m_DestinationPos.y - position.y;
-			animate(AnState::Standing);
-		}
-		break;
-	case AnState::MovingRight:
-		movement.x = m_MovementSpeed * dt;
-		if (position.x + movement.x > m_DestinationPos.x) {
-			movement.x = m_DestinationPos.x - position.x;
-			animate(AnState::Standing);
-		}
-		break;
-	case AnState::MovingDown:
-		movement.y = m_MovementSpeed * dt;
-		if (position.y + movement.y > m_DestinationPos.y) {
-			movement.y = m_DestinationPos.y - position.y;
-			animate(AnState::Standing);
-		}
-		break;
-	case AnState::MovingLeft:
-		movement.x = -m_MovementSpeed * dt;
-		if (position.x + movement.x < m_DestinationPos.x) {
-			movement.x = m_DestinationPos.x - position.x;
-			animate(AnState::Standing);
-		}
-		break;
-	}
 
-	if (movement.x != 0.f || movement.y != 0.f) {
-		shift_px(movement);
+		if (PlayerControl::go_up)
+			walk({ 0, -1 }, "MovingUp");
+		else if (PlayerControl::go_right)
+			walk({ 1, 0 }, "MovingRight");
+		else if (PlayerControl::go_down)
+			walk({ 0, 1 }, "MovingDown");
+		else if (PlayerControl::go_left)
+			walk({ -1, 0 }, "MovingLeft");
+	}
+}
+
+void Player::walk(vec2i direction, const std::string& animation)
+{
+	if (can_walk(direction)) {
+		m_AnimationStopDelay = 0;
+		m_Animation->play_animation(animation, ANIMATION_FPS, ANIMATE_REPEAT);
+		vec2f movement = { m_TileSize * direction.x, m_TileSize* direction.y };
+		start_movement(movement, m_MovementSpeed);
+		m_TilePosition += direction;
 		if (m_PushedBox != nullptr)
-			m_PushedBox->shift_px(movement);
+			m_PushedBox->start_movement(movement, m_MovementSpeed);
 	}
-}
-
-void Player::walk(Direction direction)
-{
-	switch (direction) {
-	case Direction::Up:
-		if (can_walk({ 0, -1 })) {
-			animate(AnState::MovingUp);
-			m_DestinationPos.y -= m_TileMap->get_tile_size().y;
-			m_TilePosition.y--;
-		}
-		break;
-	case Direction::Right:
-		if (can_walk({ 1, 0 })) {
-			animate(AnState::MovingRight);
-			m_DestinationPos.x += m_TileMap->get_tile_size().x;
-			m_TilePosition.x++;
-		}
-		break;
-	case Direction::Down:
-		if (can_walk({ 0, 1 })) {
-			animate(AnState::MovingDown);
-			m_DestinationPos.y += m_TileMap->get_tile_size().y;
-			m_TilePosition.y++;
-		}
-		break;
-	case Direction::Left:
-		if (can_walk({ -1, 0 })) {
-			animate(AnState::MovingLeft);
-			m_DestinationPos.x -= m_TileMap->get_tile_size().x;
-			m_TilePosition.x--;
-		}
-		break;
-	}
-}
-
-void Player::animate(AnState an_state)
-{
-	const uint8_t fps = 8;
-	m_AnimationState = an_state;
-	if (an_state != AnState::Standing)
-		m_Animation->play_animation(m_AnName.at(an_state), fps, ANIMATE_REPEAT);
-	else
-		m_StopWalking = true;
 }
 
 bool Player::can_walk(vec2i offset)
@@ -137,7 +74,6 @@ bool Player::can_walk(vec2i offset)
 				break;
 			}
 	}
-
 	if (m_Moves != nullptr)
 		(*m_Moves)++;
 	return true;
@@ -146,26 +82,12 @@ bool Player::can_walk(vec2i offset)
 Player::Player(TileMap* tile_map) : m_TileMap(tile_map)
 {
 	set_sprite("player-sprite-sheet", { 0, 0 }, { 64, 64 });
+	m_TileSize = m_TileMap->get_tile_size();
 	m_MovementSpeed *= get_scale().x;
-	m_Animation = new Animation(this);
+	m_Animation = std::unique_ptr<Animation>(new Animation(this));
 	m_Animation->set_sprite_sheet("player-sprite-sheet");
 	m_Animation->new_animation("MovingDown", 0, 0, 64, 64, 9);
 	m_Animation->new_animation("MovingUp", 0, 64, 64, 64, 9);
 	m_Animation->new_animation("MovingRight", 0, 128, 64, 64, 9);
 	m_Animation->new_animation("MovingLeft", 0, 192, 64, 64, 9);
-	m_AnName[AnState::MovingUp] = "MovingUp";
-	m_AnName[AnState::MovingRight] = "MovingRight";
-	m_AnName[AnState::MovingDown] = "MovingDown";
-	m_AnName[AnState::MovingLeft] = "MovingLeft";
-}
-
-void Player::set_moves_ptr(uint32_t* moves_ptr)
-{
-	m_Moves = moves_ptr;
-}
-
-Player::~Player()
-{
-	LOG_WARN("Player object deleted");
-	delete m_Animation;
 }

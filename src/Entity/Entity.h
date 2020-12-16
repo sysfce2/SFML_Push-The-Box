@@ -25,8 +25,11 @@ public:
 	inline vec2f get_size()        const { return m_Size; }
 	inline vec2f get_size_px()     const { return m_SizePx; }
 	inline vec2f get_scale()       const { return m_Scale; }
+	inline vec2f get_velocity_px() const { return m_VelocityPx; }
 	inline float get_rotation()    const { return m_RotationAngle; }
 	inline bool is_visible()	   const { return m_Visible; }
+	void start_movement(const vec2f& move_offset_px, float movement_speed_px);
+	void update_movements(const float& dt);
 	void vanish(bool freeze = false);
 	void appear(bool freeze = false);
 	void destroy();
@@ -46,15 +49,20 @@ private:
 	vec2f m_Scale = { 1.f, 1.f };
 	vec2f m_SpriteSize = { 0.f, 0.f };
 	std::vector<Entity*> m_ChildEntities;
+	Entity* m_AttachedToEntity = nullptr;
 protected:
+	sf::Sprite* m_Sprite = nullptr;
 	bool m_IsUIElement = false;
 	bool m_Visible = true;
 	bool m_Freezed = false;
+
 	float m_RotationAngle = 0.f;
 	vec2f m_PositionPx = { 0.f, 0.f };
 	vec2f m_Position = { 0.f, 0.f };
 	vec2f m_SizePx = { 0.f, 0.f };
 	vec2f m_Size = { 0.f, 0.f };
-	sf::Sprite* m_Sprite = nullptr;
-	Entity* m_AttachedToEntity = nullptr;
+	vec2f m_VelocityPx = { 0.f, 0.f };
+
+	vec2f m_DistanceLeft = { 0.f, 0.f };
+	bool m_MovingToDestination = false;
 };

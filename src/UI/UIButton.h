@@ -6,7 +6,7 @@
 
 class UIButton : public UIElement
 {
-	void update(const float& dt) override;
+	virtual void update(const float& dt) override;
 public:
 	bool was_pressed();
 	bool is_pressed() const;

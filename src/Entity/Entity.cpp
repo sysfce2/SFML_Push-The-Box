@@ -2,6 +2,7 @@
 #include "Core/Window.h"
 #include "Core/AssetsManager.h"
 #include "Core/Logger.h"
+#include <math.h>
 
 void Entity::render(sf::RenderTarget& target, const vec2f& camera)
 {
@@ -128,6 +129,48 @@ Entity& Entity::detach_position()
 {
 	m_AttachedToEntity = nullptr;
 	return *this;
+}
+
+void Entity::start_movement(const vec2f& move_offset_px, float movement_speed_px)
+{
+	vec2f move_ratio = { 1.f, 1.f };
+	if (move_offset_px.x != 0.f && move_offset_px.y != 0.f)
+		move_ratio = {
+			abs(move_offset_px.x / move_offset_px.y),
+			abs(move_offset_px.y / move_offset_px.x)
+		};
+	else {
+		if (move_offset_px.x == 0.f) move_ratio.x = 0.f;
+		if (move_offset_px.y == 0.f) move_ratio.y = 0.f;
+	}
+	m_DistanceLeft = { abs(move_offset_px.x) , abs(move_offset_px.y) };
+	m_VelocityPx = { movement_speed_px * move_ratio.x, movement_speed_px * move_ratio.y };
+	if (move_offset_px.x < 0) m_VelocityPx.x *= -1.f;
+	if (move_offset_px.y < 0) m_VelocityPx.y *= -1.f;
+	m_MovingToDestination = true;
+}
+
+void Entity::update_movements(const float& dt)
+{
+	if (m_MovingToDestination) {
+		vec2i direction;
+		direction.x = m_VelocityPx.x > 0 ? 1 : -1;
+		direction.y = m_VelocityPx.y > 0 ? 1 : -1;
+		
+		if (m_DistanceLeft.x - abs(m_VelocityPx.x * dt) < 0
+			|| m_DistanceLeft.y - abs(m_VelocityPx.y * dt) < 0) {
+			vec2f movement;
+			movement.x = m_DistanceLeft.x * direction.x;
+			movement.y = m_DistanceLeft.y * direction.y;
+			m_MovingToDestination = false;
+			m_VelocityPx = { 0.f, 0.f };
+			shift_px(movement);
+			return;
+		}
+		m_DistanceLeft -= { abs(m_VelocityPx.x * dt), abs(m_VelocityPx.y * dt) };
+	}
+	if (m_VelocityPx.x != 0.f || m_VelocityPx.y != 0.f)
+		shift_px(m_VelocityPx * dt);
 }
 
 void Entity::vanish(bool freeze)

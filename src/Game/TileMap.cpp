@@ -27,7 +27,7 @@ bool TileMap::load_level(const std::string& file_path)
 		if (level_size.x * level_size.y != file_size - sizeof(vec2u) * 2)
 			return false;
 		
-		m_TileSize = Wall(place_pos, 0).set_scale(m_TileScale).get_size_px();
+		m_TileSize = Wall(place_pos, 0).set_scale(m_TileScale).get_size_px().x;
 		m_Map = new Tile * [level_size.x];
 
 		for (uint32_t i = 0; i < level_size.x; i++) {
@@ -58,29 +58,23 @@ bool TileMap::load_level(const std::string& file_path)
 				}
 				else return false;
 
-				place_pos.y += m_TileSize.y;
+				place_pos.y += m_TileSize;
 			}
-			place_pos.x += m_TileSize.x;
+			place_pos.x += m_TileSize;
 			place_pos.y = 0;
 		}
 
 		m_Player = new Player(this);
 		m_Player->set_scale(m_TileScale);
-		vec2f offset = (m_TileSize - m_Player->get_size_px()) / 2.f;
+		vec2f offset = (vec2f(m_TileSize, m_TileSize) - m_Player->get_size_px()) / 2.f;
 		vec2f place_px = (vec2f)player_pos * m_TileSize;
 		m_Player->set_position_px(place_px + offset);
-		m_Player->m_DestinationPos = m_Player->get_position_px();
 		m_Player->m_TilePosition = player_pos;
 		m_LevelSize = level_size;
 		file.close();
 	}
 	else return false;
 	return true;
-}
-
-vec2f TileMap::get_tile_size() const
-{
-	return m_TileSize;
 }
 
 TileMap::~TileMap()

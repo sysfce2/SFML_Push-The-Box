@@ -19,7 +19,7 @@ public:
 	friend class GamePlay;
 	friend class Player;
 	bool load_level(const std::string& file_path);
-	vec2f get_tile_size() const;
+	inline float get_tile_size() const { return m_TileSize; }
 
 	TileMap() = default;
 	virtual ~TileMap();
@@ -34,7 +34,7 @@ private:
 	Tile** m_Map = nullptr;
 	Player* m_Player = nullptr;
 	vec2u m_LevelSize;
-	vec2f m_TileSize;
+	float m_TileSize;
 	vec2f m_TileScale = { 1.25f, 1.25f };
 	std::vector<Entity*> m_Tiles;
 };

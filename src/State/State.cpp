@@ -2,11 +2,6 @@
 #include "Core/Logger.h"
 #include "UI/UIButton.h"
 
-State::State()
-{
-	LOG_INFO("New active state created");
-}
-
 State::~State()
 {
 	for (auto& entity : m_Entities)

@@ -12,9 +12,6 @@ const vec2f BTN_SCALE{ 2.8f, 2.8f };
 
 void GamePlay::update(const float& dt)
 {	
-	if (KB::isKeyPressed(KB::Escape))
-		destroy_state();
-	
 	vec2f player_pos = m_Player->get_position();
 	vec2f player_size = m_Player->get_size();
 	vec2f camera_offset = player_pos - m_Camera;
@@ -39,20 +36,20 @@ void GamePlay::update(const float& dt)
 	}
 
 	if (KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed())
-		PlayerControl::up_pressed = true;
-	else PlayerControl::up_pressed = false;
+		PlayerControl::go_up = true;
+	else PlayerControl::go_up = false;
 
 	if (KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed())
-		PlayerControl::down_pressed = true;
-	else PlayerControl::down_pressed = false;
+		PlayerControl::go_down = true;
+	else PlayerControl::go_down = false;
 
 	if (KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed())
-		PlayerControl::right_pressed = true;
-	else PlayerControl::right_pressed = false;
+		PlayerControl::go_right = true;
+	else PlayerControl::go_right = false;
 
 	if (KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed())
-		PlayerControl::left_pressed = true;
-	else PlayerControl::left_pressed = false;
+		PlayerControl::go_left = true;
+	else PlayerControl::go_left = false;
 
 	if (m_TileMap->s_Targets.size() == m_TileMap->s_BoxesOnTargets) {
 		destroy_state();
@@ -71,6 +68,11 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 	: m_LevelPath(level_path), m_LevelNameStr(name)
 {
 	m_TileMap = new TileMap();
+	PlayerControl::go_up = false;
+	PlayerControl::go_down = false;
+	PlayerControl::go_right = false;
+	PlayerControl::go_left = false;
+
 	if (m_TileMap->load_level(m_LevelPath)) {
 		// Initialize UI elements
 		m_Background = new UIElement("gameplay-background", { 1.f, 1.f });
@@ -96,7 +98,7 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 			make_entity(box);
 
 		m_Player = m_TileMap->m_Player;
-		m_Player->set_moves_ptr(&m_PlayerMoves);
+		m_Player->m_Moves = &m_PlayerMoves;
 		make_entity(m_Player);
 
 		// Construct UI menu

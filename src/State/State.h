@@ -20,7 +20,7 @@ protected:
 	void destroy_state();
 	virtual void update(const float& dt) = 0;
 
-	State();
+	State() = default;
 	virtual ~State();
 private:
 	bool m_DestroyState = false;
