@@ -170,7 +170,6 @@
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Game\LevelEditor\LevelEditorMenu.h" />
     <ClInclude Include="src\Game\Tiles\Storage.h" />
-    <ClInclude Include="src\Game\Tiles\Tile.h" />
     <ClInclude Include="src\State\Layer.h" />
     <ClInclude Include="src\State\State.h" />
     <ClInclude Include="src\State\StatesManager.h" />
@@ -197,7 +196,6 @@
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game\LevelEditor\LevelEditorMenu.cpp" />
     <ClCompile Include="src\Game\Tiles\Storage.cpp" />
-    <ClCompile Include="src\Game\Tiles\Tile.cpp" />
     <ClCompile Include="src\State\Layer.cpp" />
     <ClCompile Include="src\State\State.cpp" />
     <ClCompile Include="src\State\StatesManager.cpp" />

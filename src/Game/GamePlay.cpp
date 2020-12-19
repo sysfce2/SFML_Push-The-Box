@@ -83,18 +83,7 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		make_entity(m_Background);
 
 		// Construct tilemap
-		for (auto& tile : m_TileMap->m_Tiles)
-			make_entity(tile);
-
-		for (auto& storage : m_TileMap->m_Storages)
-			make_entity(storage);
-
-		for (auto& box : m_TileMap->m_Boxes)
-			make_entity(box);
-
-		m_Player = m_TileMap->m_Player;
-		m_Player->m_Moves = &m_PlayerMoves;
-		make_entity(m_Player);
+		construct_tilemap();
 
 		// Construct UI menu
 		m_fovWidth = 1.f - m_Menu->get_size().x;
@@ -153,5 +142,16 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 
 void GamePlay::construct_tilemap()
 {
+	for (auto& tile : m_TileMap->m_Tiles)
+		make_entity(tile);
 
+	for (auto& storage : m_TileMap->m_Storages)
+		make_entity(storage);
+
+	for (auto& box : m_TileMap->m_Boxes)
+		make_entity(box);
+
+	m_Player = m_TileMap->m_Player;
+	m_Player->m_Moves = &m_PlayerMoves;
+	make_entity(m_Player);
 }

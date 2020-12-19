@@ -26,7 +26,6 @@
     <ClInclude Include="src\Game\Tiles\Floor.h" />
     <ClInclude Include="src\Game\Tiles\Wall.h" />
     <ClInclude Include="src\Game\Tiles\Storage.h" />
-    <ClInclude Include="src\Game\Tiles\Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -54,6 +53,5 @@
     <ClCompile Include="src\Game\Tiles\Floor.cpp" />
     <ClCompile Include="src\Game\Tiles\Wall.cpp" />
     <ClCompile Include="src\Game\Tiles\Storage.cpp" />
-    <ClCompile Include="src\Game\Tiles\Tile.cpp" />
   </ItemGroup>
 </Project>

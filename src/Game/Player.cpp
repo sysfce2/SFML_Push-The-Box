@@ -16,7 +16,7 @@ void Player::update(const float& dt)
 			m_Animation->stop();
 		}
 
-		if (PlayerControl::get().go_up)			try_walk({ 0, -1 }, "MovingUp");
+		if (PlayerControl::get().go_up)		try_walk({ 0, -1 }, "MovingUp");
 		else if (PlayerControl::get().go_right)	try_walk({ 1, 0 },  "MovingRight");
 		else if (PlayerControl::get().go_down)	try_walk({ 0, 1 },  "MovingDown");
 		else if (PlayerControl::get().go_left)	try_walk({ -1, 0 }, "MovingLeft");
