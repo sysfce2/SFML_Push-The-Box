@@ -37,7 +37,7 @@ bool PushTheBox::on_init()
 	load_ok *= manager.load_texture("player-spritesheet.png", "player-sprite-sheet", true);
 	load_ok *= manager.load_texture("wall.png", "wall0", true);
 	load_ok *= manager.load_texture("wall1.png", "wall1", true);
-	load_ok *= manager.load_texture("target.png", "target", true);
+	load_ok *= manager.load_texture("storage.png", "storage", true);
 	load_ok *= manager.load_texture("box.png", "box", true);
 	load_ok *= manager.load_texture("box-gold.png", "box-gold", true);
 	load_ok *= manager.load_texture("floor.png", "floor0", true);

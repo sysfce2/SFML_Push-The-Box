@@ -3,9 +3,8 @@
 #include <string>
 
 template <typename T>
-class vec2
+struct vec2
 {
-public:
 	T x;
 	T y;
 
@@ -22,6 +21,10 @@ public:
 	void set(T x, T y) {
 		this->x = x;
 		this->y = y;
+	}
+
+	inline bool is_zero() const {
+		return x == 0 && y == 0;
 	}
 
 	inline vec2& Add(const vec2& vec) {

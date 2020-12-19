@@ -1,9 +1,8 @@
 #pragma once
 #include "GamePlay.h"
-#include "TileMap.h"
-#include "Player.h"
 #include "Core/Logger.h"
 #include "State/StatesManager.h"
+#include "TileMap.h"
 
 using KB = sf::Keyboard;
 constexpr float A_RATIO = 9.f / 16.f;
@@ -16,16 +15,19 @@ void GamePlay::update(const float& dt)
 	vec2f player_size = m_Player->get_size();
 	vec2f camera_offset = player_pos - m_Camera;
 
-	// Prawa strona
+	// Right game screen side
 	if (camera_offset.x + player_size.x > m_fovWidth - m_CameraBorderDistance * A_RATIO)
 		m_Camera.x = player_pos.x + player_size.x - m_fovWidth + m_CameraBorderDistance * A_RATIO;
-	// Lewa strona
+
+	// Left game screen side
 	else if (player_pos.x - m_Camera.x < m_CameraBorderDistance * A_RATIO)
 		m_Camera.x = player_pos.x - m_CameraBorderDistance * A_RATIO;
-	// Górna strona
+
+	// Up game sceen side
 	if (camera_offset.y + player_size.y > 1.f - m_CameraBorderDistance)
 		m_Camera.y = player_pos.y + player_size.y - 1.f + m_CameraBorderDistance;
-	// Dolna strona
+
+	// Down game screen side
 	else if (camera_offset.y < m_CameraBorderDistance)
 		m_Camera.y = player_pos.y - m_CameraBorderDistance;
 
@@ -35,23 +37,17 @@ void GamePlay::update(const float& dt)
 		m_MovesText->center_x();
 	}
 
-	if (KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed())
-		PlayerControl::go_up = true;
-	else PlayerControl::go_up = false;
+	bool up_pressed = KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed();
+	bool down_pressed = KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed();
+	bool right_pressed = KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed();
+	bool left_pressed = KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed();
+	PlayerControl::get().go_up = up_pressed;
+	PlayerControl::get().go_down = down_pressed;
+	PlayerControl::get().go_right = right_pressed;
+	PlayerControl::get().go_left = left_pressed;
 
-	if (KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed())
-		PlayerControl::go_down = true;
-	else PlayerControl::go_down = false;
-
-	if (KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed())
-		PlayerControl::go_right = true;
-	else PlayerControl::go_right = false;
-
-	if (KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed())
-		PlayerControl::go_left = true;
-	else PlayerControl::go_left = false;
-
-	if (m_TileMap->s_Targets.size() == m_TileMap->s_BoxesOnTargets) {
+	if (m_TileMap->m_Storages.size() == m_TileMap->m_StoragesFilled) {
+		// Level finished
 		destroy_state();
 	}
 
@@ -60,7 +56,7 @@ void GamePlay::update(const float& dt)
 		StatesManager::get().create_active_state(new GamePlay(m_LevelPath, m_LevelNameStr));
 	}
 
-	if (m_Exit->was_pressed())
+	if (m_Exit->was_pressed()) 
 		destroy_state();
 }
 
@@ -68,12 +64,8 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 	: m_LevelPath(level_path), m_LevelNameStr(name)
 {
 	m_TileMap = new TileMap();
-	PlayerControl::go_up = false;
-	PlayerControl::go_down = false;
-	PlayerControl::go_right = false;
-	PlayerControl::go_left = false;
-
 	if (m_TileMap->load_level(m_LevelPath)) {
+
 		// Initialize UI elements
 		m_Background = new UIElement("gameplay-background", { 1.f, 1.f });
 		m_Menu = new UIElement("gameplay-menu", { 1.f, 1.f });
@@ -84,17 +76,20 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		m_MoveDown = new UIButton("", BTN_SCALE);
 		m_MoveRight = new UIButton("", BTN_SCALE);
 		m_MoveLeft = new UIButton("", BTN_SCALE);
-		m_Restart = new UIButton(L"RESTART", { 2.f, 2.f }, 26);
+		m_Restart =	new UIButton(L"RESTART", { 2.f, 2.f }, 26);
 		m_Exit = new UIButton(L"WYJD", { 2.f, 2.f }, 26);
 
 		// Construct background
 		make_entity(m_Background);
 
 		// Construct tilemap
-		for (auto tile : m_TileMap->m_Tiles)
+		for (auto& tile : m_TileMap->m_Tiles)
 			make_entity(tile);
 
-		for (auto box : m_TileMap->m_Boxes)
+		for (auto& storage : m_TileMap->m_Storages)
+			make_entity(storage);
+
+		for (auto& box : m_TileMap->m_Boxes)
 			make_entity(box);
 
 		m_Player = m_TileMap->m_Player;
@@ -151,7 +146,12 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		make_entity(m_Exit);
 	}
 	else {
-		LOG_ERROR("Can't find game level:", level_path);
+		LOG_ERROR("Can't open game level:", level_path);
 		destroy_state();
 	}
+}
+
+void GamePlay::construct_tilemap()
+{
+
 }

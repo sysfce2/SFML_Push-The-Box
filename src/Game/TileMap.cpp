@@ -1,67 +1,92 @@
 #include "TileMap.h"
-#include "Wall.h"
 #include "Core/Logger.h"
-#include "Floor.h"
-#include "Player.h"
+
 #include <cstdlib>
 #include <fstream>
 
-uint16_t TileMap::s_BoxesOnTargets;
-std::vector<vec2u> TileMap::s_Targets;
-
 bool TileMap::load_level(const std::string& file_path)
 {
-	std::ifstream size_check(file_path, std::ios_base::ate | std::ios_base::binary);
-	uint32_t file_size = static_cast<uint32_t>(size_check.tellg());
-	size_check.close();
-
 	std::ifstream file(file_path, std::ios_base::in | std::ios_base::binary);
 	if (file.is_open()) {
 		vec2u level_size;
 		vec2u player_pos;
 		vec2f place_pos;
+		uint16_t storages_count;
+		m_TileSize = Wall(vec2f(), vec2f(), 0).set_scale(m_TileScale).get_size_px().x;
 
 		file.read(reinterpret_cast<char*>(&level_size), sizeof(vec2u));
 		file.read(reinterpret_cast<char*>(&player_pos), sizeof(vec2u));
-		srand(static_cast<unsigned>(level_size.x * level_size.y));
-		if (level_size.x * level_size.y != file_size - sizeof(vec2u) * 2)
-			return false;
-		
-		m_TileSize = Wall(place_pos, 0).set_scale(m_TileScale).get_size_px().x;
-		m_Map = new Tile * [level_size.x];
+		file.read(reinterpret_cast<char*>(&storages_count), sizeof(uint16_t));
 
-		for (uint32_t i = 0; i < level_size.x; i++) {
-			m_Map[i] = new Tile[level_size.y];
+		m_BoxPlacePositions.reserve(storages_count);
+		m_StoragePositions.reserve(storages_count);
+		for (uint16_t i = 0; i < storages_count; i++) {
+			vec2u storage_pos;
+			file.read(reinterpret_cast<char*>(&storage_pos), sizeof(vec2u));
+			m_StoragePositions.emplace_back(storage_pos);
+		}
 
-			for (uint32_t j = 0; j < level_size.y; j++) {
-				uint8_t tile_type;
+		m_Boxes.reserve(storages_count);
+		m_Storages.reserve(storages_count);
+		m_Tiles.reserve(level_size.x * level_size.y);
+		m_Map.reserve(level_size.x);
+		for (uint16_t i = 0; i < level_size.x; i++) {
+			m_Map.emplace_back(std::vector<uint16_t>());
+			m_Map.back().reserve(level_size.y);
+			for (uint16_t j = 0; j < level_size.y; j++)
+				m_Map.back().emplace_back(NONE_TILE);
+		}
+
+		uint16_t boxes_created = 0;
+		for (uint16_t i = 0; i < level_size.x; i++) {
+			for (uint16_t j = 0; j < level_size.y; j++) {
+
+				uint8_t tile_id;
 				uint8_t rand_int = rand() % 256;
-				file.read(reinterpret_cast<char*>(&tile_type), sizeof(uint8_t));
+				vec2u tile_pos{ i, j };
+				vec2f place_pos{ m_TileSize * i, m_TileSize * j };
+				file.read(reinterpret_cast<char*>(&tile_id), sizeof(uint8_t));
 
-				if (tile_type == TARGET_FILE_ID) {
-					m_Tiles.emplace_back(new Floor(place_pos, rand_int, true))->set_scale(m_TileScale);
-					s_Targets.emplace_back(vec2u(i, j));
-					m_Map[i][j] = Tile::None;
+				if (tile_id == FLOOR_TILE) {
+					Floor* floor = new Floor(place_pos, tile_pos, rand_int);
+					m_Tiles.emplace_back(floor)->set_scale(m_TileScale);
+					m_Map[i][j] = FLOOR_TILE;
 				}
-				else if (tile_type == BOX_FILE_ID) {
-					m_Boxes.emplace_back(new Box(place_pos, { i, j }))->set_scale(m_TileScale);
-					m_Tiles.emplace_back(new Floor(place_pos, rand_int))->set_scale(m_TileScale);
-					m_Map[i][j] = Tile::Box;
+				else if (tile_id == WALL_TILE) {
+					Wall* wall = new Wall(place_pos, tile_pos, rand_int);
+					m_Tiles.emplace_back(wall)->set_scale(m_TileScale);
+					m_Map[i][j] = WALL_TILE;
 				}
-				else if (tile_type == WALL_FILE_ID) {
-					m_Tiles.emplace_back(new Wall(place_pos, rand_int))->set_scale(m_TileScale);
-					m_Map[i][j] = Tile::Wall;
+				else if (tile_id == BOX_TILE) {
+					Floor* floor = new Floor(place_pos, tile_pos, rand_int);
+					m_Tiles.emplace_back(floor)->set_scale(m_TileScale);
+					if (boxes_created < storages_count) {
+						m_BoxPlacePositions.emplace_back(tile_pos);
+						m_Map[i][j] = BOX_TILE;
+						boxes_created++;
+					}
+					else m_Map[i][j] = FLOOR_TILE;
 				}
-				else if (tile_type == FLOOR_FILE_ID) {
-					m_Tiles.emplace_back(new Floor(place_pos, rand_int))->set_scale(m_TileScale);
-					m_Map[i][j] = Tile::None;
+				else if (tile_id == NONE_TILE) {
+					m_Map[i][j] = NONE_TILE;
 				}
-				else return false;
-
-				place_pos.y += m_TileSize;
+				else {
+					LOG_ERROR("Undefined tile id:", tile_id);
+					return false;
+				}
 			}
-			place_pos.x += m_TileSize;
-			place_pos.y = 0;
+		}
+		
+		for (vec2u s : m_StoragePositions) {
+			vec2f pos = { (float)s.x * m_TileSize, (float)s.y * m_TileSize };
+			Storage* storage = new Storage(pos, s);
+			m_Storages.emplace_back(storage)->set_scale(m_TileScale);
+		}
+
+		for (vec2u b : m_BoxPlacePositions) {
+			vec2f pos = { (float)b.x * m_TileSize, (float)b.y * m_TileSize };
+			Box* box = new Box(pos, b, this);
+			m_Boxes.emplace_back(box)->set_scale(m_TileScale);
 		}
 
 		m_Player = new Player(this);
@@ -75,11 +100,6 @@ bool TileMap::load_level(const std::string& file_path)
 	}
 	else return false;
 	return true;
-}
-
-TileMap::~TileMap()
-{
-	delete m_Map;
 }
 
 void TileMap::update(const float& dt)

@@ -1,40 +1,38 @@
 #pragma once
-#include "Entity/Entity.h"
-#include "GamePlay.h"
-#include "Box.h"
+#include "Player.h"
+#include "Tiles/Floor.h"
+#include "Tiles/Wall.h"
+#include "Tiles/Box.h"
+#include "Tiles/Storage.h"
 
-#define FLOOR_FILE_ID	0
-#define WALL_FILE_ID	1
-#define BOX_FILE_ID		2
-#define TARGET_FILE_ID	3
+#define NONE_TILE		0
+#define FLOOR_TILE		1
+#define WALL_TILE		2
+#define BOX_TILE		3
+#define STORAGE_TILE	4
 
-enum class Tile {
-	None, Wall, Box
-};
-
-class Player;
 class TileMap
 {
 public:
 	friend class GamePlay;
 	friend class Player;
-	bool load_level(const std::string& file_path);
+	friend class Box;
 	inline float get_tile_size() const { return m_TileSize; }
-
-	TileMap() = default;
-	virtual ~TileMap();
+	bool load_level(const std::string& file_path);
 private:
 	void update(const float& dt);
 
-public:
-	std::vector<Box*> m_Boxes;
-	static uint16_t s_BoxesOnTargets;
-	static std::vector<vec2u> s_Targets;
 private:
-	Tile** m_Map = nullptr;
+	std::vector<Entity*> m_Tiles;
+	std::vector<Box*> m_Boxes;
+	std::vector<Storage*> m_Storages;
+	std::vector<vec2u> m_BoxPlacePositions;
+	std::vector<vec2u> m_StoragePositions;
+	std::vector<std::vector<uint16_t>> m_Map;
+	uint16_t m_StoragesFilled = 0;
 	Player* m_Player = nullptr;
 	vec2u m_LevelSize;
-	float m_TileSize;
-	vec2f m_TileScale = { 1.25f, 1.25f };
-	std::vector<Entity*> m_Tiles;
+	vec2f m_TileScale = { 1.2f, 1.2f };
+	float m_TileSize = 32.f;
+	
 };

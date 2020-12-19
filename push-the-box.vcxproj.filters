@@ -8,15 +8,12 @@
     <ClInclude Include="src\UI\UIButton.h" />
     <ClInclude Include="src\UI\UIElement.h" />
     <ClInclude Include="src\UI\UIText.h" />
-    <ClInclude Include="src\Game\Box.h" />
-    <ClInclude Include="src\Game\Floor.h" />
     <ClInclude Include="src\Game\GamePlay.h" />
     <ClInclude Include="src\Game\LevelSelection.h" />
     <ClInclude Include="src\Game\MainMenu.h" />
     <ClInclude Include="src\Game\Player.h" />
     <ClInclude Include="src\Game\PushTheBox.h" />
     <ClInclude Include="src\Game\TileMap.h" />
-    <ClInclude Include="src\Game\Wall.h" />
     <ClInclude Include="src\State\State.h" />
     <ClInclude Include="src\State\StatesManager.h" />
     <ClInclude Include="src\Entity\Entity.h" />
@@ -25,6 +22,11 @@
     <ClInclude Include="src\Game\LevelEditor\LevelEditorMenu.h" />
     <ClInclude Include="src\UI\UITextBox.h" />
     <ClInclude Include="src\State\Layer.h" />
+    <ClInclude Include="src\Game\Tiles\Box.h" />
+    <ClInclude Include="src\Game\Tiles\Floor.h" />
+    <ClInclude Include="src\Game\Tiles\Wall.h" />
+    <ClInclude Include="src\Game\Tiles\Storage.h" />
+    <ClInclude Include="src\Game\Tiles\Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -35,15 +37,12 @@
     <ClCompile Include="src\UI\UIElement.cpp" />
     <ClCompile Include="src\UI\UIText.cpp" />
     <ClCompile Include="src\EntryPoint.cpp" />
-    <ClCompile Include="src\Game\Box.cpp" />
-    <ClCompile Include="src\Game\Floor.cpp" />
     <ClCompile Include="src\Game\GamePlay.cpp" />
     <ClCompile Include="src\Game\LevelSelection.cpp" />
     <ClCompile Include="src\Game\MainMenu.cpp" />
     <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\Game\PushTheBox.cpp" />
     <ClCompile Include="src\Game\TileMap.cpp" />
-    <ClCompile Include="src\Game\Wall.cpp" />
     <ClCompile Include="src\State\State.cpp" />
     <ClCompile Include="src\State\StatesManager.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
@@ -51,5 +50,10 @@
     <ClCompile Include="src\Game\LevelEditor\LevelEditorMenu.cpp" />
     <ClCompile Include="src\UI\UITextBox.cpp" />
     <ClCompile Include="src\State\Layer.cpp" />
+    <ClCompile Include="src\Game\Tiles\Box.cpp" />
+    <ClCompile Include="src\Game\Tiles\Floor.cpp" />
+    <ClCompile Include="src\Game\Tiles\Wall.cpp" />
+    <ClCompile Include="src\Game\Tiles\Storage.cpp" />
+    <ClCompile Include="src\Game\Tiles\Tile.cpp" />
   </ItemGroup>
 </Project>
