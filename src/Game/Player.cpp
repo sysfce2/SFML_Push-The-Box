@@ -4,6 +4,14 @@
 constexpr uint16_t ANIMATION_FPS = 8;
 PlayerControl* PlayerControl::s_Instance = nullptr;
 
+void Player::init(TileMap* tile_map, std::vector<HistoryRecord>* history)
+{
+	m_TileMap = tile_map;
+	m_GameHistory = history;
+	m_TileSize = m_TileMap->get_tile_size();
+	m_MovementSpeed *= get_scale().x;
+}
+
 void Player::update(const float& dt)
 {
 	update_movements(dt);
@@ -79,11 +87,9 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 	return true;
 }
 
-Player::Player(TileMap* tile_map) : m_TileMap(tile_map)
+Player::Player()
 {
 	set_sprite("player-sprite-sheet", { 0, 0 }, { 64, 64 });
-	m_TileSize = m_TileMap->get_tile_size();
-	m_MovementSpeed *= get_scale().x;
 	m_Animation = std::unique_ptr<Animation>(new Animation(this));
 	m_Animation->set_sprite_sheet("player-sprite-sheet");
 	m_Animation->new_animation("MovingDown", 0, 0, 64, 64, 9);

@@ -5,7 +5,7 @@ Floor::Floor(vec2f place_pos, vec2u tile_size, uint8_t v)
 {
 	v %= 4;
 	set_position_px(place_pos);
-	set_sprite("floor" + std::to_string(v + 1));
+	set_sprite("floor0");
 
 }
 

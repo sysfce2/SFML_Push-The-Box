@@ -41,10 +41,10 @@ bool PushTheBox::on_init()
 	load_ok *= manager.load_texture("box.png", "box", true);
 	load_ok *= manager.load_texture("box-gold.png", "box-gold", true);
 	load_ok *= manager.load_texture("floor.png", "floor0", true);
-	load_ok *= manager.load_texture("floor1.png", "floor1", true);
+	/*load_ok *= manager.load_texture("floor1.png", "floor1", true);
 	load_ok *= manager.load_texture("floor2.png", "floor2", true);
 	load_ok *= manager.load_texture("floor3.png", "floor3", true);
-	load_ok *= manager.load_texture("floor4.png", "floor4", true);
+	load_ok *= manager.load_texture("floor4.png", "floor4", true);*/
 
 	load_ok *= manager.load_font("joystix.ttf", "joystix");
 	load_ok *= manager.load_font("invasion.ttf", "invasion");

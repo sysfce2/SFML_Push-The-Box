@@ -89,7 +89,7 @@ bool TileMap::load_level(const std::string& file_path)
 			m_Boxes.emplace_back(box)->set_scale(m_TileScale);
 		}
 
-		m_Player = new Player(this);
+		m_Player = new Player();
 		m_Player->set_scale(m_TileScale);
 		vec2f offset = (vec2f(m_TileSize, m_TileSize) - m_Player->get_size_px()) / 2.f;
 		vec2f place_px = (vec2f)player_pos * m_TileSize;

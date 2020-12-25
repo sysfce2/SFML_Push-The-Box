@@ -131,7 +131,7 @@ Entity& Entity::detach_position()
 	return *this;
 }
 
-void Entity::start_movement(const vec2f& move_offset_px, float movement_speed_px)
+void Entity::start_movement(vec2f move_offset_px, float movement_speed_px)
 {
 	vec2f move_ratio = { 1.f, 1.f };
 	if (move_offset_px.x != 0.f && move_offset_px.y != 0.f)
@@ -143,6 +143,7 @@ void Entity::start_movement(const vec2f& move_offset_px, float movement_speed_px
 		if (move_offset_px.x == 0.f) move_ratio.x = 0.f;
 		if (move_offset_px.y == 0.f) move_ratio.y = 0.f;
 	}
+	move_offset_px /= Window::res_scale();
 	m_DistanceLeft = { abs(move_offset_px.x) , abs(move_offset_px.y) };
 	m_VelocityPx = { movement_speed_px * move_ratio.x, movement_speed_px * move_ratio.y };
 	if (move_offset_px.x < 0) m_VelocityPx.x *= -1.f;

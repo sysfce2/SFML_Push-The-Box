@@ -79,7 +79,7 @@ bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mod
             if (frames->animation_scale != m_AnimationOwner->m_Scale) {
                 frames->animation_scale = m_AnimationOwner->m_Scale;
                 for (auto& spr : m_Animations.at(name).sprites)
-                    spr->setScale(frames->animation_scale);
+                    spr->setScale(frames->animation_scale * Window::res_scale());
             }
 
             m_Frames = static_cast<uint32_t>(frames->sprites.size());

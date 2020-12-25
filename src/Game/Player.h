@@ -21,18 +21,27 @@ private:
 	static PlayerControl* s_Instance;
 };
 
+struct HistoryRecord
+{
+	vec2u m_PlayerPos;
+	vec2u m_BoxPos;
+	Box* m_Box;
+};
+
 class Player : public Entity
 {
 public:
 	friend class GamePlay;
 	friend class TileMap;
-	Player(TileMap* tile_map);
+	Player();
 	virtual ~Player() = default;
 private:
+	void init(TileMap* tile_map, std::vector<HistoryRecord>* history);
 	void update(const float& dt) override;
 	void try_walk(vec2i direction, const std::string& animation);
 	bool walk(vec2i offset, Box*& pushed_box);
 
+	std::vector<HistoryRecord>* m_GameHistory;
 	std::unique_ptr<Animation> m_Animation;
 	TileMap* m_TileMap = nullptr;
 	uint32_t* m_Moves = nullptr;

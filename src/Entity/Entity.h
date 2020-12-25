@@ -28,7 +28,7 @@ public:
 	inline vec2f get_velocity_px() const { return m_VelocityPx; }
 	inline float get_rotation()    const { return m_RotationAngle; }
 	inline bool is_visible()	   const { return m_Visible; }
-	void start_movement(const vec2f& move_offset_px, float movement_speed_px);
+	void start_movement(vec2f move_offset_px, float movement_speed_px);
 	void update_movements(const float& dt);
 	void vanish(bool freeze = false);
 	void appear(bool freeze = false);

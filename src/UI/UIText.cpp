@@ -44,7 +44,9 @@ void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t
 		m_Text->setScale(Window::res_scale());
 		m_Text->setString(m_TextContent);
 		m_Text->setFillColor(m_Color);
-		m_SizePx = { (float)m_Text->getLocalBounds().width, (float)m_Text->getLocalBounds().height };
+		
+		vec2f size = { (float)m_Text->getLocalBounds().width, (float)m_Text->getLocalBounds().height };
+		m_SizePx = size * Window::res_scale();
 		m_Size = m_SizePx / Window::size();
 		m_Margin.x = m_Text->getLocalBounds().left * Window::res_scale().x;
 		m_Margin.y = m_Text->getLocalBounds().top * Window::res_scale().y;

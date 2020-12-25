@@ -1,9 +1,8 @@
 #pragma once
 #include "State/State.h"
 #include "UI/UIButton.h"
-
-class TileMap;
-class Player;
+#include "Player.h"
+#include "TileMap.h"
 
 class GamePlay : public State
 {
@@ -26,6 +25,7 @@ private:
 	uint32_t m_PlayerMoves = 0;
 	std::string m_LevelPath;
 	std::wstring m_LevelNameStr;
+	std::vector<HistoryRecord> m_GameHistory;
 
 	UIElement* m_Background = nullptr;
 	UIElement* m_Menu = nullptr;

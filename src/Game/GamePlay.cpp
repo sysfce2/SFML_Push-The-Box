@@ -2,7 +2,6 @@
 #include "GamePlay.h"
 #include "Core/Logger.h"
 #include "State/StatesManager.h"
-#include "TileMap.h"
 
 using KB = sf::Keyboard;
 constexpr float A_RATIO = 9.f / 16.f;
@@ -153,5 +152,6 @@ void GamePlay::construct_tilemap()
 
 	m_Player = m_TileMap->m_Player;
 	m_Player->m_Moves = &m_PlayerMoves;
+	m_Player->init(m_TileMap, &m_GameHistory);
 	make_entity(m_Player);
 }
