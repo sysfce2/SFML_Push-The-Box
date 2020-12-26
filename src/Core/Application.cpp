@@ -7,9 +7,9 @@
 Application::Application(const std::string& app_name) : m_AppName(app_name)
 {
 	// TODO: JSON window config load
-	m_ScreenWidth = 1920;
-	m_ScreenHeight = 1080;
-	uint8_t fullscreen = sf::Style::Fullscreen;
+	m_ScreenWidth = 1280;
+	m_ScreenHeight = 720;
+	uint8_t fullscreen = 0; // sf::Style::Fullscreen;
 
 	sf::Uint32 style = sf::Style::Close | fullscreen;
 	m_Window.create(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, style);

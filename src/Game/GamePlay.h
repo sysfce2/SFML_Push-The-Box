@@ -27,10 +27,16 @@ private:
 	std::wstring m_LevelNameStr;
 	std::vector<HistoryRecord> m_GameHistory;
 
+	float m_ElapsedTime = 0.f;
+	uint32_t m_ElapsedMinutes = 0u;
+	uint32_t m_ElapsedSeconds = 0u;
+	uint32_t m_AvaliableUndos = 0u;
 	UIElement* m_Background = nullptr;
 	UIElement* m_Menu = nullptr;
 	UIText* m_LevelName = nullptr;
+	UIText* m_Timer = nullptr;
 	UIText* m_MovesText = nullptr;
+	UIText* m_UndosText = nullptr;
 	UIButton* m_UndoButton = nullptr;
 	UIButton* m_MoveUp = nullptr;
 	UIButton* m_MoveDown = nullptr;

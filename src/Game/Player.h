@@ -5,6 +5,8 @@
 #include "Entity/Animation.h"
 #include <unordered_map>
 
+constexpr uint16_t UNDOS_LIMIT = 10u;
+
 struct PlayerControl
 {
 	bool go_up = false;
@@ -25,7 +27,7 @@ struct HistoryRecord
 {
 	vec2u m_PlayerPos;
 	vec2u m_BoxPos;
-	Box* m_Box;
+	Box* m_Box = nullptr;
 };
 
 class Player : public Entity
@@ -35,8 +37,9 @@ public:
 	friend class TileMap;
 	Player();
 	virtual ~Player() = default;
+
 private:
-	void init(TileMap* tile_map, std::vector<HistoryRecord>* history);
+	void init(TileMap* tile_map, std::vector<HistoryRecord>* history, uint32_t* moves);
 	void update(const float& dt) override;
 	void try_walk(vec2i direction, const std::string& animation);
 	bool walk(vec2i offset, Box*& pushed_box);

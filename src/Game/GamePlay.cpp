@@ -10,6 +10,7 @@ const vec2f BTN_SCALE{ 2.8f, 2.8f };
 
 void GamePlay::update(const float& dt)
 {	
+	m_ElapsedTime += dt;
 	vec2f player_pos = m_Player->get_position();
 	vec2f player_size = m_Player->get_size();
 	vec2f camera_offset = player_pos - m_Camera;
@@ -29,11 +30,39 @@ void GamePlay::update(const float& dt)
 	// Down game screen side
 	else if (camera_offset.y < m_CameraBorderDistance)
 		m_Camera.y = player_pos.y - m_CameraBorderDistance;
+	
+	// Update timer
+	uint32_t wts = static_cast<uint32_t>(m_ElapsedTime);
+	uint32_t epds = wts % 60u; wts -= epds;
+	uint32_t epdm = wts / 60u;
+	if (epds != m_ElapsedSeconds || epdm != m_ElapsedMinutes) {
+		m_ElapsedSeconds = epds;
+		m_ElapsedMinutes = epdm;
+		std::wstring m = std::to_wstring(epdm);
+		std::wstring s = std::to_wstring(epds);
+		if (epdm / 10u == 0u) m = L"0" + m;
+		if (epds / 10u == 0u) s = L"0" + s;
+		m_Timer->set_text(L"Czas: " + m + L":" + s);
+		m_Timer->center_x();
+	}
 
-	if (m_PlayerMoves > m_Moves) {
+	if (m_PlayerMoves != m_Moves) {
 		m_Moves = m_PlayerMoves;
 		m_MovesText->set_text(L"Ruchy: " + std::to_wstring(m_Moves));
 		m_MovesText->center_x();
+	}
+
+	if (m_GameHistory.size() != m_AvaliableUndos) {
+		m_AvaliableUndos = m_GameHistory.size();
+		if (m_UndoButton->is_disabled())
+		{
+			if (m_AvaliableUndos > 0) m_UndoButton->disable(false);
+		}
+		else {
+			if (m_AvaliableUndos == 0) m_UndoButton->disable();
+		}
+		m_UndosText->set_text(std::to_wstring(m_AvaliableUndos) + L"/" + std::to_wstring(UNDOS_LIMIT));
+		m_UndosText->center_x();
 	}
 
 	bool up_pressed = KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed();
@@ -48,6 +77,31 @@ void GamePlay::update(const float& dt)
 	if (m_TileMap->m_Storages.size() == m_TileMap->m_StoragesFilled) {
 		// Level finished
 		destroy_state();
+	}
+
+	if (m_UndoButton->was_pressed()) {
+		if (m_Player->get_velocity_px().is_zero() && m_GameHistory.size() > 0) {
+			
+			HistoryRecord hr = m_GameHistory.back();
+			vec2i p_offset = hr.m_PlayerPos - m_Player->m_TilePosition;
+			vec2f player_undo_move = vec2f(p_offset) * m_TileMap->m_TileSize;
+			m_Player->start_movement(player_undo_move, 1000.f);
+			m_Player->m_TilePosition = hr.m_PlayerPos;
+			
+			if (hr.m_Box != nullptr) {
+				vec2u box_pos = hr.m_Box->m_TilePos;
+				vec2i b_offset = hr.m_BoxPos - box_pos;
+				vec2f box_undo_move = vec2f(b_offset) * m_TileMap->m_TileSize;
+				hr.m_Box->start_movement(box_undo_move, 1000.f);
+				m_TileMap->m_Map[box_pos.x][box_pos.y] = FLOOR_TILE;
+				m_TileMap->m_Map[hr.m_BoxPos.x][hr.m_BoxPos.y] = BOX_TILE;
+				hr.m_Box->m_TilePos = hr.m_BoxPos;
+				hr.m_Box->m_CheckForStorage = true;
+			} 
+			
+			m_PlayerMoves--;
+			m_GameHistory.pop_back();
+		}
 	}
 
 	if (m_Restart->was_pressed()) {
@@ -69,7 +123,9 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		m_Background = new UIElement("gameplay-background", { 1.f, 1.f });
 		m_Menu = new UIElement("gameplay-menu", { 1.f, 1.f });
 		m_LevelName = new UIText(m_LevelNameStr, "joystix", 26);
+		m_Timer = new UIText("Czas: 00:00", "joystix", 24);
 		m_MovesText = new UIText("Ruchy: 0", "joystix", 24);
+		m_UndosText = new UIText("0/" + std::to_string(UNDOS_LIMIT), "joystix", 24);
 		m_UndoButton = new UIButton("COFNIJ", BTN_SCALE, 22);
 		m_MoveUp = new UIButton("", BTN_SCALE);
 		m_MoveDown = new UIButton("", BTN_SCALE);
@@ -88,9 +144,12 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		m_fovWidth = 1.f - m_Menu->get_size().x;
 		m_Menu->set_position({ m_fovWidth, 0.f });
 		m_LevelName->attach_position(m_Menu).set_position({ 0.f, 0.05f }).center_x();
-		m_MovesText->attach_position(m_Menu).set_position({ 0.f, 0.13f }).center_x();
+		m_Timer->attach_position(m_Menu).set_position({ 0.f, 0.13f }).center_x();
+		m_MovesText->attach_position(m_Menu).set_position({ 0.f, 0.18f }).center_x();
 		m_UndoButton->assign_button_sprite("btn-3x1", "btn-3x1-pressed");
-		m_UndoButton->attach_position(m_Menu).set_position({ 0.f, 0.2f }).center_x();
+		m_UndoButton->attach_position(m_Menu).set_position({ 0.f, 0.24f }).center_x();
+		m_UndoButton->disable();
+		m_UndosText->attach_position(m_Menu).set_position({ 0.f, 0.33f }).center_x();
 
 		UIElement* arrow_up = new UIElement("arrow_up", BTN_SCALE);
 		UIElement* arrow_down = new UIElement("arrow_down", BTN_SCALE);
@@ -98,7 +157,7 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		UIElement* arrow_left = new UIElement("arrow_left", BTN_SCALE);
 
 		m_MoveUp->assign_button_sprite("btn-1x1", "btn-1x1-pressed");
-		m_MoveUp->attach_position(m_Menu).set_position({ 0.f, 0.4f }).center_x();
+		m_MoveUp->attach_position(m_Menu).set_position({ 0.f, 0.41f }).center_x();
 		m_MoveUp->set_symbol(arrow_up);
 
 		float down_y = m_MoveUp->get_position().y + m_MoveUp->get_size().y + CTRL_BTNS_SPACING * 3.f;
@@ -124,8 +183,10 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 
 		make_entity(m_Menu);
 		make_entity(m_LevelName);
+		make_entity(m_Timer);
 		make_entity(m_MovesText);
 		make_entity(m_UndoButton);
+		make_entity(m_UndosText);
 		make_entity(m_MoveUp);
 		make_entity(m_MoveDown);
 		make_entity(m_MoveRight);
@@ -151,7 +212,6 @@ void GamePlay::construct_tilemap()
 		make_entity(box);
 
 	m_Player = m_TileMap->m_Player;
-	m_Player->m_Moves = &m_PlayerMoves;
-	m_Player->init(m_TileMap, &m_GameHistory);
+	m_Player->init(m_TileMap, &m_GameHistory, &m_PlayerMoves);
 	make_entity(m_Player);
 }

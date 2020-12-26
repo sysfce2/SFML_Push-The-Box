@@ -4,10 +4,11 @@
 constexpr uint16_t ANIMATION_FPS = 8;
 PlayerControl* PlayerControl::s_Instance = nullptr;
 
-void Player::init(TileMap* tile_map, std::vector<HistoryRecord>* history)
+void Player::init(TileMap* tile_map, std::vector<HistoryRecord>* history, uint32_t* moves)
 {
 	m_TileMap = tile_map;
 	m_GameHistory = history;
+	m_Moves = moves;
 	m_TileSize = m_TileMap->get_tile_size();
 	m_MovementSpeed *= get_scale().x;
 }
@@ -40,7 +41,6 @@ void Player::try_walk(vec2i direction, const std::string& animation)
 		start_movement(movement, m_MovementSpeed);
 
 		m_Animation->play_animation(animation, ANIMATION_FPS, ANIMATE_REPEAT);
-		m_TilePosition += direction;
 		m_StoppedWalking = false;
 		
 		if (pushed_box != nullptr)
@@ -61,6 +61,8 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 		|| m_TileMap->m_Map[first.x][first.y] == NONE_TILE)
 		return false;
 
+	HistoryRecord hr{ m_TilePosition };
+
 	if (m_TileMap->m_Map[first.x][first.y] == BOX_TILE) {
 		
 		if (second.x < 0 || second.y < 0 || second.x >= lsize.x || second.y >= lsize.y)
@@ -71,9 +73,12 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 
 		m_TileMap->m_Map[first.x][first.y] = FLOOR_TILE;
 		m_TileMap->m_Map[second.x][second.y] = BOX_TILE;
+		
 
 		for (Box* box : m_TileMap->m_Boxes)
 			if (box->m_TilePos == vec2u(first.x, first.y)) {
+				hr.m_BoxPos = box->m_TilePos;
+				hr.m_Box = box;
 				box->m_TilePos = { (unsigned)second.x, (unsigned)second.y };
 				box->m_CheckForStorage = true;
 				pushed_box = box;
@@ -81,9 +86,13 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 			}
 	}
 
+	m_TilePosition += offset;
 	if (m_Moves != nullptr)
 		(*m_Moves)++;
 
+	if (m_GameHistory->size() == UNDOS_LIMIT)
+		m_GameHistory->erase(m_GameHistory->begin(), m_GameHistory->begin() + 1);
+	m_GameHistory->emplace_back(hr);
 	return true;
 }
 

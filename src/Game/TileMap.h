@@ -32,7 +32,7 @@ private:
 	uint16_t m_StoragesFilled = 0;
 	Player* m_Player = nullptr;
 	vec2u m_LevelSize;
-	vec2f m_TileScale = { 1.2f, 1.2f };
+	vec2f m_TileScale = { 1.f, 1.f };
 	float m_TileSize = 32.f;
 	
 };

@@ -8,7 +8,7 @@ bool UIButton::m_AnyPressed = false;
 
 void UIButton::update(const float& dt)
 {
-	if (m_Visible) {
+	if (m_Visible && !m_Disabled) {
 		auto cursor_over_button = [&]() {
 			sf::FloatRect bounds = m_Sprite->getGlobalBounds();
 			sf::Vector2i mouse = sf::Mouse::getPosition(*Window::get_handle());
@@ -65,16 +65,30 @@ bool UIButton::was_pressed()
 	else return false;
 }
 
-bool UIButton::is_pressed() const
-{
-	return m_Pressed;
-}
-
 void UIButton::set_symbol(UIElement* symbol)
 {
 	m_Symbol = symbol;
 	m_Symbol->attach_position(this).center_x().center_y();
 	add_child_entity(m_Symbol);
+}
+
+void UIButton::disable(bool disabled)
+{
+	m_Disabled = disabled;
+	if (m_Pressed) {
+		m_Pressed = false;
+		set_sprite(m_ButtonSprite);
+		if (m_ButtonText != nullptr)
+			m_ButtonText->shift_px({ get_scale().x, -get_scale().y });
+
+		if (m_Symbol != nullptr)
+			m_Symbol->shift_px({ get_scale().x, -get_scale().y });
+	}
+	
+	if (disabled)
+		m_Sprite->setColor(sf::Color(170, 150, 130, 120));
+	else 
+		m_Sprite->setColor(sf::Color(255, 255, 255, 255));
 }
 
 void UIButton::assign_button_sprite(const std::string& unpressed_sprite, const std::string& pressed_sprite)

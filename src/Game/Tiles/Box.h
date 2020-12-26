@@ -7,6 +7,7 @@ class Box : public Entity
 {
 public:
 	friend class Player;
+	friend class GamePlay;
 	bool m_CheckForStorage = true;
 	bool m_IsOnStorage = false;
 	Box(vec2f place_pos, vec2u tile_pos, TileMap* t_ptr);
