@@ -2,9 +2,9 @@
 
 const sf::Color HEADER_COLOR{ 229, 198, 0, 255 };
 const sf::Color TB_TEXT_COLOR{ 229, 198, 0, 255 };
-const vec2f BUTTON_SCALE{ 3.f, 3.f };
+const vec2f BUTTON_SCALE{ 4.5f, 4.5f };
 const TextBoxProps TB_PROPS {
-	"joystix", 18, TB_TEXT_COLOR, "cursor"
+	"joystix", 36, TB_TEXT_COLOR, "cursor"
 };
 
 void LevelEditorMenu::update(const float& dt)
@@ -25,11 +25,11 @@ void LevelEditorMenu::update(const float& dt)
 
 LevelEditorMenu::LevelEditorMenu()
 {
-	m_Background = new UIElement("select-state", { 1.f, 1.f });
-	m_HeaderText = new UIText(L"EDYTOR POZIOMÓW", "joystix", 54);
-	m_NewButton = new UIButton(L"NOWY", BUTTON_SCALE, 42);
-	m_LoadButton = new UIButton(L"WCZYTAJ", BUTTON_SCALE, 42);
-	m_BackButton = new UIButton(L"WRÓÆ", BUTTON_SCALE, 42);
+	m_Background = new UIElement("select-state", { 1.5f, 1.5f });
+	m_HeaderText = new UIText(L"EDYTOR POZIOMÓW", "joystix", 80);
+	m_NewButton = new UIButton(L"NOWY", BUTTON_SCALE, 60);
+	m_LoadButton = new UIButton(L"WCZYTAJ", BUTTON_SCALE, 60);
+	m_BackButton = new UIButton(L"WRÓÆ", BUTTON_SCALE, 60);
 	m_LevelName = new UITextBox("level-name", BUTTON_SCALE, TB_PROPS);
 
 	m_HeaderText->set_position({ 0.f, .017f }).center_x();

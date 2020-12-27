@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector2.h"
-#define WIDTH_MODEL   1280.f
-#define HEIGHT_MODEL  720.f
+#define WIDTH_MODEL   1920.f
+#define HEIGHT_MODEL  1080.f
 
 class Window
 {

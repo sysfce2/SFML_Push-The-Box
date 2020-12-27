@@ -6,7 +6,7 @@
 using KB = sf::Keyboard;
 constexpr float A_RATIO = 9.f / 16.f;
 constexpr float CTRL_BTNS_SPACING = 0.02f;
-const vec2f BTN_SCALE{ 2.8f, 2.8f };
+const vec2f BTN_SCALE{ 4.2f, 4.2f };
 
 void GamePlay::update(const float& dt)
 {	
@@ -65,14 +65,10 @@ void GamePlay::update(const float& dt)
 		m_UndosText->center_x();
 	}
 
-	bool up_pressed = KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed();
-	bool down_pressed = KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed();
-	bool right_pressed = KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed();
-	bool left_pressed = KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed();
-	PlayerControl::get().go_up = up_pressed;
-	PlayerControl::get().go_down = down_pressed;
-	PlayerControl::get().go_right = right_pressed;
-	PlayerControl::get().go_left = left_pressed;
+	PlayerControl::get().go_up = KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed();
+	PlayerControl::get().go_down = KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed();
+	PlayerControl::get().go_right = KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed();
+	PlayerControl::get().go_left = KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed();
 
 	if (m_TileMap->m_Storages.size() == m_TileMap->m_StoragesFilled) {
 		// Level finished
@@ -120,19 +116,19 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 	if (m_TileMap->load_level(m_LevelPath)) {
 
 		// Initialize UI elements
-		m_Background = new UIElement("gameplay-background", { 1.f, 1.f });
-		m_Menu = new UIElement("gameplay-menu", { 1.f, 1.f });
-		m_LevelName = new UIText(m_LevelNameStr, "joystix", 26);
-		m_Timer = new UIText("Czas: 00:00", "joystix", 24);
-		m_MovesText = new UIText("Ruchy: 0", "joystix", 24);
-		m_UndosText = new UIText("0/" + std::to_string(UNDOS_LIMIT), "joystix", 24);
-		m_UndoButton = new UIButton("COFNIJ", BTN_SCALE, 22);
+		m_Background = new UIElement("gameplay-background", { 1.5f, 1.5f });
+		m_Menu = new UIElement("gameplay-menu", { 1.5f, 1.5f });
+		m_LevelName = new UIText(m_LevelNameStr, "joystix", 38);
+		m_Timer = new UIText("Czas: 00:00", "joystix", 36);
+		m_MovesText = new UIText("Ruchy: 0", "joystix", 36);
+		m_UndosText = new UIText("0/" + std::to_string(UNDOS_LIMIT), "joystix", 36);
+		m_UndoButton = new UIButton("COFNIJ", BTN_SCALE, 32);
 		m_MoveUp = new UIButton("", BTN_SCALE);
 		m_MoveDown = new UIButton("", BTN_SCALE);
 		m_MoveRight = new UIButton("", BTN_SCALE);
 		m_MoveLeft = new UIButton("", BTN_SCALE);
-		m_Restart =	new UIButton(L"RESTART", { 2.f, 2.f }, 26);
-		m_Exit = new UIButton(L"WYJDè", { 2.f, 2.f }, 26);
+		m_Restart =	new UIButton(L"RESTART", { 3.f, 3.f }, 32);
+		m_Exit = new UIButton(L"WYJDè", { 3.f, 3.f }, 32);
 
 		// Construct background
 		make_entity(m_Background);

@@ -9,14 +9,14 @@
 const sf::Color GOLDEN_BROWN{ 105, 91, 0, 255 };
 const sf::Color HEADER_COLOR{ 229, 198, 0, 255 };
 const vec2f HEADER_POS = { 0.f, .03f };
-const vec2f SELECT_BLOCK_SCALE{ 2.f, 2.f };
-const vec2f BTN_SCALE{ 3.f, 3.f };
-const uint8_t BTN_FNT_SIZE = 42;
+const vec2f SELECT_BLOCK_SCALE{ 3.f, 3.f };
+const vec2f BTN_SCALE{ 4.5f, 4.5f };
+const uint8_t BTN_FNT_SIZE = 60;
 
 SelectBlock::SelectBlock(const vec2f& position, uint16_t number)
 	: UIElement("not-completed", SELECT_BLOCK_SCALE, position), m_Number(number)
 {
-	m_NumberText = new UIText(std::to_string(number), "invasion", 32);
+	m_NumberText = new UIText(std::to_string(number), "invasion", 48);
 	m_PlayButton = new UIButton("", SELECT_BLOCK_SCALE);
 	m_PlayButton->assign_button_sprite("play-btn", "play-btn-pressed");
 	m_NumberText->attach_position(this).set_position({ 0.015f, 0.f }).center_y();
@@ -67,12 +67,12 @@ LevelSelection::LevelSelection()
 	vec2f btn_pos{ 0.f, 0.2f };
 	vec2f pos_off{ 0.f, 0.15f };
 	
-	m_Background = new UIElement("select-state", { 1.f, 1.f });
-	m_HeaderText = new UIText(L"WYBIERZ POZIOM", "joystix", 54);
+	m_Background = new UIElement("select-state", { 1.5f, 1.5f });
+	m_HeaderText = new UIText(L"WYBIERZ POZIOM", "joystix", 80);
 	m_EasyButton = new UIButton(L"£ATWE", BTN_SCALE, BTN_FNT_SIZE);
 	m_HardButton = new UIButton(L"TRUDNE", BTN_SCALE, BTN_FNT_SIZE);
 	m_ExpertButton = new UIButton(L"EKSPERT", BTN_SCALE, BTN_FNT_SIZE);
-	m_EditorButton = new UIButton(L"   EDYTOR\n   POZIOMóW", BTN_SCALE, 25);
+	m_EditorButton = new UIButton(L"   EDYTOR\n   POZIOMóW", BTN_SCALE, 38);
 	m_BackButton = new UIButton(L"WRÓÆ", BTN_SCALE, BTN_FNT_SIZE);
 
 	m_HeaderText->set_color(HEADER_COLOR);
