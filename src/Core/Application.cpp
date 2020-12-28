@@ -7,9 +7,9 @@
 Application::Application(const std::string& app_name) : m_AppName(app_name)
 {
 	// TODO: JSON window config load
-	m_ScreenWidth = 1920;
-	m_ScreenHeight = 1080;
-	uint8_t fullscreen = sf::Style::Fullscreen;
+	m_ScreenWidth = 1600;
+	m_ScreenHeight = 900;
+	uint8_t fullscreen = 0; // sf::Style::Fullscreen;
 
 	sf::Uint32 style = sf::Style::Close | fullscreen;
 	m_Window.create(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, style);
@@ -65,6 +65,12 @@ void Application::handle_sfml_events()
 		case sf::Event::TextEntered:
 			UITextBox::m_WasKeyEntered = true;
 			UITextBox::m_KeyEntered = event.text.unicode;
+			break;
+		case sf::Event::GainedFocus:
+			Window::m_IsFocused = true;
+			break;
+		case sf::Event::LostFocus:
+			Window::m_IsFocused = false;
 			break;
 		default:
 			UITextBox::m_WasKeyEntered = false;

@@ -14,6 +14,13 @@ void UITextBox::only_numbers(bool is_true)
 	m_OnlyNumbers = is_true;
 }
 
+void UITextBox::clear()
+{
+	m_Text->set_text(L"");
+	m_CharsTyped = 0u;
+	update_cursor_pos();
+}
+
 UITextBox::UITextBox(const std::string& text_box_texture, const vec2f& scale, const TextBoxProps& props)
 {
 	set_sprite(text_box_texture);
@@ -22,7 +29,8 @@ UITextBox::UITextBox(const std::string& text_box_texture, const vec2f& scale, co
 	m_Text->attach_position(this).set_position({ 0.01f, 0.f }).center_y();
 	m_Cursor = new Cursor();
 	m_Cursor->set_sprite(props.cursor_texture).attach_position(this)
-		.set_scale(scale).center_y().vanish(true);
+		.set_scale(scale).center_y();
+	m_Cursor->vanish(true);
 	update_cursor_pos();
 	add_child_entity(m_Text);
 	add_child_entity(m_Cursor);
@@ -51,14 +59,14 @@ void UITextBox::update(const float& dt)
 			m_WasKeyEntered = false;
 			uint32_t key = m_KeyEntered;
 
-			if (key == 13 || key == 27) {
+			if (key == 13u || key == 27u) {
 				m_Focused = false;
 				m_Cursor->vanish(true);
 				m_Cursor->m_IsHidden = true;
 				return;
 			}
 
-			if (key == 8) {
+			if (key == 8u) {
 				std::wstring content = m_Text->get_content();
 				if (content.length() > 0) {
 					content = content.substr(0, content.size() - 1);
@@ -70,11 +78,11 @@ void UITextBox::update(const float& dt)
 				return;
 			}
 
-			if (m_CharsTyped <= m_MaxChars || m_MaxChars == 0) {
-				bool is_digit = key >= 48 && key <= 57;
+			if (m_CharsTyped <= m_MaxChars - 1 || m_MaxChars == 0) {
+				bool is_digit = key >= 48u && key <= 57u;
 				if (m_OnlyNumbers && !is_digit) return;
-				if ((key >= 65 && key <= 90) || (key >= 97 && key <= 122)
-					|| key == 95 || key == 45 || is_digit) {
+				if ((key >= 65u && key <= 90u) || (key >= 97u && key <= 122u)
+					|| key == 95u || key == 45u || is_digit) {
 					wchar_t entered_char = key;
 					m_Text->set_text(m_Text->get_content() + entered_char);
 					m_Text->center_y();
@@ -94,8 +102,10 @@ void UITextBox::update_cursor_pos()
 
 void Cursor::update(const float& dt)
 {
-	if (m_IsHidden && m_Visible)
+	if (m_IsHidden || !get_attached()->is_visible()) {
 		vanish(true);
+		return;
+	}
 
 	m_CursorTime += dt;
 	if (m_CursorTime >= 0.5f) {

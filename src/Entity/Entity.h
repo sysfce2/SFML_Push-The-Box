@@ -9,8 +9,11 @@ public:
 
 	Entity& set_sprite(sf::Sprite* sprite, bool size_changed);
 	Entity& set_sprite(const std::string& asset_id, vec2i pos = { 0, 0 }, vec2i size = { 0,0 });
+	Entity& set_color(const sf::Color& color);
 	Entity& set_position(const vec2f& position);
 	Entity& set_position_px(const vec2f& position);
+	Entity& set_size(const vec2f& size);
+	Entity& set_size_px(const vec2f& size_px);
 	Entity& set_scale(const vec2f& scale);
 	Entity& set_rotation(const float& rotation);
 	Entity& shift(const vec2f& offset);
@@ -41,7 +44,7 @@ protected:
 
 public:
 	Entity(const Entity& entity) = delete;
-	Entity() = default;
+	Entity();
 	virtual ~Entity();
 
 private:
@@ -52,17 +55,16 @@ private:
 	Entity* m_AttachedToEntity = nullptr;
 protected:
 	sf::Sprite* m_Sprite = nullptr;
-	bool m_IsUIElement = false;
+	sf::RectangleShape m_RectSprite;
 	bool m_Visible = true;
 	bool m_Freezed = false;
-
+	bool m_UseCameraPosition = true;
 	float m_RotationAngle = 0.f;
-	vec2f m_PositionPx = { 0.f, 0.f };
-	vec2f m_Position = { 0.f, 0.f };
-	vec2f m_SizePx = { 0.f, 0.f };
-	vec2f m_Size = { 0.f, 0.f };
-	vec2f m_VelocityPx = { 0.f, 0.f };
-
-	vec2f m_DistanceLeft = { 0.f, 0.f };
+	vec2f m_PositionPx;
+	vec2f m_Position;
+	vec2f m_SizePx;
+	vec2f m_Size ;
+	vec2f m_VelocityPx;
+	vec2f m_DistanceLeft;
 	bool m_MovingToDestination = false;
 };

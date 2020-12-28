@@ -4,6 +4,7 @@ sf::Window* Window::m_Handle;
 vec2f Window::m_ResScale;
 uint16_t Window::m_Width;
 uint16_t Window::m_Height;
+bool Window::m_IsFocused = true;
 
 void Window::set_handle(sf::Window* window_handle)
 {
@@ -42,4 +43,9 @@ uint16_t Window::width()
 uint16_t Window::height()
 {
 	return m_Height;
+}
+
+bool Window::is_focused()
+{
+	return m_IsFocused;
 }

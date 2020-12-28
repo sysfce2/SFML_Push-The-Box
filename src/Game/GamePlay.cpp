@@ -1,6 +1,7 @@
 #pragma once
 #include "GamePlay.h"
 #include "Core/Logger.h"
+#include "Core/Window.h"
 #include "State/StatesManager.h"
 
 using KB = sf::Keyboard;
@@ -23,7 +24,7 @@ void GamePlay::update(const float& dt)
 	else if (player_pos.x - m_Camera.x < m_CameraBorderDistance * A_RATIO)
 		m_Camera.x = player_pos.x - m_CameraBorderDistance * A_RATIO;
 
-	// Up game sceen side
+	// Up game screen side
 	if (camera_offset.y + player_size.y > 1.f - m_CameraBorderDistance)
 		m_Camera.y = player_pos.y + player_size.y - 1.f + m_CameraBorderDistance;
 
@@ -65,13 +66,16 @@ void GamePlay::update(const float& dt)
 		m_UndosText->center_x();
 	}
 
-	PlayerControl::get().go_up = KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed();
-	PlayerControl::get().go_down = KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed();
-	PlayerControl::get().go_right = KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed();
-	PlayerControl::get().go_left = KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed();
+	if (Window::is_focused()) {
+		PlayerControl::get().go_up = KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed();
+		PlayerControl::get().go_down = KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed();
+		PlayerControl::get().go_right = KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed();
+		PlayerControl::get().go_left = KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed();
+	}
 
+	// Level finished
 	if (m_TileMap->m_Storages.size() == m_TileMap->m_StoragesFilled) {
-		// Level finished
+		
 		destroy_state();
 	}
 
@@ -81,14 +85,14 @@ void GamePlay::update(const float& dt)
 			HistoryRecord hr = m_GameHistory.back();
 			vec2i p_offset = hr.m_PlayerPos - m_Player->m_TilePosition;
 			vec2f player_undo_move = vec2f(p_offset) * m_TileMap->m_TileSize;
-			m_Player->start_movement(player_undo_move, 1000.f);
+			m_Player->start_movement(player_undo_move, 1000.f * m_TileMap->m_TileScale.x);
 			m_Player->m_TilePosition = hr.m_PlayerPos;
 			
 			if (hr.m_Box != nullptr) {
 				vec2u box_pos = hr.m_Box->m_TilePos;
 				vec2i b_offset = hr.m_BoxPos - box_pos;
 				vec2f box_undo_move = vec2f(b_offset) * m_TileMap->m_TileSize;
-				hr.m_Box->start_movement(box_undo_move, 1000.f);
+				hr.m_Box->start_movement(box_undo_move, 1000.f * m_TileMap->m_TileScale.x);
 				m_TileMap->m_Map[box_pos.x][box_pos.y] = FLOOR_TILE;
 				m_TileMap->m_Map[hr.m_BoxPos.x][hr.m_BoxPos.y] = BOX_TILE;
 				hr.m_Box->m_TilePos = hr.m_BoxPos;
@@ -116,7 +120,7 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 	if (m_TileMap->load_level(m_LevelPath)) {
 
 		// Initialize UI elements
-		m_Background = new UIElement("gameplay-background", { 1.5f, 1.5f });
+		m_Background = new UIElement("gameplay-background", { 1.f, 1.f });
 		m_Menu = new UIElement("gameplay-menu", { 1.5f, 1.5f });
 		m_LevelName = new UIText(m_LevelNameStr, "joystix", 38);
 		m_Timer = new UIText("Czas: 00:00", "joystix", 36);

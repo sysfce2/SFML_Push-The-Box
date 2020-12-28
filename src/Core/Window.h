@@ -12,6 +12,7 @@ public:
 	static vec2f size();
 	static uint16_t width();
 	static uint16_t height();
+	static bool is_focused();
 private:
 	static void set_handle(sf::Window* window_handle);
 	static void update_res_scale();
@@ -20,4 +21,5 @@ private:
 	static vec2f m_ResScale;
 	static uint16_t m_Width;
 	static uint16_t m_Height;
+	static bool m_IsFocused;
 };

@@ -8,7 +8,7 @@ private:
 	void render(sf::RenderTarget& target, const vec2f& camera) override;
 public:
 	void set_text(const std::wstring& text, const std::string& font = "", uint8_t font_size = 0);
-	void set_color(sf::Color color);
+	void set_tcolor(const sf::Color& color);
 	void use_camera_position(bool use = true);
 	inline std::wstring get_content() const { return m_TextContent; }
 
@@ -17,8 +17,12 @@ public:
 	virtual ~UIText();
 
 	// Deleted entity methods
-	Entity& set_scale(const vec2f& scale) = delete;
 	Entity& set_sprite(const std::string& asset_id, int x, int y, int w, int h) = delete;
+	Entity& set_scale(const vec2f& scale) = delete;
+	Entity& set_size(const vec2f& size) = delete;
+	Entity& set_size_px(const vec2f& size) = delete;
+	Entity& set_color(const sf::Color& color) = delete;
+
 private:
 	std::wstring m_TextContent;
 	vec2f m_Margin;
@@ -27,5 +31,4 @@ private:
 	sf::Font* m_Font = nullptr;
 	sf::Text* m_Text = nullptr;
 	bool m_AntiAliasing = false;
-	bool m_UseCameraPosition = false;
 };

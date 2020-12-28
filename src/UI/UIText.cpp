@@ -57,7 +57,7 @@ void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t
 		LOG_ERROR("Trying to set text with no proper font assigned. Font name:", font);
 }
 
-void UIText::set_color(sf::Color color)
+void UIText::set_tcolor(const sf::Color& color)
 {
 	m_Color = color;
 	m_Text->setFillColor(m_Color);

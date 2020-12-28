@@ -6,9 +6,10 @@
 
 void Entity::render(sf::RenderTarget& target, const vec2f& camera)
 {
-	if (m_Visible && m_Sprite != nullptr) {
+	if (m_Visible) {
 		vec2f draw_pos = get_position_px();
-		if (!m_IsUIElement)
+
+		if (m_UseCameraPosition)
 			draw_pos -= camera * Window::size();
 
 		Entity* entity = get_attached();
@@ -17,8 +18,14 @@ void Entity::render(sf::RenderTarget& target, const vec2f& camera)
 			entity = entity->get_attached();
 		}
 
-		m_Sprite->setPosition(draw_pos);
-		target.draw(*m_Sprite);
+		if (m_Sprite != nullptr) {
+			m_Sprite->setPosition(draw_pos);
+			target.draw(*m_Sprite);
+		}
+		else {
+			m_RectSprite.setPosition(draw_pos);
+			target.draw(m_RectSprite);
+		}
 	}
 }
 
@@ -28,16 +35,26 @@ Entity& Entity::set_sprite(const std::string& asset_id, vec2i pos, vec2i size)
 	if (m_Sprite != nullptr)
 		delete m_Sprite;
 
-	m_Sprite = new sf::Sprite();
-	m_Sprite->setTexture(*texture);
+	if (texture != nullptr) {
+		m_Sprite = new sf::Sprite();
+		m_Sprite->setTexture(*texture);
 
-	if (size.x > 0 && size.y > 0) {
-		m_Sprite->setTextureRect(sf::IntRect(pos.x, pos.y, size.x, size.y));
-		m_SpriteSize = size;
+		if (size.x > 0 && size.y > 0) {
+			m_Sprite->setTextureRect(sf::IntRect(pos.x, pos.y, size.x, size.y));
+			m_SpriteSize = size;
+		}
+		else m_SpriteSize = { (float)texture->getSize().x, (float)texture->getSize().y };
+		set_scale(m_Scale);
 	}
-	else m_SpriteSize = { (float)texture->getSize().x, (float)texture->getSize().y };
-	set_scale(m_Scale);
 
+	return *this;
+}
+
+Entity& Entity::set_color(const sf::Color& color)
+{
+	if (m_Sprite != nullptr)
+		m_Sprite->setColor(color);
+	m_RectSprite.setFillColor(color);
 	return *this;
 }
 
@@ -67,14 +84,48 @@ Entity& Entity::set_position_px(const vec2f& position)
 	return *this;
 }
 
+Entity& Entity::set_size(const vec2f& size)
+{
+	if (m_Sprite != nullptr)
+		set_scale(size / m_SpriteSize / Window::size());
+	else m_Scale = { 1.f, 1.f };
+
+	vec2f size_px = size * Window::size();
+	m_RectSprite.setSize(size_px);
+	m_SizePx = size_px;
+	m_Size = size;
+	return *this;
+}
+
+Entity& Entity::set_size_px(const vec2f& size_px)
+{
+	if (m_Sprite != nullptr)
+		set_scale(size_px / m_SpriteSize);
+	else m_Scale = { 1.f, 1.f };
+
+	m_RectSprite.setSize((vec2f)(size_px));
+	m_SizePx = size_px;
+	m_Size = size_px / Window::size();
+
+	return *this;
+}
+
 Entity& Entity::set_scale(const vec2f& scale)
 {
 	vec2f draw_scale = scale * Window::res_scale();
-	if (m_Sprite != nullptr)
+	if (m_Sprite != nullptr) {
 		m_Sprite->setScale(draw_scale);
-	m_SizePx = m_SpriteSize * draw_scale;
-	m_Size = m_SpriteSize * draw_scale / Window::size();
-	m_Scale = scale;
+		m_SizePx = m_SpriteSize * draw_scale;
+		m_Size = m_SpriteSize * draw_scale / Window::size();
+		m_Scale = scale;
+	}
+	else if (!m_Size.is_zero()) {
+		vec2f rect_init_size = vec2f(m_RectSprite.getSize().x, m_RectSprite.getSize().y) / m_Scale;
+		m_RectSprite.setScale(draw_scale);
+		m_SizePx = rect_init_size * scale;
+		m_Size = rect_init_size * scale / Window::size();
+		m_Scale = scale;
+	}
 	return *this;
 }
 
@@ -203,6 +254,13 @@ Entity& Entity::add_child_entity(Entity* entity)
 {
 	m_ChildEntities.emplace_back(entity);
 	return *entity;
+}
+
+Entity::Entity()
+{
+	m_RectSprite = sf::RectangleShape();
+	m_RectSprite.setSize(vec2f(100.f, 100.f) * Window::res_scale());
+	m_RectSprite.setFillColor(sf::Color::Magenta);
 }
 
 Entity::~Entity()

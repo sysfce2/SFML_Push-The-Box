@@ -8,7 +8,7 @@ bool UIButton::m_AnyPressed = false;
 
 void UIButton::update(const float& dt)
 {
-	if (m_Visible && !m_Disabled) {
+	if (Window::is_focused() && m_Visible && !m_Disabled) {
 		auto cursor_over_button = [&]() {
 			sf::FloatRect bounds = m_Sprite->getGlobalBounds();
 			sf::Vector2i mouse = sf::Mouse::getPosition(*Window::get_handle());
@@ -86,9 +86,9 @@ void UIButton::disable(bool disabled)
 	}
 	
 	if (disabled)
-		m_Sprite->setColor(sf::Color(170, 150, 130, 120));
+		set_color(sf::Color(222, 222, 222, 75));
 	else 
-		m_Sprite->setColor(sf::Color(255, 255, 255, 255));
+		set_color(sf::Color(255, 255, 255, 255));
 }
 
 void UIButton::assign_button_sprite(const std::string& unpressed_sprite, const std::string& pressed_sprite)
@@ -108,7 +108,7 @@ UIButton::UIButton(const std::string& button_string, const vec2f& scale, uint8_t
 	if (button_string.length() > 0) {
 		m_ButtonText = new UIText(button_string, DEFAULT_FONT, font_size);
 		m_ButtonText->attach_position(this).center_x().center_y();
-		m_ButtonText->set_color(DEFAULT_COLOR);
+		m_ButtonText->set_tcolor(DEFAULT_COLOR);
 		add_child_entity(m_ButtonText);
 	}
 }
@@ -120,7 +120,7 @@ UIButton::UIButton(const std::wstring& button_string, const vec2f& scale, uint8_
 	if (button_string.length() > 0) {
 		m_ButtonText = new UIText(button_string, DEFAULT_FONT, font_size);
 		m_ButtonText->attach_position(this).center_x().center_y();
-		m_ButtonText->set_color(DEFAULT_COLOR);
+		m_ButtonText->set_tcolor(DEFAULT_COLOR);
 		add_child_entity(m_ButtonText);
 	}
 }

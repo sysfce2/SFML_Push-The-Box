@@ -67,7 +67,7 @@ LevelSelection::LevelSelection()
 	vec2f btn_pos{ 0.f, 0.2f };
 	vec2f pos_off{ 0.f, 0.15f };
 	
-	m_Background = new UIElement("select-state", { 1.5f, 1.5f });
+	m_Background = new UIElement("header-state", { 1.5f, 1.5f });
 	m_HeaderText = new UIText(L"WYBIERZ POZIOM", "joystix", 80);
 	m_EasyButton = new UIButton(L"£ATWE", BTN_SCALE, BTN_FNT_SIZE);
 	m_HardButton = new UIButton(L"TRUDNE", BTN_SCALE, BTN_FNT_SIZE);
@@ -75,7 +75,7 @@ LevelSelection::LevelSelection()
 	m_EditorButton = new UIButton(L"   EDYTOR\n   POZIOMóW", BTN_SCALE, 38);
 	m_BackButton = new UIButton(L"WRÓÆ", BTN_SCALE, BTN_FNT_SIZE);
 
-	m_HeaderText->set_color(HEADER_COLOR);
+	m_HeaderText->set_tcolor(HEADER_COLOR);
 	m_HeaderText->set_position(HEADER_POS).center_x();
 	m_EasyButton->set_position(btn_pos).center_x();
 	m_HardButton->set_position(btn_pos + pos_off).center_x();
@@ -104,6 +104,8 @@ LevelSelection::LevelSelection()
 			uint16_t level_number = i * 6 + j + 1;
 			block = new SelectBlock(place_pos, level_number);
 			block->vanish(true);
+			if (level_number > 6)
+				block->m_PlayButton->disable();
 			m_Levels.emplace_back(block);
 			make_entity(block, EASY_LEVELS | HARD_LEVELS | EXPERT_LEVELS);
 			place_pos.x += place_offset.x + block_size.x;

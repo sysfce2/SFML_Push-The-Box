@@ -21,9 +21,11 @@ bool PushTheBox::on_init()
 	load_ok *= manager.load_texture("editor-btn.png", "editor-btn", false);
 	load_ok *= manager.load_texture("editor-btn-pressed.png", "editor-btn-pressed", false);
 	load_ok *= manager.load_texture("editor-level-name.png", "level-name", false);
+	load_ok *= manager.load_texture("editor-level-size.png", "level-size", false);
 	load_ok *= manager.load_texture("cursor.png", "cursor", false);
+	load_ok *= manager.load_texture("editor-state.png", "editor-state", false);
 
-	load_ok *= manager.load_texture("select-state.png", "select-state", false);
+	load_ok *= manager.load_texture("header-state.png", "header-state", false);
 	load_ok *= manager.load_texture("completed.png", "completed", false);
 	load_ok *= manager.load_texture("not-completed.png", "not-completed", false);
 
