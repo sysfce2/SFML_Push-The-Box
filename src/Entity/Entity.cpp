@@ -32,10 +32,11 @@ void Entity::render(sf::RenderTarget& target, const vec2f& camera)
 Entity& Entity::set_sprite(const std::string& asset_id, vec2i pos, vec2i size)
 {
 	sf::Texture* texture = AssetsManager::get().get_texture(asset_id);
-	if (m_Sprite != nullptr)
-		delete m_Sprite;
 
 	if (texture != nullptr) {
+		if (m_Sprite != nullptr)
+			delete m_Sprite;
+
 		m_Sprite = new sf::Sprite();
 		m_Sprite->setTexture(*texture);
 

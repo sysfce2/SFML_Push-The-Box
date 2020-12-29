@@ -4,13 +4,15 @@
 
 State::~State()
 {
+	LOG_WARN("A state was destroyed");
+
 	for (auto& entity : m_Entities)
 		delete entity;
 	m_Entities.clear();
+
 	for (auto& layer : m_Layers)
 		delete layer.second;
 	m_Layers.clear();
-	LOG_WARN("A state was destroyed");
 }
 
 Entity* State::make_entity(Entity* entity, uint16_t layers)
@@ -18,20 +20,17 @@ Entity* State::make_entity(Entity* entity, uint16_t layers)
 	if (layers != 0x0)
 		for (uint16_t i = 0; i < MAX_LAYERS; i++) {
 			if ((layers & (1 << i)) >> i) {
-				uint16_t layer_id = 1 << i;
-				if (m_Layers.find(layer_id) == m_Layers.end())
-					m_Layers[layer_id] = new Layer();
-				Layer* layer = m_Layers[layer_id];
-				auto& entities = layer->m_LayerEntities;
+				Layer* _layer = layer(1 << i);
+				auto& entities = _layer->m_LayerEntities;
 				if (!std::count(entities.begin(), entities.end(), entity))
-					layer->m_LayerEntities.emplace_back(entity);
+					_layer->m_LayerEntities.emplace_back(entity);
 			}
 		}
 
 	if (!std::count(m_Entities.begin(), m_Entities.end(), entity)) {
 		m_Entities.emplace_back(entity);
 		for (auto& child : entity->m_ChildEntities)
-			m_Entities.emplace_back(child);
+			make_entity(child, layers);
 	}
 
 	return entity;

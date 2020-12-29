@@ -14,7 +14,10 @@ bool PushTheBox::on_init()
 	load_ok *= manager.load_texture("btn-3x1-pressed.png", "btn-3x1-pressed", false);
 	load_ok *= manager.load_texture("btn-1x1.png", "btn-1x1", false);
 	load_ok *= manager.load_texture("btn-1x1-pressed.png", "btn-1x1-pressed", false);
+	load_ok *= manager.load_texture("header-state.png", "header-state", false);
 
+	load_ok *= manager.load_texture("completed.png", "completed", false);
+	load_ok *= manager.load_texture("not-completed.png", "not-completed", false);
 	load_ok *= manager.load_texture("play-btn.png", "play-btn", false);
 	load_ok *= manager.load_texture("play-btn-pressed.png", "play-btn-pressed", false);
 
@@ -23,11 +26,12 @@ bool PushTheBox::on_init()
 	load_ok *= manager.load_texture("editor-level-name.png", "level-name", false);
 	load_ok *= manager.load_texture("editor-level-size.png", "level-size", false);
 	load_ok *= manager.load_texture("cursor.png", "cursor", false);
+	load_ok *= manager.load_texture("plus.png", "plus", false);
+	load_ok *= manager.load_texture("minus.png", "minus", false);
+	load_ok *= manager.load_texture("editor-storage.png", "editor-storage", true);
 	load_ok *= manager.load_texture("editor-state.png", "editor-state", false);
-
-	load_ok *= manager.load_texture("header-state.png", "header-state", false);
-	load_ok *= manager.load_texture("completed.png", "completed", false);
-	load_ok *= manager.load_texture("not-completed.png", "not-completed", false);
+	load_ok *= manager.load_texture("editor-empty-tile.png", "editor-empty-tile", false);
+	load_ok *= manager.load_texture("editor-tool-selection.png", "editor-tool-selection", true);
 
 	load_ok *= manager.load_texture("gameplay-background.png", "gameplay-background", true);
 	load_ok *= manager.load_texture("gameplay-menu.png", "gameplay-menu", true);

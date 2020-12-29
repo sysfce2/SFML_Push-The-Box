@@ -53,7 +53,7 @@ bool LevelEditorMenu::create_level()
 	std::string level_name = converter.to_bytes(ln_content);
 	vec2u size = { (unsigned)std::stoi(w_content), (unsigned)std::stoi(h_content) };
 
-	if (size.x == 0u || size.y == 0u) return false;
+	if (size.x < 5u || size.y < 5u) return false;
 
 	StatesManager::get().create_active_state(new Editor(level_name, size));
 	return true;
@@ -85,8 +85,8 @@ LevelEditorMenu::LevelEditorMenu()
 	m_tbLevelWidth = new UITextBox("level-size", BUTTON_SCALE, TB_PROPS);
 	m_tbLevelHeight = new UITextBox("level-size", BUTTON_SCALE, TB_PROPS);
 	m_NewCaption1 = new UIText(L"NAZWA POZIOMU", "joystix", 36);
-	m_NewCaption2 = new UIText(L"ROZMIAR POZIOMU (SZEROKOŒÆ)", "joystix", 36);
-	m_NewCaption3 = new UIText(L"ROZMIAR POZIOMU (WYSOKOŒÆ)", "joystix", 36);
+	m_NewCaption2 = new UIText(L"SZEROKOŒÆ POZIOMU (5-99)", "joystix", 36);
+	m_NewCaption3 = new UIText(L"WYSOKOŒÆ POZIOMU (5-99)", "joystix", 36);
 	m_bCreate = new UIButton(L"STWÓRZ", BUTTON_SCALE, 60);
 
 	m_tbLevelName->set_max_chars(14);

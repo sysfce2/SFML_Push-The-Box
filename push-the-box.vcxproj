@@ -183,6 +183,7 @@
     <ClInclude Include="src\Game\PushTheBox.h" />
     <ClInclude Include="src\Game\TileMap.h" />
     <ClInclude Include="src\Game\Tiles\Wall.h" />
+    <ClInclude Include="src\UI\UISelectBox.h" />
     <ClInclude Include="src\UI\UIButton.h" />
     <ClInclude Include="src\UI\UIElement.h" />
     <ClInclude Include="src\UI\UIText.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="src\Game\Tiles\Wall.cpp" />
     <ClCompile Include="src\UI\UIButton.cpp" />
     <ClCompile Include="src\UI\UIElement.cpp" />
+    <ClCompile Include="src\UI\UISelectBox.cpp" />
     <ClCompile Include="src\UI\UIText.cpp" />
     <ClCompile Include="src\UI\UITextBox.cpp" />
   </ItemGroup>

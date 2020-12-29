@@ -9,7 +9,7 @@ bool UIButton::m_AnyPressed = false;
 void UIButton::update(const float& dt)
 {
 	if (Window::is_focused() && m_Visible && !m_Disabled) {
-		auto cursor_over_button = [&]() {
+		auto cursor_over_button = [&]() -> bool {
 			sf::FloatRect bounds = m_Sprite->getGlobalBounds();
 			sf::Vector2i mouse = sf::Mouse::getPosition(*Window::get_handle());
 			return bounds.contains((float)mouse.x, (float)mouse.y);
