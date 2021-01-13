@@ -171,6 +171,18 @@ Entity& Entity::center_y()
 	return *this;
 }
 
+Entity& Entity::center_x(float y_pos)
+{
+	set_position({ 0.f, y_pos });
+	return center_x();
+}
+
+Entity& Entity::center_y(float x_pos)
+{
+	set_position({ x_pos, 0.f });
+	return center_y();
+}
+
 Entity& Entity::attach_position(Entity* other)
 {
 	m_AttachedToEntity = other;

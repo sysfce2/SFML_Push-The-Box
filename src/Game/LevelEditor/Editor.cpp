@@ -9,7 +9,7 @@ const vec2f TILES_START{ 0.22f, 0.22f};
 const vec2f TILES_SCALE{ 1.2f, 1.2f };
 
 // Static
-const Rect Editor::CanvasRect{ {.05f, .15f}, {.65f, .65f} };
+const Rect Editor::CanvasRect{ {.04f, .14f}, {.67f, .8f} };
 bool Editor::CameraChanged = false;
 bool Editor::PlayerPlaced = false;
 uint8_t Editor::SelectedTool = FLOOR_TILE;
@@ -58,9 +58,16 @@ void Editor::update(const float& dt)
 		if (m_Camera != before)
 			CameraChanged = true;
 
+		if (m_bSave->was_pressed())
+			save_level();
+
 		if (m_bExit->was_pressed())
 			destroy_state();
 	}
+}
+
+void Editor::save_level()
+{
 }
 
 Editor::Editor(std::string file_name, vec2u size)
@@ -77,12 +84,13 @@ Editor::Editor(std::string file_name, vec2u size)
 	PlayerTile = new Tile(&m_Camera, { 0u, 0u }, PLAYER_TILE);
 	PlayerTile->vanish(true);
 
-	m_Canvas->set_size({ .7f, .75f }).set_position({ .025f, .1f });
+	//m_Background->set_color(sf::Color(255, 255, 255, 100));
+	m_Canvas->set_size(CanvasRect.size).set_position(CanvasRect.pos);
 	m_Canvas->set_color(sf::Color(16, 16, 55, 255));
 	m_HeaderText->set_tcolor({ 229, 198, 0, 255 });
-	m_HeaderText->set_position({ 0.f, .03f }).center_x();
-	m_bSave->attach_position(m_ToolBox).set_position({ .0f, .55f }).center_x();
-	m_bExit->attach_position(m_ToolBox).set_position({ .0f, .7f }).center_x();
+	m_HeaderText->center_x(.03f);
+	m_bSave->attach_position(m_ToolBox).center_x(.55f);
+	m_bExit->attach_position(m_ToolBox).center_x(.7f);
 
 	// Construct tiles
 	m_Tiles.reserve(size.x);
@@ -111,7 +119,7 @@ Editor::Editor(std::string file_name, vec2u size)
 
 ToolBox::ToolBox()
 {
-	Rect canvas = Editor::CanvasRect;
+	const Rect& canvas = Editor::CanvasRect;
 	set_position({ canvas.pos.x + canvas.size.x + .02f, canvas.pos.y });
 	set_size({ .25f, .5f });
 	set_color(sf::Color(22, 19, 69, 255));
@@ -123,14 +131,14 @@ ToolBox::ToolBox()
 	m_BoxMinus = new UIButton("", btn_scale);
 	m_tPlayer = new UIText(L"GRACZ", "joystix", 28);
  
-	m_tBoxCount->attach_position(this).set_position({ 0.f, .03f }).center_x();
+	m_tBoxCount->attach_position(this).center_x(.03f);
 	m_BoxPlus->assign_button_sprite("btn-1x1", "btn-1x1-pressed");
 	m_BoxMinus->assign_button_sprite("btn-1x1", "btn-1x1-pressed");
 	m_BoxPlus->set_symbol(new UIElement("plus", btn_scale));
 	m_BoxMinus->set_symbol(new UIElement("minus", btn_scale));
-	m_BoxPlus->attach_position(this).set_position({.08f, .075f });
-	m_BoxMinus->attach_position(this).set_position({.13f, .075f });
-	m_tTiles->attach_position(this).set_position({ .0f, .2f }).center_x();
+	m_BoxMinus->attach_position(this).set_position({.085f, .08f });
+	m_BoxPlus->attach_position(this).set_position({.135f, .08f });
+	m_tTiles->attach_position(this).center_x(.2f);
 	
 
 	float offset = .0233336f;
@@ -140,18 +148,18 @@ ToolBox::ToolBox()
 
 	for (auto& tool_name : tool_names) {
 		Tool* tool = new Tool(current, tool_name);
-		tool->m_CanBeUnselected = false;
+		tool->m_CanBeUnchecked = false;
 		tool->attach_position(this).set_position(place_pos);
 		m_Tools.emplace_back(tool);
 		place_pos.x += tool->get_size().x + offset;
 		current++;
 	}
 
-	m_tPlayer->attach_position(this).set_position({ 0.f, place_pos.y + .13f }).center_x();
+	m_tPlayer->attach_position(this).center_x(place_pos.y + .13f);
 	Tool* player_tile = new Tool(PLAYER_TILE, "box");
 	player_tile->set_sprite("player-sprite-sheet", { 0, 0 }, { 64, 64 });
-	player_tile->m_CanBeUnselected = false;
-	player_tile->attach_position(this).set_position({ 0.f, place_pos.y + .17f }).center_x();
+	player_tile->m_CanBeUnchecked = false;
+	player_tile->attach_position(this).center_x(place_pos.y + .17f);
 	m_Tools.emplace_back(player_tile);
 	m_Tools.front()->select();
 
@@ -163,6 +171,7 @@ ToolBox::ToolBox()
 		});
 		add_child_entity(tool);
 	}
+
 	add_child_entity(m_tBoxCount);
 	add_child_entity(m_BoxPlus);
 	add_child_entity(m_BoxMinus);
@@ -238,7 +247,7 @@ void Tile::update(const float& dt)
 	if (Editor::CameraChanged) {
 		vec2f screen_pos = get_position() - *m_CameraPtr;
 		vec2f size = get_size();
-		Rect canvas = Editor::CanvasRect;
+		const Rect& canvas = Editor::CanvasRect;
 		if ((screen_pos.x + size.x >= canvas.pos.x
 			&& screen_pos.x <= canvas.pos.x + canvas.size.x)
 			&& (screen_pos.y + size.y >= canvas.pos.y
@@ -251,6 +260,7 @@ void Tile::update(const float& dt)
 	if (Window::is_focused() && is_visible() && m_TileId != PLAYER_TILE) {
 		sf::FloatRect bounds = m_Sprite->getGlobalBounds();
 		sf::Vector2i mouse = sf::Mouse::getPosition(*Window::get_handle());
+	
 		bool is_selected = bounds.contains((float)mouse.x, (float)mouse.y);
 		if (is_selected != m_IsSelected)
 			select(is_selected);
@@ -305,7 +315,8 @@ void Tile::set_tile(uint8_t tile_id)
 			m_HasBox = false;
 		};
 
-		if (tile_id == NONE_TILE) {
+		switch (tile_id) {
+		case NONE_TILE:
 			if (m_HasPlayer) {
 				m_HasPlayer = false;
 				Editor::PlayerPlaced = false;
@@ -326,52 +337,57 @@ void Tile::set_tile(uint8_t tile_id)
 				set_sprite("editor-empty-tile");
 				m_TileId = tile_id;
 			}
-		}
-		else if (tile_id == FLOOR_TILE) {
+			break;
+		case FLOOR_TILE:
 			if (!m_HasBox && !m_HasStorage && !m_HasPlayer) {
 				set_sprite("floor0");
 				m_TileId = tile_id;
 			}
-		}
-		else if (tile_id == WALL_TILE) {
-			set_sprite("wall0");
-			remove_box();
-			remove_storage();
-			m_TileId = tile_id;
-		}
-		else if (tile_id == BOX_TILE && !m_HasBox) {
-			if (Editor::BoxesPlaced < Editor::BoxesCount && m_TileId == FLOOR_TILE) {
+			break;
+		case WALL_TILE:
+			if (!m_HasPlayer) {
+				set_sprite("wall0");
+				remove_box();
+				remove_storage();
+				m_TileId = tile_id;
+			}
+			break;
+		case BOX_TILE:
+			if (m_TileId == FLOOR_TILE && !m_HasBox && !m_HasPlayer
+				&& Editor::BoxesPlaced < Editor::BoxesCount) {
 				Editor::BoxesPlaced++;
 				if (m_HasStorage) set_sprite("box-gold");
 				else set_sprite("box");
 				m_HasBox = true;
 				m_TileId = tile_id;
 			}
-		}
-		else if (tile_id == STORAGE_TILE && !m_HasStorage ) {
-			if (Editor::StoragesPlaced < Editor::BoxesCount
-				&& m_TileId == FLOOR_TILE || m_TileId == BOX_TILE) {
-				Editor::StoragesPlaced++;
-				if (m_HasBox) set_sprite("box-gold");
-				else set_sprite("editor-storage");
-				m_HasStorage = true;
-				m_TileId = FLOOR_TILE;
-			}
-		}
-		else if (tile_id == PLAYER_TILE && !Editor::PlayerPlaced) {
-			if (m_TileId == FLOOR_TILE && !m_HasBox) {
-				m_HasPlayer = true;
+			break;
+		case STORAGE_TILE:
+			if ((m_TileId == FLOOR_TILE || m_TileId == BOX_TILE) && !m_HasStorage)
+				if( Editor::StoragesPlaced < Editor::BoxesCount) {
+					Editor::StoragesPlaced++;
+					if (m_HasBox) set_sprite("box-gold");
+					else set_sprite("editor-storage");
+					m_HasStorage = true;
+					m_TileId = FLOOR_TILE;
+				}
+			break;
+		case PLAYER_TILE:
+			if (m_TileId == FLOOR_TILE && !m_HasBox && !Editor::PlayerPlaced) {
 				Editor::PlayerPlaced = true;
 				Editor::PlayerTile->m_TilePos = m_TilePos;
 				Editor::PlayerTile->set_position(TILES_START + get_size() * (vec2f)m_TilePos);
 				Editor::PlayerTile->appear();
+				m_HasPlayer = true;
 			}
+			break;
 		}
+
 		select(m_IsSelected);
 	}
 }
 
 Tool::Tool(uint8_t id, const std::string& sprite)
-	: UISelectBox(sprite, "editor-tool-selection"), m_TileId(id)
+	: UICheckBox(sprite, "editor-tool-selection"), m_TileId(id)
 {
 }

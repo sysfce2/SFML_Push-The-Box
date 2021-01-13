@@ -69,10 +69,10 @@ LevelEditorMenu::LevelEditorMenu()
 	m_bBack = new UIButton(L"WRÓÆ", BUTTON_SCALE, 60);
 
 	m_HeaderText->set_tcolor(HEADER_COLOR);
-	m_HeaderText->set_position({ 0.f, .017f }).center_x();
-	m_bNew->set_position({ 0.f, .35f }).center_x();
-	m_bLoad->set_position({ 0.f, .5f }).center_x();
-	m_bBack->set_position({ 0.f, 0.85f }).center_x();
+	m_HeaderText->center_x(.017f);
+	m_bNew->center_x(.35f);
+	m_bLoad->center_x(.5f);
+	m_bBack->center_x(.85f);
 
 	make_entity(m_Background);
 	make_entity(m_HeaderText);
@@ -92,13 +92,13 @@ LevelEditorMenu::LevelEditorMenu()
 	m_tbLevelName->set_max_chars(14);
 	m_tbLevelWidth->only_numbers(); m_tbLevelHeight->only_numbers();
 	m_tbLevelWidth->set_max_chars(2); m_tbLevelHeight->set_max_chars(2);
-	m_NewCaption1->set_position({ 0.f, .2f }).center_x();
-	m_tbLevelName->set_position({ 0.f, .25f }).center_x();
-	m_NewCaption2->set_position({ 0.f, .35f }).center_x();
-	m_tbLevelWidth->set_position({ 0.f, .4f }).center_x();
-	m_NewCaption3->set_position({ 0.f, .5f }).center_x();
-	m_tbLevelHeight->set_position({ 0.f, .55f }).center_x();
-	m_bCreate->set_position({ 0.f, .65f }).center_x();
+	m_NewCaption1->center_x(.2f);
+	m_tbLevelName->center_x(.25f);
+	m_NewCaption2->center_x(.35f);
+	m_tbLevelWidth->center_x(.4f);
+	m_NewCaption3->center_x(.5f);
+	m_tbLevelHeight->center_x(.55f);
+	m_bCreate->center_x(.65f);
 
 	make_entity(m_tbLevelName, LE_NEW);
 	make_entity(m_tbLevelWidth, LE_NEW);

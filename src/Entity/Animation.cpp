@@ -82,6 +82,7 @@ bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mod
                     spr->setScale(frames->animation_scale * Window::res_scale());
             }
 
+            m_CurrentAnimationName = name;
             m_Frames = static_cast<uint32_t>(frames->sprites.size());
             m_StopAnimation = m_Frames == 1u;
             m_CurrentAnimation = frames; 

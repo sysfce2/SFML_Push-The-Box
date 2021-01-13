@@ -20,6 +20,8 @@ public:
 	Entity& shift_px(const vec2f& offset);
 	Entity& center_x();
 	Entity& center_y();
+	Entity& center_x(float y_pos);
+	Entity& center_y(float x_pos);
 	Entity& attach_position(Entity* other);
 	Entity& detach_position();
 	inline Entity* get_attached()  const { return m_AttachedToEntity; }

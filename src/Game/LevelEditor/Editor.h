@@ -1,8 +1,46 @@
 #pragma once
 #include "State/State.h"
 #include "UI/UIButton.h"
-#include "UI/UISelectBox.h"
+#include "UI/UICheckBox.h"
 #include "Game/TileMap.h"
+
+#define PLAYER_TILE 0xFF
+
+class Tile;
+class Tool;
+class ToolBox;
+struct Rect { vec2f pos; vec2f size; };
+
+class Editor : public State
+{
+private:
+	void update(const float& dt) override;
+	void save_level();
+public:
+	Editor(std::string file_name, vec2u size);
+	virtual ~Editor() = default;
+
+	static const Rect CanvasRect;
+	static bool CameraChanged;
+	static bool PlayerPlaced;
+	static uint8_t SelectedTool;
+	static uint16_t BoxesPlaced;
+	static uint16_t StoragesPlaced;
+	static uint16_t BoxesCount;
+	static Tile* PlayerTile;
+private:
+	vec2f m_TileSize;
+	vec2u m_LevelSize;
+	std::string m_FileName;
+	std::vector<std::vector<Tile*>> m_Tiles;
+	
+	UIElement* m_Canvas;
+	UIElement* m_Background;
+	UIText* m_HeaderText;
+	ToolBox* m_ToolBox;
+	UIButton* m_bSave;
+	UIButton* m_bExit;
+};
 
 class Tile : public Entity
 {
@@ -25,7 +63,7 @@ private:
 	uint8_t m_TileId;
 };
 
-class Tool : public UISelectBox
+class Tool : public UICheckBox
 {
 public:
 	friend class ToolBox;
@@ -35,7 +73,6 @@ private:
 	uint8_t m_TileId;
 };
 
-#define PLAYER_TILE 0xFF
 class ToolBox : public UIElement
 {
 public:
@@ -49,37 +86,4 @@ private:
 	UIText* m_tTiles;
 	UIText* m_tPlayer;
 	std::vector<Tool*> m_Tools;
-};
-
-struct Rect { vec2f pos; vec2f size; };
-
-class Editor : public State
-{
-private:
-	void update(const float& dt) override;
-public:
-	Editor(std::string file_name, vec2u size);
-	virtual ~Editor() = default;
-
-	static const Rect CanvasRect;
-	static bool CameraChanged;
-	static bool PlayerPlaced;
-	static uint8_t SelectedTool;
-	static uint16_t BoxesPlaced;
-	static uint16_t StoragesPlaced;
-	static uint16_t BoxesCount;
-	static Tile* PlayerTile;
-private:
-	vec2f m_TileSize;
-	vec2u m_LevelSize;
-	std::string m_FileName;
-	std::vector<std::vector<Tile*>> m_Tiles;
-	
-	
-	UIElement* m_Canvas;
-	UIElement* m_Background;
-	UIText* m_HeaderText;
-	ToolBox* m_ToolBox;
-	UIButton* m_bSave;
-	UIButton* m_bExit;
 };

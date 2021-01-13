@@ -8,7 +8,6 @@
 
 const sf::Color GOLDEN_BROWN{ 105, 91, 0, 255 };
 const sf::Color HEADER_COLOR{ 229, 198, 0, 255 };
-const vec2f HEADER_POS = { 0.f, .03f };
 const vec2f SELECT_BLOCK_SCALE{ 3.f, 3.f };
 const vec2f BTN_SCALE{ 4.5f, 4.5f };
 const uint8_t BTN_FNT_SIZE = 60;
@@ -19,8 +18,8 @@ SelectBlock::SelectBlock(const vec2f& position, uint16_t number)
 	m_NumberText = new UIText(std::to_string(number), "invasion", 48);
 	m_PlayButton = new UIButton("", SELECT_BLOCK_SCALE);
 	m_PlayButton->assign_button_sprite("play-btn", "play-btn-pressed");
-	m_NumberText->attach_position(this).set_position({ 0.015f, 0.f }).center_y();
-	m_PlayButton->attach_position(this).set_position({ 0.075f, 0.0f }).center_y();
+	m_NumberText->attach_position(this).center_y(0.015f);
+	m_PlayButton->attach_position(this).center_y(0.075f);
 	add_child_entity(m_NumberText);
 	add_child_entity(m_PlayButton);
 }
@@ -64,8 +63,8 @@ void LevelSelection::update(const float& dt)
 
 LevelSelection::LevelSelection()
 {
-	vec2f btn_pos{ 0.f, 0.2f };
-	vec2f pos_off{ 0.f, 0.15f };
+	float btn_y = .2f;
+	float btn_off = .15f;
 	
 	m_Background = new UIElement("header-state", { 1.5f, 1.5f });
 	m_HeaderText = new UIText(L"WYBIERZ POZIOM", "joystix", 80);
@@ -76,12 +75,12 @@ LevelSelection::LevelSelection()
 	m_BackButton = new UIButton(L"WRÓÆ", BTN_SCALE, BTN_FNT_SIZE);
 
 	m_HeaderText->set_tcolor(HEADER_COLOR);
-	m_HeaderText->set_position(HEADER_POS).center_x();
-	m_EasyButton->set_position(btn_pos).center_x();
-	m_HardButton->set_position(btn_pos + pos_off).center_x();
-	m_ExpertButton->set_position(btn_pos + pos_off * 2).center_x();
-	m_EditorButton->set_position({ 0.72f, 0.85f });
-	m_BackButton->set_position({ 0.f, 0.85f }).center_x();
+	m_HeaderText->center_x(.03f);
+	m_EasyButton->center_x(btn_y);
+	m_HardButton->center_x(btn_y + btn_off);
+	m_ExpertButton->center_x(btn_y + btn_off * 2);
+	m_EditorButton->set_position({ .72f, .85f });
+	m_BackButton->center_x(.85f);
 	m_EditorButton->assign_button_sprite("editor-btn", "editor-btn-pressed");
 	
 	make_entity(m_Background);

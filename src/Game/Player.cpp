@@ -4,10 +4,10 @@
 constexpr uint16_t ANIMATION_FPS = 8;
 PlayerControl* PlayerControl::s_Instance = nullptr;
 
-void Player::init(TileMap* tile_map, std::vector<HistoryRecord>* history, uint32_t* moves)
+void Player::init(TileMap* tile_map, std::vector<Undo>* reg, uint32_t* moves)
 {
 	m_TileMap = tile_map;
-	m_GameHistory = history;
+	m_UndoRegister = reg;
 	m_Moves = moves;
 	m_TileSize = m_TileMap->get_tile_size();
 	m_MovementSpeed *= get_scale().x;
@@ -61,7 +61,7 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 		|| m_TileMap->m_Map[first.x][first.y] == NONE_TILE)
 		return false;
 
-	HistoryRecord hr{ m_TilePosition };
+	Undo undo{ offset * -1, m_Animation->get_animation_name() };
 
 	if (m_TileMap->m_Map[first.x][first.y] == BOX_TILE) {
 		
@@ -74,13 +74,11 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 		m_TileMap->m_Map[first.x][first.y] = FLOOR_TILE;
 		m_TileMap->m_Map[second.x][second.y] = BOX_TILE;
 		
-
 		for (Box* box : m_TileMap->m_Boxes)
 			if (box->m_TilePos == vec2u(first.x, first.y)) {
-				hr.m_BoxPos = box->m_TilePos;
-				hr.m_Box = box;
 				box->m_TilePos = { (unsigned)second.x, (unsigned)second.y };
 				box->m_CheckForStorage = true;
+				undo.m_Box = box;
 				pushed_box = box;
 				break;
 			}
@@ -90,9 +88,9 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 	if (m_Moves != nullptr)
 		(*m_Moves)++;
 
-	if (m_GameHistory->size() == UNDOS_LIMIT)
-		m_GameHistory->erase(m_GameHistory->begin(), m_GameHistory->begin() + 1);
-	m_GameHistory->emplace_back(hr);
+	if (m_UndoRegister->size() == UNDOS_LIMIT)
+		m_UndoRegister->erase(m_UndoRegister->begin(), m_UndoRegister->begin() + 1);
+	m_UndoRegister->emplace_back(undo);
 	return true;
 }
 

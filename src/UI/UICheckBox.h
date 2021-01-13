@@ -2,11 +2,11 @@
 #include "UIElement.h"
 #include <functional>
 
-class UISelectBox : public UIElement
+class UICheckBox : public UIElement
 {
 public:
-	UISelectBox(const std::string& sprite, const std::string& selection_glyph, vec2f scale = { 1.f, 1.f });
-	virtual ~UISelectBox() = default;
+	UICheckBox(const std::string& sprite, const std::string& selection_glyph, vec2f scale = { 1.f, 1.f });
+	virtual ~UICheckBox() = default;
 
 	void on_change(std::function<void(bool)> on_change_function);
 	void select(bool selected = true);
@@ -22,5 +22,5 @@ private:
 	bool m_IsDisabled = false;
 	bool m_Released = true;
 public:
-	bool m_CanBeUnselected = true;
+	bool m_CanBeUnchecked = true;
 };

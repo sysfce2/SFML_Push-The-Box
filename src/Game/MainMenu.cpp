@@ -14,11 +14,11 @@ MainMenu::MainMenu()
 	m_ExitButton = new UIButton(L"WYJD", BTN_SCALE, BTN_FNT_SIZE);
 	m_Footer = new UIText(L"PROJEKT Z C++ WYKONA£ DAMIAN ¯UK", "joystix", 32);
 
-	m_Title->set_position({ 0.f, 0.1f }).center_x();
-	m_PlayButton->set_position({ 0.f, .4f }).center_x();
-	m_OptionsButton->set_position({ 0.f, .55f }).center_x();
-	m_ExitButton->set_position({ 0.f, .70f }).center_x();
-	m_Footer->set_position({ .42f, .945f }).center_x();
+	m_Title->center_x(.1f);
+	m_PlayButton->center_x(.4f);
+	m_OptionsButton->center_x(.55f);
+	m_ExitButton->center_x(.7f);
+	m_Footer->center_x(.945f);
 
 	make_entity(m_Background);
 	make_entity(m_Title);

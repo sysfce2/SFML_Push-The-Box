@@ -1,7 +1,7 @@
-#include "UISelectBox.h"
+#include "UICheckBox.h"
 #include "Core/Window.h"
 
-UISelectBox::UISelectBox(const std::string& sprite, const std::string& selection_glyph, vec2f scale)
+UICheckBox::UICheckBox(const std::string& sprite, const std::string& selection_glyph, vec2f scale)
 	: m_SelectionGlyph(new UIElement(selection_glyph, scale))
 {
 	set_sprite(sprite);
@@ -10,12 +10,12 @@ UISelectBox::UISelectBox(const std::string& sprite, const std::string& selection
 	add_child_entity(m_SelectionGlyph);
 }
 
-void UISelectBox::on_change(std::function<void(bool)> on_change_function)
+void UICheckBox::on_change(std::function<void(bool)> on_change_function)
 {
 	m_OnChangeFunction = on_change_function;
 }
 
-void UISelectBox::select(bool selected)
+void UICheckBox::select(bool selected)
 {
 	m_IsSelected = selected;
 	if (m_IsSelected)
@@ -24,7 +24,7 @@ void UISelectBox::select(bool selected)
 		m_SelectionGlyph->vanish(true);
 }
 
-void UISelectBox::disable(bool disabled)
+void UICheckBox::disable(bool disabled)
 {
 	m_IsDisabled = disabled;
 	if (disabled && m_IsSelected) select(false);
@@ -32,7 +32,7 @@ void UISelectBox::disable(bool disabled)
 	else  set_color(sf::Color(255, 255, 255, 255));
 }
 
-void UISelectBox::update(const float& dt)
+void UICheckBox::update(const float& dt)
 {
 	if (!m_IsDisabled) {
 		if (!m_IsSelected && m_SelectionGlyph->is_visible())
@@ -45,7 +45,7 @@ void UISelectBox::update(const float& dt)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			if (contains && m_Released) {
 				m_Released = false;
-				if (m_IsSelected && !m_CanBeUnselected) return;
+				if (m_IsSelected && !m_CanBeUnchecked) return;
 				select(!m_IsSelected);
 
 				if (m_OnChangeFunction != nullptr)

@@ -19,6 +19,7 @@ public:
 	bool set_sprite_sheet(const std::string& texture_name);
 	bool play_animation(const std::string& name, uint8_t fps, uint8_t mode = ANIMATE_ONCE, uint32_t repeat_from = 0u);
 	bool new_animation(const std::string& name, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t frames);
+	inline std::string get_animation_name() const { return m_CurrentAnimationName; }
 	void stop();
 	void pause();
 	void resume();
@@ -38,6 +39,7 @@ private:
 	uint32_t m_Frames = 0u;
 	uint32_t m_CurrentFrame = 0u;
 	uint32_t m_RepeatFrom = 0u;
+	std::string m_CurrentAnimationName;
 
 	AnimationFrames* m_CurrentAnimation = nullptr;
 	sf::Texture* m_SpriteSheet = nullptr;

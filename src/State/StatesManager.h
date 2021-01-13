@@ -14,8 +14,6 @@ public:
 		return *s_Instance;
 	}
 
-	StatesManager();
-	virtual ~StatesManager();
 private:
 	static StatesManager* s_Instance;
 	static std::stack<State*> m_AppStates;

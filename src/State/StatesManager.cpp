@@ -14,11 +14,3 @@ void StatesManager::create_active_state(State* state)
 	m_AppStates.emplace(state);
 	LOG_INFO("New active state created");
 }
-
-StatesManager::StatesManager()
-{
-}
-
-StatesManager::~StatesManager()
-{
-}

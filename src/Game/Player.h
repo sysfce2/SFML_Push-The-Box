@@ -23,10 +23,10 @@ private:
 	static PlayerControl* s_Instance;
 };
 
-struct HistoryRecord
+struct Undo
 {
-	vec2u m_PlayerPos;
-	vec2u m_BoxPos;
+	vec2i m_LastMove;
+	std::string m_Animation;
 	Box* m_Box = nullptr;
 };
 
@@ -39,12 +39,12 @@ public:
 	virtual ~Player() = default;
 
 private:
-	void init(TileMap* tile_map, std::vector<HistoryRecord>* history, uint32_t* moves);
+	void init(TileMap* tile_map, std::vector<Undo>* reg, uint32_t* moves);
 	void update(const float& dt) override;
 	void try_walk(vec2i direction, const std::string& animation);
 	bool walk(vec2i offset, Box*& pushed_box);
 
-	std::vector<HistoryRecord>* m_GameHistory;
+	std::vector<Undo>* m_UndoRegister;
 	std::unique_ptr<Animation> m_Animation;
 	TileMap* m_TileMap = nullptr;
 	uint32_t* m_Moves = nullptr;

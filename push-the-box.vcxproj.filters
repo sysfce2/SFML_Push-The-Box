@@ -27,7 +27,8 @@
     <ClInclude Include="src\Game\Tiles\Wall.h" />
     <ClInclude Include="src\Game\Tiles\Storage.h" />
     <ClInclude Include="src\Game\LevelEditor\Editor.h" />
-    <ClInclude Include="src\UI\UISelectBox.h" />
+    <ClInclude Include="src\UI\UIMessageBox.h" />
+    <ClInclude Include="src\UI\UICheckBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -56,6 +57,7 @@
     <ClCompile Include="src\Game\Tiles\Wall.cpp" />
     <ClCompile Include="src\Game\Tiles\Storage.cpp" />
     <ClCompile Include="src\Game\LevelEditor\Editor.cpp" />
-    <ClCompile Include="src\UI\UISelectBox.cpp" />
+    <ClCompile Include="src\UI\UIMessageBox.cpp" />
+    <ClCompile Include="src\UI\UICheckBox.cpp" />
   </ItemGroup>
 </Project>

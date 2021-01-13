@@ -25,7 +25,7 @@ private:
 	uint32_t m_PlayerMoves = 0;
 	std::string m_LevelPath;
 	std::wstring m_LevelNameStr;
-	std::vector<HistoryRecord> m_GameHistory;
+	std::vector<Undo> m_UndoRegister;
 
 	float m_ElapsedTime = 0.f;
 	uint32_t m_ElapsedMinutes = 0u;
