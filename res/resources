@@ -1,0 +1,50 @@
+## FONT
+FONT joystix.ttf, joystix
+FONT invasion.ttf, invasion
+
+## MENU
+title-logo.png, title, 0
+menu-state.png, menu-state, 0
+btn-4x1.png, btn-4x1, 0
+btn-4x1-pressed.png, btn-4x1-pressed, 0
+btn-3x1.png, btn-3x1, 0
+btn-3x1-pressed.png, btn-3x1-pressed, 0
+btn-1x1.png, btn-1x1, 0
+btn-1x1-pressed.png, btn-1x1-pressed, 0
+header-state.png, header-state, 0
+
+## LEVEL SELECTION
+completed.png, completed, 0
+not-completed.png, not-completed, 0
+play-btn.png, play-btn, 0
+play-btn-pressed.png, play-btn-pressed, 0
+
+## EDITOR
+editor-btn.png, editor-btn, 0
+editor-btn-pressed.png, editor-btn-pressed, 0
+editor-level-name.png, level-name, 0
+editor-level-size.png, level-size, 0
+cursor.png, cursor, 0
+plus.png, plus, 0
+minus.png, minus, 0
+editor-storage.png, editor-storage, 1
+editor-state.png, editor-state, 0
+editor-empty-tile.png, editor-empty-tile, 0
+editor-tool-selection.png, editor-tool-selection, 1
+
+## GAMEPLAY MENU
+gameplay-background.png, gameplay-background, 1
+gameplay-menu.png, gameplay-menu, 1
+arrow_up.png, arrow_up, 0
+arrow_down.png, arrow_down, 0
+arrow_right.png, arrow_right, 0
+arrow_left.png, arrow_left, 0
+
+## TILEMAP
+player-spritesheet.png, player-sprite-sheet, 1
+wall.png, wall0, 1
+wall1.png, wall1, 1
+storage.png, storage, 1
+box.png, box, 1
+box-gold.png, box-gold, 1
+floor.png, floor0, 1

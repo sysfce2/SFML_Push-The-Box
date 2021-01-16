@@ -303,7 +303,7 @@ Tile::Tile(vec2f* camera, vec2u tile_pos, uint8_t id)
 		set_sprite("player-sprite-sheet", { 0, 0 }, { 64, 64 });
 	else {
 		set_sprite("editor-empty-tile");
-		set_color({ 255,255,255,235 });
+		set_color({ 255,255,255,230 });
 	}
 
 	set_scale(TILES_SCALE);
@@ -367,7 +367,7 @@ void Tile::select(bool selected)
 	if (selected)
 		set_color(sf::Color(100, 220, 0, 255));
 	else
-		set_color(sf::Color(255, 255, 255, m_TileId != NONE_TILE ? 255 : 235));
+		set_color(sf::Color(255, 255, 255, m_TileId != NONE_TILE ? 255 : 230));
 }
 
 void Tile::set_tile(uint8_t tile_id)
