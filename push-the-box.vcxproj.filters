@@ -29,6 +29,7 @@
     <ClInclude Include="src\Game\LevelEditor\Editor.h" />
     <ClInclude Include="src\UI\UIMessageBox.h" />
     <ClInclude Include="src\UI\UICheckBox.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -59,5 +60,12 @@
     <ClCompile Include="src\Game\LevelEditor\Editor.cpp" />
     <ClCompile Include="src\UI\UIMessageBox.cpp" />
     <ClCompile Include="src\UI\UICheckBox.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\assets\icon.ico" />
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="push-the-box.rc" />
   </ItemGroup>
 </Project>

@@ -22,12 +22,8 @@ void LevelEditorMenu::update(const float& dt)
 			set_main_layer(LE_LOAD);
 	}
 	else if (active_layer == LE_NEW) {
-		//if (m_bCreate->was_pressed() && create_level())
-			//destroy_state();
-		if (m_bCreate->was_pressed()) {
-			StatesManager::get().create_active_state(new Editor("test", {12, 12}));
+		if (m_bCreate->was_pressed() && create_level())
 			destroy_state();
-		}
 	}
 
 	if (m_bBack->was_pressed())

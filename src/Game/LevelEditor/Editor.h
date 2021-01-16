@@ -5,6 +5,7 @@
 #include "Game/TileMap.h"
 
 #define PLAYER_TILE 0xFF
+#define ERASER 0xFD
 
 class Tile;
 class Tool;
@@ -40,11 +41,13 @@ private:
 	ToolBox* m_ToolBox;
 	UIButton* m_bSave;
 	UIButton* m_bExit;
+	UIText* m_Info;
 };
 
 class Tile : public Entity
 {
 public:
+	friend class Editor;
 	Tile(vec2f* camera, vec2u tile_pos, uint8_t id = NONE_TILE);
 	virtual ~Tile() = default;
 private:
@@ -86,4 +89,15 @@ private:
 	UIText* m_tTiles;
 	UIText* m_tPlayer;
 	std::vector<Tool*> m_Tools;
+};
+
+class OnSave : public State
+{
+	void update(const float& dt) override;
+public:
+	OnSave(std::wstring result, std::vector<std::wstring> info);
+	virtual ~OnSave() = default;
+
+private:
+	UIButton* m_bBack;
 };

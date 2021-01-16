@@ -4,10 +4,22 @@
 #include <sstream>
 #include <memory>
 
+// Kolory oznaczeñ logów
 #define _LOG_COLOR 7
 #define _INFO_COLOR 9
 #define _WARN_COLOR 14
 #define _ERROR_COLOR 12
+
+/*******************************************
+============================================
+Klasa do debuggowania:
+	Wyœwietlanie logów w oknie konsoli:
+		- zwyk³y log
+		- info log
+		- ostrze¿enie
+		- b³¹d
+============================================
+*******************************************/
 
 class Logger
 {

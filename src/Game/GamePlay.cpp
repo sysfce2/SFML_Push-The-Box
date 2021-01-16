@@ -131,7 +131,7 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		m_MoveDown = new UIButton("", BTN_SCALE);
 		m_MoveRight = new UIButton("", BTN_SCALE);
 		m_MoveLeft = new UIButton("", BTN_SCALE);
-		m_Restart =	new UIButton(L"RESTART", { 3.f, 3.f }, 32);
+		m_Restart = new UIButton(L"RESTART", { 3.f, 3.f }, 32);
 		m_Exit = new UIButton(L"WYJDè", { 3.f, 3.f }, 32);
 
 		// Construct background

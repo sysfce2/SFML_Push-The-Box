@@ -6,13 +6,20 @@
 
 Application::Application(const std::string& app_name) : m_AppName(app_name)
 {
-	// TODO: JSON window config load
 	m_ScreenWidth = 1600;
 	m_ScreenHeight = 900;
 	uint8_t fullscreen = 0; // sf::Style::Fullscreen;
 
 	sf::Uint32 style = sf::Style::Close | fullscreen;
 	m_Window.create(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, style);
+	m_Window.clear();
+
+	sf::Image icon;
+	if (icon.loadFromFile("icon.bmp")) {
+		m_Window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+		LOG_INFO("Icon loaded");
+	}
+
 	Window::set_handle(&m_Window);
 	Logger::init();
 }
