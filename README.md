@@ -6,5 +6,5 @@ Gra jest klonem klasycznej gry o nazwie Sokoban, stworzona w ramach projektu z j
 Do zrealizowania projektu użyłem bibliotekę graficzną SFML. </br>
 #### Politechnika Rzeszowska im. Ignacego Łukasiewicza
 # Zrzuty ekranu
-![](https://i.imgur.com/3LwCYU8.png)
+![](https://i.imgur.com/73e5nPQ.png)
 ![](https://i.imgur.com/cxSp176.png)
