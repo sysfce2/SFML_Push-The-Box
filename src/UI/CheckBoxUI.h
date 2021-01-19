@@ -1,12 +1,12 @@
 #pragma once
-#include "UIElement.h"
+#include "ElementUI.h"
 #include <functional>
 
-class UICheckBox : public UIElement
+class CheckBoxUI : public ElementUI
 {
 public:
-	UICheckBox(const std::string& sprite, const std::string& selection_glyph, vec2f scale = { 1.f, 1.f });
-	virtual ~UICheckBox() = default;
+	CheckBoxUI(const std::string& sprite, const std::string& selection_glyph, vec2f scale = { 1.f, 1.f });
+	virtual ~CheckBoxUI() = default;
 
 	void on_change(std::function<void(bool)> on_change_function);
 	void select(bool selected = true);
@@ -16,7 +16,7 @@ public:
 private:
 	void update(const float& dt) override;
 
-	UIElement* m_SelectionGlyph;
+	ElementUI* m_SelectionGlyph;
 	std::function<void(bool)> m_OnChangeFunction = nullptr;
 	bool m_IsSelected = false;
 	bool m_IsDisabled = false;

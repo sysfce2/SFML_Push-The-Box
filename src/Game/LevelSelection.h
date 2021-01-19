@@ -1,23 +1,23 @@
 #pragma once
 #include "State/State.h"
-#include "UI/UIElement.h"
-#include "UI/UIButton.h"
-#include "UI/UIText.h"
+#include "UI/ElementUI.h"
+#include "UI/ButtonUI.h"
+#include "UI/TextUI.h"
 
 #define DIFFICULTY_SELECTION	LAYER_1
 #define EASY_LEVELS				LAYER_2
 #define HARD_LEVELS				LAYER_3
 #define EXPERT_LEVELS			LAYER_4
 
-class SelectBlock : public UIElement
+class SelectBlock : public ElementUI
 {
 public:
 	friend class LevelSelection;
 	SelectBlock(const vec2f& position, uint16_t number);
 	virtual ~SelectBlock() = default;
 private:
-	UIButton* m_PlayButton;
-	UIText* m_NumberText;
+	ButtonUI* m_PlayButton;
+	TextUI* m_NumberText;
 	uint16_t m_Number;
 };
 
@@ -31,11 +31,11 @@ private:
 	void switch_layer(uint16_t layer);
 
 	std::vector<SelectBlock*> m_Levels;
-	UIElement* m_Background;
-	UIText* m_HeaderText;
-	UIButton* m_EasyButton;
-	UIButton* m_HardButton;
-	UIButton* m_ExpertButton;
-	UIButton* m_BackButton;
-	UIButton* m_EditorButton;
+	ElementUI* m_Background;
+	TextUI* m_HeaderText;
+	ButtonUI* m_EasyButton;
+	ButtonUI* m_HardButton;
+	ButtonUI* m_ExpertButton;
+	ButtonUI* m_BackButton;
+	ButtonUI* m_EditorButton;
 };

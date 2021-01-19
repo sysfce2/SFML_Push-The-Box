@@ -7,12 +7,12 @@ const vec2f BTN_SCALE{ 4.5f, 4.5f };
 
 MainMenu::MainMenu()
 {
-	m_Background = new UIElement("menu-state", { 1.5f, 1.5f });
-	m_Title = new UIElement("title", { 5.25f, 5.25f });
-	m_PlayButton = new UIButton("GRAJ", BTN_SCALE, BTN_FNT_SIZE);
-	m_OptionsButton = new UIButton("OPCJE", BTN_SCALE, BTN_FNT_SIZE);
-	m_ExitButton = new UIButton(L"WYJD", BTN_SCALE, BTN_FNT_SIZE);
-	m_Footer = new UIText(L"PROJEKT Z C++ WYKONA£ DAMIAN ¯UK", "joystix", 32);
+	m_Background = new ElementUI("menu-state", { 1.5f, 1.5f });
+	m_Title = new ElementUI("title", { 5.25f, 5.25f });
+	m_PlayButton = new ButtonUI("GRAJ", BTN_SCALE, BTN_FNT_SIZE);
+	m_OptionsButton = new ButtonUI("OPCJE", BTN_SCALE, BTN_FNT_SIZE);
+	m_ExitButton = new ButtonUI(L"WYJD", BTN_SCALE, BTN_FNT_SIZE);
+	m_Footer = new TextUI(L"PROJEKT Z C++ WYKONA£ DAMIAN ¯UK", "joystix", 32);
 
 	m_Title->center_x(.1f);
 	m_PlayButton->center_x(.4f);

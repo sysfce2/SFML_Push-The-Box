@@ -1,8 +1,8 @@
-#include "UICheckBox.h"
+#include "CheckBoxUI.h"
 #include "Core/Window.h"
 
-UICheckBox::UICheckBox(const std::string& sprite, const std::string& selection_glyph, vec2f scale)
-	: m_SelectionGlyph(new UIElement(selection_glyph, scale))
+CheckBoxUI::CheckBoxUI(const std::string& sprite, const std::string& selection_glyph, vec2f scale)
+	: m_SelectionGlyph(new ElementUI(selection_glyph, scale))
 {
 	set_sprite(sprite);
 	set_scale(scale);
@@ -10,12 +10,12 @@ UICheckBox::UICheckBox(const std::string& sprite, const std::string& selection_g
 	add_child_entity(m_SelectionGlyph);
 }
 
-void UICheckBox::on_change(std::function<void(bool)> on_change_function)
+void CheckBoxUI::on_change(std::function<void(bool)> on_change_function)
 {
 	m_OnChangeFunction = on_change_function;
 }
 
-void UICheckBox::select(bool selected)
+void CheckBoxUI::select(bool selected)
 {
 	m_IsSelected = selected;
 	if (m_IsSelected)
@@ -24,7 +24,7 @@ void UICheckBox::select(bool selected)
 		m_SelectionGlyph->vanish(true);
 }
 
-void UICheckBox::disable(bool disabled)
+void CheckBoxUI::disable(bool disabled)
 {
 	m_IsDisabled = disabled;
 	if (disabled && m_IsSelected) select(false);
@@ -32,7 +32,7 @@ void UICheckBox::disable(bool disabled)
 	else  set_color(sf::Color(255, 255, 255, 255));
 }
 
-void UICheckBox::update(const float& dt)
+void CheckBoxUI::update(const float& dt)
 {
 	if (!m_IsDisabled) {
 		if (!m_IsSelected && m_SelectionGlyph->is_visible())

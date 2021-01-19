@@ -11,18 +11,18 @@ CameraInfo GameCamera::m_CamInfo;
 void GameCamera::set_cam_info(vec2f total_size, Rect canvas, Player* p) {
 	
 	CameraInfo camera;
-	vec2f total_cnvs = { canvas.size.x + canvas.pos.x, canvas.size.y + canvas.pos.y };
+	vec2f total_cnvs = { canvas.size.x + canvas.pos.x * 2.f, canvas.size.y + canvas.pos.y * 2.f};
 	vec2f margin_top_left = { -.1f - canvas.pos.x, -0.1f - canvas.pos.y };
 
-	if (total_size.x <= total_cnvs.x) {
-		camera.pos.x = -(total_cnvs.x - total_size.x + canvas.pos.x) / 2.f;
+	if (total_size.x <= total_cnvs.x * .95f) {
+		camera.pos.x = -(total_cnvs.x - total_size.x) / 2.f;
 		camera.locked.x = true;
 	}
 	else
 		camera.pos.x = margin_top_left.x;
 
-	if (total_size.y <= total_cnvs.y) {
-		camera.pos.y = -(total_cnvs.y - total_size.y + canvas.pos.y) / 2.f;
+	if (total_size.y <= total_cnvs.y * .95f) {
+		camera.pos.y = -(total_cnvs.y - total_size.y) / 2.f;
 		camera.locked.y = true;
 	}
 	else

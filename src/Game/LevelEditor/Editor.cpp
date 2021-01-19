@@ -148,17 +148,17 @@ Editor::Editor(std::string file_name, vec2u size)
 	m_Camera = m_CameraInfo.pos;
 
 	// Initialize
-	m_Canvas = new UIElement();
+	m_Canvas = new ElementUI();
 	m_ToolBox = new ToolBox();
-	m_Background = new UIElement("editor-state", { 1.5f, 1.5f });
-	m_HeaderText = new UIText(L"EDYTOR", "joystix", 80);
-	m_bSave = new UIButton(L"ZAPISZ", { 4.2f, 4.2f }, 42);
-	m_bExit = new UIButton(L"WYJD", { 4.2f, 4.2f }, 42);
+	m_Background = new ElementUI("editor-state", { 1.5f, 1.5f });
+	m_HeaderText = new TextUI(L"EDYTOR", "joystix", 80);
+	m_bSave = new ButtonUI(L"ZAPISZ", { 4.2f, 4.2f }, 42);
+	m_bExit = new ButtonUI(L"WYJD", { 4.2f, 4.2f }, 42);
 
 	std::wstring info_text = L"[RUCH KAMERY: STRZA£KI]  ";
 	info_text += L"[RYSOWANIE: LEWY PRZYCISK MYSZY]  ";
 	info_text += L"[GUMKA: PRAWY PRZYCISK MYSZY]";
-	m_Info = new UIText(info_text, "joystix", 25);
+	m_Info = new TextUI(info_text, "joystix", 25);
 
 	Player = new Tile(&m_Camera, { 0u, 0u }, PLAYER_TILE);
 	Player->vanish(true);
@@ -205,17 +205,17 @@ ToolBox::ToolBox()
 	set_color(sf::Color(22, 19, 69, 255));
 
 	vec2f btn_scale = { 2.f, 2.f };
-	m_tBoxCount = new UIText(L"ILOŒÆ SKRZYNEK: " + std::to_wstring(Editor::BoxesCount), "joystix", 28);
-	m_tTiles = new UIText(L"KAFELKI", "joystix", 28);
-	m_BoxPlus = new UIButton("", btn_scale);
-	m_BoxMinus = new UIButton("", btn_scale);
-	m_tPlayer = new UIText(L"GRACZ", "joystix", 28);
+	m_tBoxCount = new TextUI(L"ILOŒÆ SKRZYNEK: " + std::to_wstring(Editor::BoxesCount), "joystix", 28);
+	m_tTiles = new TextUI(L"KAFELKI", "joystix", 28);
+	m_BoxPlus = new ButtonUI("", btn_scale);
+	m_BoxMinus = new ButtonUI("", btn_scale);
+	m_tPlayer = new TextUI(L"GRACZ", "joystix", 28);
  
 	m_tBoxCount->attach_position(this).center_x(.03f);
 	m_BoxPlus->assign_button_sprite("btn-1x1", "btn-1x1-pressed");
 	m_BoxMinus->assign_button_sprite("btn-1x1", "btn-1x1-pressed");
-	m_BoxPlus->set_symbol(new UIElement("plus", btn_scale));
-	m_BoxMinus->set_symbol(new UIElement("minus", btn_scale));
+	m_BoxPlus->set_symbol(new ElementUI("plus", btn_scale));
+	m_BoxMinus->set_symbol(new ElementUI("minus", btn_scale));
 	m_BoxMinus->attach_position(this).set_position({.085f, .08f });
 	m_BoxPlus->attach_position(this).set_position({.135f, .08f });
 	m_tTiles->attach_position(this).center_x(.2f);
@@ -471,7 +471,7 @@ void Tile::set_tile(uint8_t tile_id)
 }
 
 Tool::Tool(uint8_t id, const std::string& sprite)
-	: UICheckBox(sprite, "editor-tool-selection"), m_TileId(id)
+	: CheckBoxUI(sprite, "editor-tool-selection"), m_TileId(id)
 {
 }
 
@@ -483,9 +483,9 @@ void OnSave::update(const float& dt)
 
 OnSave::OnSave(std::wstring result, std::vector<std::wstring> info)
 {
-	UIElement* background = new UIElement("header-state", { 1.5f, 1.5f });
-	UIText* header = new UIText(L"EDYTOR POZIOMÓW", "joystix", 80);
-	m_bBack = new UIButton(L"WRÓÆ", { 4.5f, 4.5f }, 60);
+	ElementUI* background = new ElementUI("header-state", { 1.5f, 1.5f });
+	TextUI* header = new TextUI(L"EDYTOR POZIOMÓW", "joystix", 80);
+	m_bBack = new ButtonUI(L"WRÓÆ", { 4.5f, 4.5f }, 60);
 	
 	header->set_tcolor({ 229, 198, 0, 255 });
 	header->center_x(.017f);
@@ -493,14 +493,14 @@ OnSave::OnSave(std::wstring result, std::vector<std::wstring> info)
 	make_entity(header);
 	
 	float y_pos = (info.size() > 0) ? .3f : .4f;
-	UIText* t_result = new UIText(result, "joystix", 48);
+	TextUI* t_result = new TextUI(result, "joystix", 48);
 	t_result->center_x(y_pos);
 	make_entity(t_result);
 	
 	int j = 0;
 	if (info.size() > 0) y_pos += .1f;
 	for (const auto& i : info) {
-		UIText* ti = new UIText(i, "joystix", 36);
+		TextUI* ti = new TextUI(i, "joystix", 36);
 		ti->center_x(y_pos);
 		make_entity(ti);
 		y_pos += (j == 0) ? .075f : .085f; j++;

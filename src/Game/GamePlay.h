@@ -1,6 +1,6 @@
 #pragma once
 #include "State/State.h"
-#include "UI/UIButton.h"
+#include "UI/ButtonUI.h"
 #include "Player.h"
 #include "TileMap.h"
 
@@ -33,17 +33,17 @@ private:
 	uint32_t m_ElapsedMinutes = 0u;
 	uint32_t m_ElapsedSeconds = 0u;
 	uint32_t m_AvaliableUndos = 0u;
-	UIElement* m_Background = nullptr;
-	UIElement* m_Menu = nullptr;
-	UIText* m_LevelName = nullptr;
-	UIText* m_Timer = nullptr;
-	UIText* m_MovesText = nullptr;
-	UIText* m_UndosText = nullptr;
-	UIButton* m_UndoButton = nullptr;
-	UIButton* m_MoveUp = nullptr;
-	UIButton* m_MoveDown = nullptr;
-	UIButton* m_MoveRight = nullptr;
-	UIButton* m_MoveLeft = nullptr;
-	UIButton* m_Restart = nullptr;
-	UIButton* m_Exit = nullptr;
+	ElementUI* m_Background = nullptr;
+	ElementUI* m_Menu = nullptr;
+	TextUI* m_LevelName = nullptr;
+	TextUI* m_Timer = nullptr;
+	TextUI* m_MovesText = nullptr;
+	TextUI* m_UndosText = nullptr;
+	ButtonUI* m_UndoButton = nullptr;
+	ButtonUI* m_MoveUp = nullptr;
+	ButtonUI* m_MoveDown = nullptr;
+	ButtonUI* m_MoveRight = nullptr;
+	ButtonUI* m_MoveLeft = nullptr;
+	ButtonUI* m_Restart = nullptr;
+	ButtonUI* m_Exit = nullptr;
 };

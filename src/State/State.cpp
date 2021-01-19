@@ -1,6 +1,6 @@
 #include "State/State.h"
 #include "Core/Logger.h"
-#include "UI/UIButton.h"
+#include "UI/ButtonUI.h"
 
 State::~State()
 {
@@ -74,6 +74,6 @@ void State::render_entities(sf::RenderTarget& target)
 void State::destroy_state()
 {
 	m_DestroyState = true;
-	UIButton::m_AnyPressed = false;
+	ButtonUI::m_AnyPressed = false;
 }
 

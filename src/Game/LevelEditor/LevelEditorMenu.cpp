@@ -58,11 +58,11 @@ bool LevelEditorMenu::create_level()
 LevelEditorMenu::LevelEditorMenu()
 {
 	// Menu layer
-	m_Background = new UIElement("header-state", { 1.5f, 1.5f });
-	m_HeaderText = new UIText(L"EDYTOR POZIOMÓW", "joystix", 80);
-	m_bNew = new UIButton(L"NOWY", BUTTON_SCALE, 60);
-	m_bLoad = new UIButton(L"WCZYTAJ", BUTTON_SCALE, 60);
-	m_bBack = new UIButton(L"WRÓÆ", BUTTON_SCALE, 60);
+	m_Background = new ElementUI("header-state", { 1.5f, 1.5f });
+	m_HeaderText = new TextUI(L"EDYTOR POZIOMÓW", "joystix", 80);
+	m_bNew = new ButtonUI(L"NOWY", BUTTON_SCALE, 60);
+	m_bLoad = new ButtonUI(L"WCZYTAJ", BUTTON_SCALE, 60);
+	m_bBack = new ButtonUI(L"WRÓÆ", BUTTON_SCALE, 60);
 
 	m_HeaderText->set_tcolor(HEADER_COLOR);
 	m_HeaderText->center_x(.017f);
@@ -77,13 +77,13 @@ LevelEditorMenu::LevelEditorMenu()
 	make_entity(m_bBack);
 
 	// New level layer
-	m_tbLevelName = new UITextBox("level-name", BUTTON_SCALE, TB_PROPS);
-	m_tbLevelWidth = new UITextBox("level-size", BUTTON_SCALE, TB_PROPS);
-	m_tbLevelHeight = new UITextBox("level-size", BUTTON_SCALE, TB_PROPS);
-	m_NewCaption1 = new UIText(L"NAZWA POZIOMU", "joystix", 36);
-	m_NewCaption2 = new UIText(L"SZEROKOŒÆ POZIOMU (5-99)", "joystix", 36);
-	m_NewCaption3 = new UIText(L"WYSOKOŒÆ POZIOMU (5-99)", "joystix", 36);
-	m_bCreate = new UIButton(L"STWÓRZ", BUTTON_SCALE, 60);
+	m_tbLevelName = new TextBoxUI("level-name", BUTTON_SCALE, TB_PROPS);
+	m_tbLevelWidth = new TextBoxUI("level-size", BUTTON_SCALE, TB_PROPS);
+	m_tbLevelHeight = new TextBoxUI("level-size", BUTTON_SCALE, TB_PROPS);
+	m_NewCaption1 = new TextUI(L"NAZWA POZIOMU", "joystix", 36);
+	m_NewCaption2 = new TextUI(L"SZEROKOŒÆ POZIOMU (5-99)", "joystix", 36);
+	m_NewCaption3 = new TextUI(L"WYSOKOŒÆ POZIOMU (5-99)", "joystix", 36);
+	m_bCreate = new ButtonUI(L"STWÓRZ", BUTTON_SCALE, 60);
 
 	m_tbLevelName->set_max_chars(14);
 	m_tbLevelWidth->only_numbers(); m_tbLevelHeight->only_numbers();

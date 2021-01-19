@@ -1,31 +1,31 @@
-#include "UITextBox.h"
+#include "TextBoxUI.h"
 #include "Core/Window.h"
 
-uint32_t UITextBox::m_KeyEntered = 0;
-bool UITextBox::m_WasKeyEntered = false;
+uint32_t TextBoxUI::m_KeyEntered = 0;
+bool TextBoxUI::m_WasKeyEntered = false;
 
-void UITextBox::set_max_chars(uint16_t max_chars)
+void TextBoxUI::set_max_chars(uint16_t max_chars)
 {
 	m_MaxChars = max_chars;
 }
 
-void UITextBox::only_numbers(bool is_true)
+void TextBoxUI::only_numbers(bool is_true)
 {
 	m_OnlyNumbers = is_true;
 }
 
-void UITextBox::clear()
+void TextBoxUI::clear()
 {
 	m_Text->set_text(L"");
 	m_CharsTyped = 0u;
 	update_cursor_pos();
 }
 
-UITextBox::UITextBox(const std::string& text_box_texture, const vec2f& scale, const TextBoxProps& props)
+TextBoxUI::TextBoxUI(const std::string& text_box_texture, const vec2f& scale, const TextBoxProps& props)
 {
 	set_sprite(text_box_texture);
 	set_scale(scale);
-	m_Text = new UIText("", props.font, props.font_size);
+	m_Text = new TextUI("", props.font, props.font_size);
 	m_Text->attach_position(this).set_position({ 0.01f, 0.f }).center_y();
 	m_Cursor = new Cursor();
 	m_Cursor->set_sprite(props.cursor_texture).attach_position(this)
@@ -36,7 +36,7 @@ UITextBox::UITextBox(const std::string& text_box_texture, const vec2f& scale, co
 	add_child_entity(m_Cursor);
 }
 
-void UITextBox::update(const float& dt)
+void TextBoxUI::update(const float& dt)
 {
 	if (m_Visible) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -94,7 +94,7 @@ void UITextBox::update(const float& dt)
 	}
 }
 
-void UITextBox::update_cursor_pos()
+void TextBoxUI::update_cursor_pos()
 {
 	float x_position = m_Text->get_position().x + m_Text->get_size().x + CURSOR_SPACING;
 	m_Cursor->set_position({ x_position, m_Cursor->get_position().y });

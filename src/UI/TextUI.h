@@ -1,7 +1,7 @@
 #pragma once
-#include "UI/UIElement.h"
+#include "UI/ElementUI.h"
 
-class UIText : public UIElement
+class TextUI : public ElementUI
 {
 private:
 	void update(const float& dt) override;
@@ -12,9 +12,9 @@ public:
 	void use_camera_position(bool use = true);
 	inline std::wstring get_content() const { return m_TextContent; }
 
-	UIText(const std::string& text, const std::string& font, uint8_t font_size);
-	UIText(const std::wstring& text, const std::string& font, uint8_t font_size);
-	virtual ~UIText();
+	TextUI(const std::string& text, const std::string& font, uint8_t font_size);
+	TextUI(const std::wstring& text, const std::string& font, uint8_t font_size);
+	virtual ~TextUI();
 
 	// Deleted entity methods
 	Entity& set_sprite(const std::string& asset_id, int x, int y, int w, int h) = delete;

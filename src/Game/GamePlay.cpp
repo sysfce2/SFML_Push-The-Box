@@ -123,19 +123,19 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 	if (m_TileMap->load_level(m_LevelPath)) {
 
 		// Initialize UI elements
-		m_Background = new UIElement("gameplay-background", { 1.f, 1.f });
-		m_Menu = new UIElement("gameplay-menu", { 1.5f, 1.5f });
-		m_LevelName = new UIText(m_LevelNameStr, "joystix", 38);
-		m_Timer = new UIText("Czas: 00:00", "joystix", 36);
-		m_MovesText = new UIText("Ruchy: 0", "joystix", 36);
-		m_UndosText = new UIText("0/" + std::to_string(UNDOS_LIMIT), "joystix", 36);
-		m_UndoButton = new UIButton("COFNIJ", BTN_SCALE, 32);
-		m_MoveUp = new UIButton("", BTN_SCALE);
-		m_MoveDown = new UIButton("", BTN_SCALE);
-		m_MoveRight = new UIButton("", BTN_SCALE);
-		m_MoveLeft = new UIButton("", BTN_SCALE);
-		m_Restart = new UIButton(L"RESTART", { 3.f, 3.f }, 32);
-		m_Exit = new UIButton(L"WYJD", { 3.f, 3.f }, 32);
+		m_Background = new ElementUI("gameplay-background", { 1.f, 1.f });
+		m_Menu = new ElementUI("gameplay-menu", { 1.5f, 1.5f });
+		m_LevelName = new TextUI(m_LevelNameStr, "joystix", 38);
+		m_Timer = new TextUI("Czas: 00:00", "joystix", 36);
+		m_MovesText = new TextUI("Ruchy: 0", "joystix", 36);
+		m_UndosText = new TextUI("0/" + std::to_string(UNDOS_LIMIT), "joystix", 36);
+		m_UndoButton = new ButtonUI("COFNIJ", BTN_SCALE, 32);
+		m_MoveUp = new ButtonUI("", BTN_SCALE);
+		m_MoveDown = new ButtonUI("", BTN_SCALE);
+		m_MoveRight = new ButtonUI("", BTN_SCALE);
+		m_MoveLeft = new ButtonUI("", BTN_SCALE);
+		m_Restart = new ButtonUI(L"RESTART", { 3.f, 3.f }, 32);
+		m_Exit = new ButtonUI(L"WYJD", { 3.f, 3.f }, 32);
 
 		// Construct background
 		make_entity(m_Background);
@@ -154,10 +154,10 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		m_UndoButton->disable();
 		m_UndosText->attach_position(m_Menu).center_x(.33f);
 
-		UIElement* arrow_up = new UIElement("arrow_up", BTN_SCALE);
-		UIElement* arrow_down = new UIElement("arrow_down", BTN_SCALE);
-		UIElement* arrow_right = new UIElement("arrow_right", BTN_SCALE);
-		UIElement* arrow_left = new UIElement("arrow_left", BTN_SCALE);
+		ElementUI* arrow_up = new ElementUI("arrow_up", BTN_SCALE);
+		ElementUI* arrow_down = new ElementUI("arrow_down", BTN_SCALE);
+		ElementUI* arrow_right = new ElementUI("arrow_right", BTN_SCALE);
+		ElementUI* arrow_left = new ElementUI("arrow_left", BTN_SCALE);
 
 		m_MoveUp->assign_button_sprite("btn-1x1", "btn-1x1-pressed");
 		m_MoveUp->attach_position(m_Menu).center_x(.41f);

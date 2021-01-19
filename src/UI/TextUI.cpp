@@ -1,13 +1,13 @@
-#include "UI/UIText.h"
+#include "UI/TextUI.h"
 #include "Core/AssetsManager.h"
 #include "Core/Window.h"
 #include "Core/Logger.h"
 
-void UIText::update(const float& dt)
+void TextUI::update(const float& dt)
 {
 }
 
-void UIText::render(sf::RenderTarget& target, const vec2f& camera)
+void TextUI::render(sf::RenderTarget& target, const vec2f& camera)
 {
 	if (m_Visible && m_Text != nullptr) {
 		vec2f draw_pos = get_position_px() - m_Margin;
@@ -25,7 +25,7 @@ void UIText::render(sf::RenderTarget& target, const vec2f& camera)
 	}
 }
 
-void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t font_size)
+void TextUI::set_text(const std::wstring& text, const std::string& font, uint8_t font_size)
 {
 	if (m_Text != nullptr)
 		delete m_Text;
@@ -57,30 +57,30 @@ void UIText::set_text(const std::wstring& text, const std::string& font, uint8_t
 		LOG_ERROR("Trying to set text with no proper font assigned. Font name:", font);
 }
 
-void UIText::set_tcolor(const sf::Color& color)
+void TextUI::set_tcolor(const sf::Color& color)
 {
 	m_Color = color;
 	m_Text->setFillColor(m_Color);
 }
 
-void UIText::use_camera_position(bool use)
+void TextUI::use_camera_position(bool use)
 {
 	m_UseCameraPosition = use;
 }
 
-UIText::UIText(const std::string& text, const std::string& font, uint8_t font_size)
-	: UIElement(std::string(), { 1.f, 1.f })
+TextUI::TextUI(const std::string& text, const std::string& font, uint8_t font_size)
+	: ElementUI(std::string(), { 1.f, 1.f })
 {
 	set_text(std::wstring(text.begin(), text.end()), font, font_size);
 }
 
-UIText::UIText(const std::wstring& text, const std::string& font, uint8_t font_size)
-	: UIElement(std::string(), { 1.f, 1.f })
+TextUI::TextUI(const std::wstring& text, const std::string& font, uint8_t font_size)
+	: ElementUI(std::string(), { 1.f, 1.f })
 {
 	set_text(text, font, font_size);
 }
 
-UIText::~UIText()
+TextUI::~TextUI()
 {
 	delete m_Text;
 }

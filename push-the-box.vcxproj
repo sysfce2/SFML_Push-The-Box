@@ -184,12 +184,11 @@
     <ClInclude Include="src\Game\PushTheBox.h" />
     <ClInclude Include="src\Game\TileMap.h" />
     <ClInclude Include="src\Game\Tiles\Wall.h" />
-    <ClInclude Include="src\UI\UIMessageBox.h" />
-    <ClInclude Include="src\UI\UICheckBox.h" />
-    <ClInclude Include="src\UI\UIButton.h" />
-    <ClInclude Include="src\UI\UIElement.h" />
-    <ClInclude Include="src\UI\UIText.h" />
-    <ClInclude Include="src\UI\UITextBox.h" />
+    <ClInclude Include="src\UI\CheckBoxUI.h" />
+    <ClInclude Include="src\UI\ButtonUI.h" />
+    <ClInclude Include="src\UI\ElementUI.h" />
+    <ClInclude Include="src\UI\TextUI.h" />
+    <ClInclude Include="src\UI\TextBoxUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -214,12 +213,11 @@
     <ClCompile Include="src\Game\PushTheBox.cpp" />
     <ClCompile Include="src\Game\TileMap.cpp" />
     <ClCompile Include="src\Game\Tiles\Wall.cpp" />
-    <ClCompile Include="src\UI\UIButton.cpp" />
-    <ClCompile Include="src\UI\UIElement.cpp" />
-    <ClCompile Include="src\UI\UIMessageBox.cpp" />
-    <ClCompile Include="src\UI\UICheckBox.cpp" />
-    <ClCompile Include="src\UI\UIText.cpp" />
-    <ClCompile Include="src\UI\UITextBox.cpp" />
+    <ClCompile Include="src\UI\ButtonUI.cpp" />
+    <ClCompile Include="src\UI\ElementUI.cpp" />
+    <ClCompile Include="src\UI\CheckBoxUI.cpp" />
+    <ClCompile Include="src\UI\TextUI.cpp" />
+    <ClCompile Include="src\UI\TextBoxUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />

@@ -1,16 +1,16 @@
-#include "UI/UIElement.h"
+#include "UI/ElementUI.h"
 #include "Core/Window.h"
 
-void UIElement::update(const float& dt)
+void ElementUI::update(const float& dt)
 {
 }
 
-UIElement::UIElement()
+ElementUI::ElementUI()
 {
 	m_UseCameraPosition = false;
 }
 
-UIElement::UIElement(const std::string& asset_id, const vec2f& scale, const vec2f& pos)
+ElementUI::ElementUI(const std::string& asset_id, const vec2f& scale, const vec2f& pos)
 {
 	m_UseCameraPosition = false;
 	if (asset_id.size() > 0) {

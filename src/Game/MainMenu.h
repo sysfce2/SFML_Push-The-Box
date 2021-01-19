@@ -1,6 +1,6 @@
 #include "State/State.h"
-#include "UI/UIElement.h"
-#include "UI/UIButton.h"
+#include "UI/ElementUI.h"
+#include "UI/ButtonUI.h"
 
 class MainMenu : public State
 {
@@ -11,10 +11,10 @@ public:
 	virtual ~MainMenu();
 
 private:
-	UIElement* m_Background;
-	UIElement* m_Title;
-	UIButton* m_PlayButton;
-	UIButton* m_OptionsButton;
-	UIButton* m_ExitButton;
-	UIElement* m_Footer;
+	ElementUI* m_Background;
+	ElementUI* m_Title;
+	ButtonUI* m_PlayButton;
+	ButtonUI* m_OptionsButton;
+	ButtonUI* m_ExitButton;
+	ElementUI* m_Footer;
 };

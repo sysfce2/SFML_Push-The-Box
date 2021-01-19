@@ -1,7 +1,7 @@
 #pragma once
 #include "State/State.h"
-#include "UI/UIButton.h"
-#include "UI/UITextBox.h"
+#include "UI/ButtonUI.h"
+#include "UI/TextBoxUI.h"
 
 #define LE_MENU LAYER_1
 #define LE_NEW LAYER_2
@@ -17,19 +17,19 @@ public:
 	virtual ~LevelEditorMenu() = default;
 private:
 
-	UIElement* m_Background;
-	UIText* m_HeaderText;
-	UIButton* m_bNew;
-	UIButton* m_bLoad;
-	UIButton* m_bBack;
+	ElementUI* m_Background;
+	TextUI* m_HeaderText;
+	ButtonUI* m_bNew;
+	ButtonUI* m_bLoad;
+	ButtonUI* m_bBack;
 
-	UITextBox* m_tbLevelName;
-	UITextBox* m_tbLevelWidth;
-	UITextBox* m_tbLevelHeight;
-	UIButton* m_bCreate;
-	UIText* m_NewCaption1;
-	UIText* m_NewCaption2;
-	UIText* m_NewCaption3;
+	TextBoxUI* m_tbLevelName;
+	TextBoxUI* m_tbLevelWidth;
+	TextBoxUI* m_tbLevelHeight;
+	ButtonUI* m_bCreate;
+	TextUI* m_NewCaption1;
+	TextUI* m_NewCaption2;
+	TextUI* m_NewCaption3;
 
 	
 };

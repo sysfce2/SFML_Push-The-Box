@@ -13,10 +13,10 @@ const vec2f BTN_SCALE{ 4.5f, 4.5f };
 const uint8_t BTN_FNT_SIZE = 60;
 
 SelectBlock::SelectBlock(const vec2f& position, uint16_t number)
-	: UIElement("not-completed", SELECT_BLOCK_SCALE, position), m_Number(number)
+	: ElementUI("not-completed", SELECT_BLOCK_SCALE, position), m_Number(number)
 {
-	m_NumberText = new UIText(std::to_string(number), "invasion", 48);
-	m_PlayButton = new UIButton("", SELECT_BLOCK_SCALE);
+	m_NumberText = new TextUI(std::to_string(number), "invasion", 48);
+	m_PlayButton = new ButtonUI("", SELECT_BLOCK_SCALE);
 	m_PlayButton->assign_button_sprite("play-btn", "play-btn-pressed");
 	m_NumberText->attach_position(this).center_y(0.015f);
 	m_PlayButton->attach_position(this).center_y(0.075f);
@@ -66,13 +66,13 @@ LevelSelection::LevelSelection()
 	float btn_y = .2f;
 	float btn_off = .15f;
 	
-	m_Background = new UIElement("header-state", { 1.5f, 1.5f });
-	m_HeaderText = new UIText(L"WYBIERZ POZIOM", "joystix", 80);
-	m_EasyButton = new UIButton(L"£ATWE", BTN_SCALE, BTN_FNT_SIZE);
-	m_HardButton = new UIButton(L"TRUDNE", BTN_SCALE, BTN_FNT_SIZE);
-	m_ExpertButton = new UIButton(L"EKSPERT", BTN_SCALE, BTN_FNT_SIZE);
-	m_EditorButton = new UIButton(L"   EDYTOR\n   POZIOMóW", BTN_SCALE, 38);
-	m_BackButton = new UIButton(L"WRÓÆ", BTN_SCALE, BTN_FNT_SIZE);
+	m_Background = new ElementUI("header-state", { 1.5f, 1.5f });
+	m_HeaderText = new TextUI(L"WYBIERZ POZIOM", "joystix", 80);
+	m_EasyButton = new ButtonUI(L"£ATWE", BTN_SCALE, BTN_FNT_SIZE);
+	m_HardButton = new ButtonUI(L"TRUDNE", BTN_SCALE, BTN_FNT_SIZE);
+	m_ExpertButton = new ButtonUI(L"EKSPERT", BTN_SCALE, BTN_FNT_SIZE);
+	m_EditorButton = new ButtonUI(L"   EDYTOR\n   POZIOMóW", BTN_SCALE, 38);
+	m_BackButton = new ButtonUI(L"WRÓÆ", BTN_SCALE, BTN_FNT_SIZE);
 
 	m_HeaderText->set_tcolor(HEADER_COLOR);
 	m_HeaderText->center_x(.03f);

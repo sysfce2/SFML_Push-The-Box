@@ -1,7 +1,7 @@
 #pragma once
 #include "State/State.h"
-#include "UI/UIButton.h"
-#include "UI/UICheckBox.h"
+#include "UI/ButtonUI.h"
+#include "UI/CheckBoxUI.h"
 #include "Game/TileMap.h"
 
 #define PLAYER_TILE 0xFF
@@ -35,13 +35,13 @@ private:
 	std::string m_FileName;
 	std::vector<std::vector<Tile*>> m_Tiles;
 	
-	UIElement* m_Canvas;
-	UIElement* m_Background;
-	UIText* m_HeaderText;
+	ElementUI* m_Canvas;
+	ElementUI* m_Background;
+	TextUI* m_HeaderText;
 	ToolBox* m_ToolBox;
-	UIButton* m_bSave;
-	UIButton* m_bExit;
-	UIText* m_Info;
+	ButtonUI* m_bSave;
+	ButtonUI* m_bExit;
+	TextUI* m_Info;
 };
 
 class Tile : public Entity
@@ -66,7 +66,7 @@ private:
 	uint8_t m_TileId;
 };
 
-class Tool : public UICheckBox
+class Tool : public CheckBoxUI
 {
 public:
 	friend class ToolBox;
@@ -76,18 +76,18 @@ private:
 	uint8_t m_TileId;
 };
 
-class ToolBox : public UIElement
+class ToolBox : public ElementUI
 {
 public:
 	ToolBox();
 	virtual ~ToolBox() = default;
 private:
 	void update(const float& dt);
-	UIText* m_tBoxCount;
-	UIButton* m_BoxMinus;
-	UIButton* m_BoxPlus;
-	UIText* m_tTiles;
-	UIText* m_tPlayer;
+	TextUI* m_tBoxCount;
+	ButtonUI* m_BoxMinus;
+	ButtonUI* m_BoxPlus;
+	TextUI* m_tTiles;
+	TextUI* m_tPlayer;
 	std::vector<Tool*> m_Tools;
 };
 
@@ -99,5 +99,5 @@ public:
 	virtual ~OnSave() = default;
 
 private:
-	UIButton* m_bBack;
+	ButtonUI* m_bBack;
 };

@@ -1,7 +1,7 @@
 #include "Core/Application.h"
 #include "Core/Window.h"
 #include "Core/Logger.h"
-#include "UI/UITextBox.h"
+#include "UI/TextBoxUI.h"
 #include <algorithm>
 
 Application::Application(const std::string& app_name) : m_AppName(app_name)
@@ -70,8 +70,8 @@ void Application::handle_sfml_events()
 			m_Window.close();
 			break;
 		case sf::Event::TextEntered:
-			UITextBox::m_WasKeyEntered = true;
-			UITextBox::m_KeyEntered = event.text.unicode;
+			TextBoxUI::m_WasKeyEntered = true;
+			TextBoxUI::m_KeyEntered = event.text.unicode;
 			break;
 		case sf::Event::GainedFocus:
 			Window::m_IsFocused = true;
@@ -80,7 +80,7 @@ void Application::handle_sfml_events()
 			Window::m_IsFocused = false;
 			break;
 		default:
-			UITextBox::m_WasKeyEntered = false;
+			TextBoxUI::m_WasKeyEntered = false;
 			break;
 		}
 }
