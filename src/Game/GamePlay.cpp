@@ -16,21 +16,25 @@ void GamePlay::update(const float& dt)
 	vec2f player_size = m_Player->get_size();
 	vec2f camera_offset = player_pos - m_Camera;
 
-	// Right game screen side
-	if (camera_offset.x + player_size.x > m_fovWidth - m_CameraBorderDistance * A_RATIO)
-		m_Camera.x = player_pos.x + player_size.x - m_fovWidth + m_CameraBorderDistance * A_RATIO;
+	if (!m_CameraInfo.locked.x) {
+		// Right game screen side
+		if (camera_offset.x + player_size.x > m_fovWidth - m_CameraBorderDistance * A_RATIO)
+			m_Camera.x = player_pos.x + player_size.x - m_fovWidth + m_CameraBorderDistance * A_RATIO;
 
-	// Left game screen side
-	else if (player_pos.x - m_Camera.x < m_CameraBorderDistance * A_RATIO)
-		m_Camera.x = player_pos.x - m_CameraBorderDistance * A_RATIO;
+		// Left game screen side
+		else if (player_pos.x - m_Camera.x < m_CameraBorderDistance * A_RATIO)
+			m_Camera.x = player_pos.x - m_CameraBorderDistance * A_RATIO;
+	}
 
-	// Up game screen side
-	if (camera_offset.y + player_size.y > 1.f - m_CameraBorderDistance)
-		m_Camera.y = player_pos.y + player_size.y - 1.f + m_CameraBorderDistance;
+	if (!m_CameraInfo.locked.y) {
+		// Up game screen side
+		if (camera_offset.y + player_size.y > 1.f - m_CameraBorderDistance)
+			m_Camera.y = player_pos.y + player_size.y - 1.f + m_CameraBorderDistance;
 
-	// Down game screen side
-	else if (camera_offset.y < m_CameraBorderDistance)
-		m_Camera.y = player_pos.y - m_CameraBorderDistance;
+		// Down game screen side
+		else if (camera_offset.y < m_CameraBorderDistance)
+			m_Camera.y = player_pos.y - m_CameraBorderDistance;
+	}
 	
 	// Update timer
 	uint32_t wts = static_cast<uint32_t>(m_ElapsedTime);
@@ -55,13 +59,12 @@ void GamePlay::update(const float& dt)
 
 	if (m_UndoRegister.size() != m_AvaliableUndos) {
 		m_AvaliableUndos = m_UndoRegister.size();
+
 		if (m_UndoButton->is_disabled())
-		{
 			if (m_AvaliableUndos > 0) m_UndoButton->disable(false);
-		}
-		else {
+		else
 			if (m_AvaliableUndos == 0) m_UndoButton->disable();
-		}
+
 		m_UndosText->set_text(std::to_wstring(m_AvaliableUndos) + L"/" + std::to_wstring(UNDOS_LIMIT));
 		m_UndosText->center_x();
 	}
@@ -193,6 +196,13 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		make_entity(m_MoveLeft);
 		make_entity(m_Restart);
 		make_entity(m_Exit);
+
+		// Camera setup
+		TileMap*& tm = m_TileMap;
+		vec2f total_size = (vec2f)tm->m_LevelSize * tm->m_TileSize / Window::size();
+		GameCamera::set_cam_info(total_size, { {0.f, 0.f}, {m_fovWidth, 1.f} }, m_Player);
+		m_CameraInfo = GameCamera::get_cam_info();
+		m_Camera = m_CameraInfo.pos;
 	}
 	else {
 		LOG_ERROR("Can't open game level:", level_path);

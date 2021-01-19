@@ -4,9 +4,8 @@
 
 /*******************************************
 ============================================
-Klasa vector s³u¿¹ca do reprezentacji 
-punktu w dwóch wymiarach.
-	Wspó³rzêdne: x, y
+	Klasa vector s³u¿¹ca do reprezentacji 
+		punktu w 2 wymiarach: x, y.
 ============================================
 *******************************************/
 

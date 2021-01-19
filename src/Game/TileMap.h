@@ -34,5 +34,36 @@ private:
 	vec2u m_LevelSize;
 	vec2f m_TileScale = { 1.1f, 1.1f };
 	float m_TileSize = 32.f;
-	
 };
+
+struct CameraInfo 
+{
+	vec2f pos;
+	vec2<bool> locked = { 0, 0 };
+};
+
+struct CameraBorders
+{
+	vec2f top_left;
+	vec2f bot_right;
+};
+
+struct Rect {
+	vec2f pos; vec2f size;
+	inline operator CameraBorders() const {
+		return { pos, size };
+	}
+};
+
+class GameCamera
+{
+public:
+	inline static CameraBorders& get_cam_borders() { return m_CamBorders; };
+	inline static CameraInfo& get_cam_info() { return m_CamInfo; };
+	static void set_cam_borders(vec2f total_size, Rect canvas);
+	static void set_cam_info(vec2f total_size, Rect canvas, Player* p = nullptr);
+private:
+	static CameraBorders m_CamBorders;
+	static CameraInfo m_CamInfo;
+};
+

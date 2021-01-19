@@ -1,8 +1,52 @@
 #include "TileMap.h"
 #include "Core/Logger.h"
+#include "Core/Window.h"
 
 #include <cstdlib>
 #include <fstream>
+
+CameraBorders GameCamera::m_CamBorders;
+CameraInfo GameCamera::m_CamInfo;
+
+void GameCamera::set_cam_info(vec2f total_size, Rect canvas, Player* p) {
+	
+	CameraInfo camera;
+	vec2f total_cnvs = { canvas.size.x + canvas.pos.x, canvas.size.y + canvas.pos.y };
+	vec2f margin_top_left = { -.1f - canvas.pos.x, -0.1f - canvas.pos.y };
+
+	if (total_size.x <= total_cnvs.x) {
+		camera.pos.x = -(total_cnvs.x - total_size.x + canvas.pos.x) / 2.f;
+		camera.locked.x = true;
+	}
+	else
+		camera.pos.x = margin_top_left.x;
+
+	if (total_size.y <= total_cnvs.y) {
+		camera.pos.y = -(total_cnvs.y - total_size.y + canvas.pos.y) / 2.f;
+		camera.locked.y = true;
+	}
+	else
+		camera.pos.y = margin_top_left.y;
+	
+	m_CamInfo = camera;
+}
+
+void GameCamera::set_cam_borders(vec2f total_size, Rect canvas) {
+	const float margin = .2f;
+	CameraBorders borders{{ -margin, -margin }};
+
+	if (total_size.x <= canvas.size.x - canvas.pos.x)
+		borders.bot_right.x = margin;
+	else
+		borders.bot_right.x = margin + total_size.x - canvas.size.x - canvas.pos.x * 2.f;
+
+	if (total_size.y <= canvas.size.y - canvas.pos.y)
+		borders.bot_right.y = margin;
+	else
+		borders.bot_right.y = margin + total_size.y - canvas.size.y - canvas.pos.y * 2.f;
+
+	m_CamBorders = borders;
+}
 
 bool TileMap::load_level(const std::string& file_path)
 {
@@ -37,6 +81,7 @@ bool TileMap::load_level(const std::string& file_path)
 				m_Map.back().emplace_back(NONE_TILE);
 		}
 
+		srand(level_size.x * level_size.y + 5 * level_size.x + 7 * level_size.y);
 		uint16_t boxes_created = 0;
 		for (uint16_t i = 0; i < level_size.x; i++) {
 			for (uint16_t j = 0; j < level_size.y; j++) {
@@ -71,7 +116,7 @@ bool TileMap::load_level(const std::string& file_path)
 					m_Map[i][j] = NONE_TILE;
 				}
 				else {
-					LOG_ERROR("Undefined tile id:", tile_id);
+					LOG_ERROR("Undefined tile id:", (int)tile_id);
 					return false;
 				}
 			}

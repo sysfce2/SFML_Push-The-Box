@@ -24,6 +24,7 @@ public:
 	static vec2f size();
 	static uint16_t width();
 	static uint16_t height();
+	static float aspect_ratio();
 	static bool is_focused();
 private:
 	static void set_handle(sf::Window* window_handle);

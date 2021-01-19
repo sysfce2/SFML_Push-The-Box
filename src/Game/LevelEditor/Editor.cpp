@@ -6,57 +6,69 @@
 #include <fstream>
 
 // Consts
-constexpr float A_RATIO = 9.f / 16.f;
-constexpr float CAMERA_SPEED = .5f;
+const vec2f camera_speed = { .5f, .5f * 16.f / 9.f };
 
 // Static
 const Rect Editor::CanvasRect{ {.03f, .055f}, {.67f, .88f} };
 bool Editor::CameraChanged = false;
 bool Editor::PlayerPlaced = false;
-uint8_t Editor::SelectedTool = FLOOR_TILE;
+Tile* Editor::Player = nullptr;
 uint16_t Editor::BoxesPlaced = 0;
 uint16_t Editor::StoragesPlaced = 0;
 uint16_t Editor::BoxesCount = 4;
-Tile* Editor::PlayerTile = nullptr;
+uint8_t Editor::SelectedTool = 1;
 
 void Editor::update(const float& dt)
 {
 	if (CameraChanged)
 		CameraChanged = false;
 
+	using KB = sf::Keyboard;
+
 	if (Window::is_focused()) {
-		float offset, border = .5f;
-		vec2f before = m_Camera;
+		float offset = 0.f;
 
-		using KB = sf::Keyboard;
-		if (KB::isKeyPressed(KB::Up)) {
-			offset = -CAMERA_SPEED * dt;
-			if (m_Camera.y + offset < -border)
-				m_Camera.y = -border;
-			else m_Camera.y += offset;
+		if (!m_CameraInfo.locked.x) {
+			CameraBorders borders = GameCamera::get_cam_borders();
+
+			if (KB::isKeyPressed(KB::Right)) {
+
+				offset = camera_speed.x * dt;
+				if (m_Camera.x + offset > borders.bot_right.x)
+					m_Camera.x = borders.bot_right.x;
+				else m_Camera.x += offset;
+			}
+
+			if (KB::isKeyPressed(KB::Left)) {
+
+				offset = -camera_speed.x * dt;
+				if (m_Camera.x + offset < borders.top_left.x)
+					m_Camera.x = borders.top_left.x;
+				else m_Camera.x += offset;
+			}
 		}
-		if (KB::isKeyPressed(KB::Right)) {
-			offset = CAMERA_SPEED * dt * A_RATIO;
-			float max_x = m_TileSize.x * m_LevelSize.x + border * A_RATIO - .5f;
-			if (m_Camera.x + offset > max_x)
-				m_Camera.x = max_x;
-			else m_Camera.x += offset;
-		}
-		if (KB::isKeyPressed(KB::Down)) {
-			offset = CAMERA_SPEED * dt;
-			float max_y = m_TileSize.y * m_LevelSize.y + border - .5f;
-			if (m_Camera.y + offset > max_y)
-				m_Camera.y = max_y;
-			else m_Camera.y += offset;
-		}
-		if (KB::isKeyPressed(KB::Left)) {
-			offset = -CAMERA_SPEED * dt * A_RATIO;
-			if (m_Camera.x + offset < -border * A_RATIO)
-				m_Camera.x = -border * A_RATIO;
-			else m_Camera.x += offset;
+		
+		if (!m_CameraInfo.locked.y) {
+			CameraBorders borders = GameCamera::get_cam_borders();
+
+			if (KB::isKeyPressed(KB::Up)) {
+
+				offset = -camera_speed.y * dt;
+				if (m_Camera.y + offset < borders.top_left.y)
+					m_Camera.y = borders.top_left.y;
+				else m_Camera.y += offset;
+			}
+
+			if (KB::isKeyPressed(KB::Down)) {
+
+				offset = camera_speed.y * dt;
+				if (m_Camera.y + offset > borders.bot_right.y)
+					m_Camera.y = borders.bot_right.y;
+				else m_Camera.y += offset;
+			}
 		}
 
-		if (m_Camera != before)
+		if (offset != 0.f)
 			CameraChanged = true;
 
 		if (m_bSave->was_pressed())
@@ -98,7 +110,7 @@ void Editor::save_level()
 		if (output.is_open()) {
 
 			output.write((char*)&m_LevelSize, sizeof(vec2u));
-			output.write((char*)&PlayerTile->m_TilePos, sizeof(vec2u));
+			output.write((char*)&Player->m_TilePos, sizeof(vec2u));
 			output.write((char*)&BoxesPlaced, sizeof(uint16_t));
 
 			for (auto& cols : m_Tiles) for (auto& tile : cols)
@@ -128,6 +140,13 @@ void Editor::save_level()
 Editor::Editor(std::string file_name, vec2u size)
 	: m_FileName(file_name), m_LevelSize(size)
 {
+	// Camera
+	vec2f total_size = (vec2f)m_LevelSize * Tile(&m_Camera, vec2u()).get_size();
+	GameCamera::set_cam_info(total_size, Editor::CanvasRect);
+	GameCamera::set_cam_borders(total_size, Editor::CanvasRect);
+	m_CameraInfo = GameCamera::get_cam_info();
+	m_Camera = m_CameraInfo.pos;
+
 	// Initialize
 	m_Canvas = new UIElement();
 	m_ToolBox = new ToolBox();
@@ -141,17 +160,15 @@ Editor::Editor(std::string file_name, vec2u size)
 	info_text += L"[GUMKA: PRAWY PRZYCISK MYSZY]";
 	m_Info = new UIText(info_text, "joystix", 25);
 
-	PlayerTile = new Tile(&m_Camera, { 0u, 0u }, PLAYER_TILE);
-	PlayerTile->vanish(true);
+	Player = new Tile(&m_Camera, { 0u, 0u }, PLAYER_TILE);
+	Player->vanish(true);
 
-	//m_Background->set_color({ 255,255,255,140 });
 	m_Canvas->set_size(CanvasRect.size).set_position(CanvasRect.pos);
-	m_Canvas->set_color(sf::Color(16, 16, 55, 255));
+	m_Canvas->set_color({ 16, 16, 55, 255 });
 	m_HeaderText->set_tcolor({ 229, 198, 0, 255 });
 	m_HeaderText->attach_position(m_ToolBox).center_x(-.115f);
 	m_bSave->attach_position(m_ToolBox).center_x(.53f);
 	m_bExit->attach_position(m_ToolBox).center_x(.67f);
-	//m_Info->set_tcolor({ 229, 198, 0, 255 });
 	m_Info->center_x(.96f);
 
 	// Construct tiles
@@ -169,7 +186,7 @@ Editor::Editor(std::string file_name, vec2u size)
 	for (auto& cols : m_Tiles)
 		for (auto& tile : cols)
 			make_entity(tile);
-	make_entity(PlayerTile);
+	make_entity(Player);
 
 	// Make UI
 	make_entity(m_Background);
@@ -293,9 +310,6 @@ void ToolBox::update(const float& dt)
 	}
 }
 
-const vec2f TILES_START{ 0.22f, 0.22f };
-const vec2f TILES_SCALE{ 1.2f, 1.2f };
-
 Tile::Tile(vec2f* camera, vec2u tile_pos, uint8_t id)
 	: m_CameraPtr(camera), m_TilePos(tile_pos), m_TileId(id)
 {
@@ -306,8 +320,8 @@ Tile::Tile(vec2f* camera, vec2u tile_pos, uint8_t id)
 		set_color({ 255,255,255,230 });
 	}
 
-	set_scale(TILES_SCALE);
-	set_position(TILES_START + get_size() * (vec2f)tile_pos);
+	set_scale({ 1.2f, 1.2f });
+	set_position(get_size() * (vec2f)tile_pos);
 }
 
 void Tile::update(const float& dt)
@@ -361,8 +375,8 @@ void Tile::select(bool selected)
 {
 	m_IsSelected = selected;
 	if (m_TileId != PLAYER_TILE && Editor::PlayerPlaced)
-		if (m_TilePos == Editor::PlayerTile->m_TilePos)
-			Editor::PlayerTile->select(selected);
+		if (m_TilePos == Editor::Player->m_TilePos)
+			Editor::Player->select(selected);
 
 	if (selected)
 		set_color(sf::Color(100, 220, 0, 255));
@@ -387,7 +401,7 @@ void Tile::set_tile(uint8_t tile_id)
 			if (m_HasPlayer) {
 				m_HasPlayer = false;
 				Editor::PlayerPlaced = false;
-				Editor::PlayerTile->vanish(true);
+				Editor::Player->vanish(true);
 			}
 			else if (m_HasStorage && !m_HasBox) {
 				set_sprite("floor0");
@@ -444,9 +458,9 @@ void Tile::set_tile(uint8_t tile_id)
 		case PLAYER_TILE:
 			if (m_TileId == FLOOR_TILE && !m_HasBox && !Editor::PlayerPlaced) {
 				Editor::PlayerPlaced = true;
-				Editor::PlayerTile->m_TilePos = m_TilePos;
-				Editor::PlayerTile->set_position(TILES_START + get_size() * (vec2f)m_TilePos);
-				Editor::PlayerTile->appear();
+				Editor::Player->m_TilePos = m_TilePos;
+				Editor::Player->set_position(get_size() * (vec2f)m_TilePos);
+				Editor::Player->appear();
 				m_HasPlayer = true;
 			}
 			break;

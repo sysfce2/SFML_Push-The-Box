@@ -8,6 +8,7 @@ class GamePlay : public State
 {
 public:
 	friend class TileMap;
+	friend class GameCamera;
 	GamePlay(const std::string& level_path, const std::wstring& name = L"???");
 	virtual ~GamePlay() = default;
 
@@ -17,6 +18,7 @@ private:
 private:
 	void construct_tilemap();
 
+	CameraInfo m_CameraInfo;
 	const float m_CameraBorderDistance = 0.4f;
 	float m_fovWidth = 1.f;
 	Player* m_Player = nullptr;

@@ -45,6 +45,11 @@ uint16_t Window::height()
 	return m_Height;
 }
 
+float Window::aspect_ratio()
+{
+	return (float)m_Width / (float)m_Height;
+}
+
 bool Window::is_focused()
 {
 	return m_IsFocused;

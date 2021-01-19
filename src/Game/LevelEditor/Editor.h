@@ -10,7 +10,6 @@
 class Tile;
 class Tool;
 class ToolBox;
-struct Rect { vec2f pos; vec2f size; };
 
 class Editor : public State
 {
@@ -28,8 +27,9 @@ public:
 	static uint16_t BoxesPlaced;
 	static uint16_t StoragesPlaced;
 	static uint16_t BoxesCount;
-	static Tile* PlayerTile;
+	static Tile* Player;
 private:
+	CameraInfo m_CameraInfo;
 	vec2f m_TileSize;
 	vec2u m_LevelSize;
 	std::string m_FileName;
