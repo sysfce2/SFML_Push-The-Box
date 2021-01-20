@@ -5,27 +5,17 @@
 
 #include <fstream>
 
-// Consts
-const vec2f camera_speed = { .5f, .5f * 16.f / 9.f };
-
-// Static
-const Rect Editor::CanvasRect{ {.03f, .055f}, {.67f, .88f} };
-bool Editor::CameraChanged = false;
-bool Editor::PlayerPlaced = false;
-Tile* Editor::Player = nullptr;
-uint16_t Editor::BoxesPlaced = 0;
-uint16_t Editor::StoragesPlaced = 0;
-uint16_t Editor::BoxesCount = 4;
-uint8_t Editor::SelectedTool = 1;
+EditorValues Editor::Values;
 
 void Editor::update(const float& dt)
 {
-	if (CameraChanged)
-		CameraChanged = false;
+	if (Values.camera_changed)
+		Values.camera_changed = false;
 
 	using KB = sf::Keyboard;
 
 	if (Window::is_focused()) {
+		const vec2f camera_speed = { .5f, .88889f };
 		float offset = 0.f;
 
 		if (!m_CameraInfo.locked.x) {
@@ -69,7 +59,7 @@ void Editor::update(const float& dt)
 		}
 
 		if (offset != 0.f)
-			CameraChanged = true;
+			Values.camera_changed = true;
 
 		if (m_bSave->was_pressed())
 			save_level();
@@ -84,22 +74,22 @@ void Editor::save_level()
 	bool valid = true;
 	std::wstring result;
 	std::vector<std::wstring> info;
-	if (!Editor::PlayerPlaced) {
+	if (!Values.player_placed) {
 		info.emplace_back(L"-Nie ustawiono spawnu gracza");
 		valid = false;
 	}
 	
-	if (Editor::BoxesPlaced != Editor::StoragesPlaced) {
+	if (Values.boxes_placed != Values.boxes_placed) {
 		info.emplace_back(L"-Liczba skrzynek nie jest równa liczbie magazynów");
 		valid = false;
 	}
 
-	if (Editor::BoxesPlaced == 0) {
+	if (Values.boxes_placed == 0) {
 		info.emplace_back(L"-Nie postawiono ¿adnej skrzynki");
 		valid = false;
 	}
 
-	if (Editor::BoxesPlaced == 0) {
+	if (Values.storages_placed == 0) {
 		info.emplace_back(L"-Nie postawiono ¿adnego magazynu");
 		valid = false;
 	}
@@ -110,8 +100,8 @@ void Editor::save_level()
 		if (output.is_open()) {
 
 			output.write((char*)&m_LevelSize, sizeof(vec2u));
-			output.write((char*)&Player->m_TilePos, sizeof(vec2u));
-			output.write((char*)&BoxesPlaced, sizeof(uint16_t));
+			output.write((char*)&Values.player->m_TilePos, sizeof(vec2u));
+			output.write((char*)&Values.boxes_placed, sizeof(uint16_t));
 
 			for (auto& cols : m_Tiles) for (auto& tile : cols)
 				if (tile->m_HasStorage)
@@ -142,8 +132,8 @@ Editor::Editor(std::string file_name, vec2u size)
 {
 	// Camera
 	vec2f total_size = (vec2f)m_LevelSize * Tile(&m_Camera, vec2u()).get_size();
-	GameCamera::set_cam_info(total_size, Editor::CanvasRect);
-	GameCamera::set_cam_borders(total_size, Editor::CanvasRect);
+	GameCamera::set_cam_info(total_size, Values.canvas_rect);
+	GameCamera::set_cam_borders(total_size, Values.canvas_rect);
 	m_CameraInfo = GameCamera::get_cam_info();
 	m_Camera = m_CameraInfo.pos;
 
@@ -160,10 +150,11 @@ Editor::Editor(std::string file_name, vec2u size)
 	info_text += L"[GUMKA: PRAWY PRZYCISK MYSZY]";
 	m_Info = new TextUI(info_text, "joystix", 25);
 
-	Player = new Tile(&m_Camera, { 0u, 0u }, PLAYER_TILE);
-	Player->vanish(true);
+	Values.player = new Tile(&m_Camera, { 0u, 0u }, PLAYER_TILE);
+	Values.player->vanish(true);
 
-	m_Canvas->set_size(CanvasRect.size).set_position(CanvasRect.pos);
+	auto& canvas = Values.canvas_rect;
+	m_Canvas->set_size(canvas.size).set_position(canvas.pos);
 	m_Canvas->set_color({ 16, 16, 55, 255 });
 	m_HeaderText->set_tcolor({ 229, 198, 0, 255 });
 	m_HeaderText->attach_position(m_ToolBox).center_x(-.115f);
@@ -186,7 +177,7 @@ Editor::Editor(std::string file_name, vec2u size)
 	for (auto& cols : m_Tiles)
 		for (auto& tile : cols)
 			make_entity(tile);
-	make_entity(Player);
+	make_entity(Values.player);
 
 	// Make UI
 	make_entity(m_Background);
@@ -199,13 +190,13 @@ Editor::Editor(std::string file_name, vec2u size)
 
 ToolBox::ToolBox()
 {
-	const Rect& canvas = Editor::CanvasRect;
+	const Rect& canvas = Editor::Values.canvas_rect;
 	set_position({ canvas.pos.x + canvas.size.x + .02f, .15f });
 	set_size({ .25f, .5f });
 	set_color(sf::Color(22, 19, 69, 255));
 
 	vec2f btn_scale = { 2.f, 2.f };
-	m_tBoxCount = new TextUI(L"ILOŒÆ SKRZYNEK: " + std::to_wstring(Editor::BoxesCount), "joystix", 28);
+	m_tBoxCount = new TextUI(L"ILOŒÆ SKRZYNEK: " + std::to_wstring(Editor::Values.boxes_count), "joystix", 28);
 	m_tTiles = new TextUI(L"KAFELKI", "joystix", 28);
 	m_BoxPlus = new ButtonUI("", btn_scale);
 	m_BoxMinus = new ButtonUI("", btn_scale);
@@ -247,7 +238,7 @@ ToolBox::ToolBox()
 		tool->on_change([&](bool is_selected) {
 			for (auto& t : m_Tools)
 				if (tool != t) t->select(false);
-			Editor::SelectedTool = tool->m_TileId;
+			Editor::Values.selected_tool = tool->m_TileId;
 		});
 		add_child_entity(tool);
 	}
@@ -261,48 +252,33 @@ ToolBox::ToolBox()
 
 void ToolBox::update(const float& dt)
 {
+	auto& val = Editor::Values;
 	auto update_box_count = [&]() -> void {
-		m_tBoxCount->set_text(L"ILOŒÆ SKRZYNEK: " + std::to_wstring(Editor::BoxesCount));
+		m_tBoxCount->set_text(L"ILOŒÆ SKRZYNEK: " + std::to_wstring(val.boxes_count));
 		m_tBoxCount->center_x();
 	};
 
 	if (m_BoxPlus->was_pressed()) {
-		Editor::BoxesCount++;
+		val.boxes_count++;
 		update_box_count();
 	}
 
 	if (m_BoxMinus->was_pressed()) {
-		if (Editor::BoxesCount > 1) {
-			Editor::BoxesCount--;
+		if (val.boxes_count > 1) {
+			val.boxes_count--;
 			update_box_count();
 		}
 	}
 
+	uint16_t placed[3] = { val.boxes_placed, val.storages_placed, val.player_placed };
+	uint16_t count[3] = { val.boxes_count, val.boxes_count, 1 };
+	
 	for (uint8_t i = 0; i < 3; i++) {
-		uint16_t placed, count;
-		Tool* tool = nullptr;
-		switch (i) {
-		case 0:
-			placed = Editor::BoxesPlaced;
-			count = Editor::BoxesCount;
-			tool = m_Tools.at(2);
-			break;
-		case 1:
-			placed = Editor::StoragesPlaced;
-			count = Editor::BoxesCount;
-			tool = m_Tools.at(3);
-			break;
-		case 2:
-			placed = Editor::PlayerPlaced;
-			count = 1u;
-			tool = m_Tools.at(4);
-			break;
-		}
-
-		if (placed >= count) {
+		Tool* tool = m_Tools.at(i + 2);
+		if (placed[i] >= count[i]) {
 			if (!tool->is_disabled()) {
 				tool->disable();
-				Editor::SelectedTool = NONE_TILE;
+				val.selected_tool = NONE_TILE;
 			}
 		}
 		else if (tool->is_disabled())
@@ -326,10 +302,10 @@ Tile::Tile(vec2f* camera, vec2u tile_pos, uint8_t id)
 
 void Tile::update(const float& dt)
 {
-	if (Editor::CameraChanged) {
+	if (Editor::Values.camera_changed) {
 		vec2f screen_pos = get_position() - *m_CameraPtr;
 		vec2f size = get_size();
-		const Rect& canvas = Editor::CanvasRect;
+		const Rect& canvas = Editor::Values.canvas_rect;
 		if ((screen_pos.x + size.x >= canvas.pos.x
 			&& screen_pos.x <= canvas.pos.x + canvas.size.x)
 			&& (screen_pos.y + size.y >= canvas.pos.y
@@ -350,7 +326,7 @@ void Tile::update(const float& dt)
 		if (is_selected) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 				if (m_lMButtonReleased) {
-					set_tile(Editor::SelectedTool);
+					set_tile(Editor::Values.selected_tool);
 					m_lMButtonReleased = false;
 				}
 			}
@@ -374,9 +350,9 @@ void Tile::update(const float& dt)
 void Tile::select(bool selected)
 {
 	m_IsSelected = selected;
-	if (m_TileId != PLAYER_TILE && Editor::PlayerPlaced)
-		if (m_TilePos == Editor::Player->m_TilePos)
-			Editor::Player->select(selected);
+	if (m_TileId != PLAYER_TILE && Editor::Values.player_placed)
+		if (m_TilePos == Editor::Values.player->m_TilePos)
+			Editor::Values.player->select(selected);
 
 	if (selected)
 		set_color(sf::Color(100, 220, 0, 255));
@@ -387,36 +363,40 @@ void Tile::select(bool selected)
 void Tile::set_tile(uint8_t tile_id)
 {
 	if (tile_id != m_TileId) {
+
+		auto& val = Editor::Values;
 		auto remove_storage = [&]() -> void {
-			if (m_HasStorage) Editor::StoragesPlaced--;
+			if (m_HasStorage) val.storages_placed--;
 			m_HasStorage = false;
 		};
 		auto remove_box = [&]() -> void {
-			if (m_HasBox) Editor::BoxesPlaced--;
+			if (m_HasBox) val.boxes_placed--;
 			m_HasBox = false;
 		};
-
+		
 		switch (tile_id) {
 		case ERASER:
-			if (m_HasPlayer) {
-				m_HasPlayer = false;
-				Editor::PlayerPlaced = false;
-				Editor::Player->vanish(true);
-			}
-			else if (m_HasStorage && !m_HasBox) {
-				set_sprite("floor0");
-				remove_storage();
-			}
-			else if (m_HasBox) {
-				if (m_HasStorage)
-					set_sprite("editor-storage");
-				else set_sprite("floor0");
-				remove_box();
-				m_TileId = FLOOR_TILE;
-			}
-			else {
-				set_sprite("editor-empty-tile");
-				m_TileId = tile_id;
+			if (m_TileId != NONE_TILE) {
+				if (m_HasPlayer) {
+					m_HasPlayer = false;
+					val.player_placed = false;
+					val.player->vanish(true);
+				}
+				else if (m_HasStorage && !m_HasBox) {
+					set_sprite("floor0");
+					remove_storage();
+				}
+				else if (m_HasBox) {
+					if (m_HasStorage)
+						set_sprite("editor-storage");
+					else set_sprite("floor0");
+					remove_box();
+					m_TileId = FLOOR_TILE;
+				}
+				else {
+					set_sprite("editor-empty-tile");
+					m_TileId = NONE_TILE;
+				}
 			}
 			break;
 		case NONE_TILE:
@@ -437,8 +417,8 @@ void Tile::set_tile(uint8_t tile_id)
 			break;
 		case BOX_TILE:
 			if (m_TileId == FLOOR_TILE && !m_HasBox && !m_HasPlayer
-				&& Editor::BoxesPlaced < Editor::BoxesCount) {
-				Editor::BoxesPlaced++;
+				&& val.boxes_placed < val.boxes_count) {
+				val.boxes_placed++;
 				if (m_HasStorage) set_sprite("box-gold");
 				else set_sprite("box");
 				m_HasBox = true;
@@ -447,8 +427,8 @@ void Tile::set_tile(uint8_t tile_id)
 			break;
 		case STORAGE_TILE:
 			if ((m_TileId == FLOOR_TILE || m_TileId == BOX_TILE) && !m_HasStorage)
-				if( Editor::StoragesPlaced < Editor::BoxesCount) {
-					Editor::StoragesPlaced++;
+				if( val.storages_placed < val.boxes_count) {
+					val.storages_placed++;
 					if (m_HasBox) set_sprite("box-gold");
 					else set_sprite("editor-storage");
 					m_HasStorage = true;
@@ -456,11 +436,11 @@ void Tile::set_tile(uint8_t tile_id)
 				}
 			break;
 		case PLAYER_TILE:
-			if (m_TileId == FLOOR_TILE && !m_HasBox && !Editor::PlayerPlaced) {
-				Editor::PlayerPlaced = true;
-				Editor::Player->m_TilePos = m_TilePos;
-				Editor::Player->set_position(get_size() * (vec2f)m_TilePos);
-				Editor::Player->appear();
+			if (m_TileId == FLOOR_TILE && !m_HasBox && !val.player_placed) {
+				val.player_placed = true;
+				val.player->m_TilePos = m_TilePos;
+				val.player->set_position(get_size() * (vec2f)m_TilePos);
+				val.player->appear();
 				m_HasPlayer = true;
 			}
 			break;

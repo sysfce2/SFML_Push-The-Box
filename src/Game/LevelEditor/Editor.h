@@ -11,23 +11,29 @@ class Tile;
 class Tool;
 class ToolBox;
 
+struct EditorValues
+{
+	Rect canvas_rect = { {.03f, .055f}, {.67f, .88f} };
+	uint16_t boxes_placed = 0;
+	uint16_t storages_placed = 0;
+	uint16_t boxes_count = 4;
+	uint8_t selected_tool = 1;
+	Tile* player = nullptr;
+	bool camera_changed = false;
+	bool player_placed = false;
+};
+
 class Editor : public State
 {
 private:
 	void update(const float& dt) override;
 	void save_level();
+
 public:
 	Editor(std::string file_name, vec2u size);
 	virtual ~Editor() = default;
+	static EditorValues Values;
 
-	static const Rect CanvasRect;
-	static bool CameraChanged;
-	static bool PlayerPlaced;
-	static uint8_t SelectedTool;
-	static uint16_t BoxesPlaced;
-	static uint16_t StoragesPlaced;
-	static uint16_t BoxesCount;
-	static Tile* Player;
 private:
 	CameraInfo m_CameraInfo;
 	vec2f m_TileSize;

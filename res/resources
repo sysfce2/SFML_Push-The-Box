@@ -29,7 +29,7 @@ plus.png, plus, 0
 minus.png, minus, 0
 editor-storage.png, editor-storage, 1
 editor-state.png, editor-state, 0
-editor-empty-tile.png, editor-empty-tile, 0
+editor-empty-tile.png, editor-empty-tile, 1
 editor-tool-selection.png, editor-tool-selection, 1
 
 ## GAMEPLAY MENU
