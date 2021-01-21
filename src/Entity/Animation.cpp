@@ -70,7 +70,7 @@ void Animation::resume()
         m_StopAnimation = false;
 }
 
-bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mode, uint32_t repeat_from)
+bool Animation::play_animation(const std::string& name, u8 fps, u8 mode, u32 repeat_from)
 {
     if (m_Animations.find(name) != m_Animations.end()) {
         AnimationFrames* frames = &m_Animations.at(name);
@@ -83,7 +83,7 @@ bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mod
             }
 
             m_CurrentAnimationName = name;
-            m_Frames = static_cast<uint32_t>(frames->sprites.size());
+            m_Frames = (u32)frames->sprites.size();
             m_StopAnimation = m_Frames == 1u;
             m_CurrentAnimation = frames; 
             m_RepeatFrom = repeat_from;
@@ -101,17 +101,17 @@ bool Animation::play_animation(const std::string& name, uint8_t fps, uint8_t mod
     else return false;
 }
 
-void Animation::play_frame(uint16_t frame)
+void Animation::play_frame(u16 frame)
 {
     if (frame >= 0 && frame < m_Frames)
         m_AnimationOwner->set_sprite(m_CurrentAnimation->sprites.at(frame), false);
 }
 
-bool Animation::new_animation(const std::string& name, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t frames)
+bool Animation::new_animation(const std::string& name, u16 x, u16 y, u16 w, u16 h, u32 frames)
 {
     if (m_SpriteSheet != nullptr) {
         m_Animations[name] = AnimationFrames();
-        for (uint16_t i = x; i < x + w * frames; i += w) {
+        for (u16 i = x; i < x + w * frames; i += w) {
             vec2f scale = { m_AnimationOwner->m_Scale.x * Window::res_scale().x,
                             m_AnimationOwner->m_Scale.y * Window::res_scale().y };
             m_Animations[name].animation_scale = m_AnimationOwner->m_Scale;

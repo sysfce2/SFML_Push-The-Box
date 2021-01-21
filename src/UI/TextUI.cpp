@@ -25,7 +25,7 @@ void TextUI::render(sf::RenderTarget& target, const vec2f& camera)
 	}
 }
 
-void TextUI::set_text(const std::wstring& text, const std::string& font, uint8_t font_size)
+void TextUI::set_text(const std::wstring& text, const std::string& font, u8 font_size)
 {
 	if (m_Text != nullptr)
 		delete m_Text;
@@ -68,13 +68,13 @@ void TextUI::use_camera_position(bool use)
 	m_UseCameraPosition = use;
 }
 
-TextUI::TextUI(const std::string& text, const std::string& font, uint8_t font_size)
+TextUI::TextUI(const std::string& text, const std::string& font, u8 font_size)
 	: ElementUI(std::string(), { 1.f, 1.f })
 {
 	set_text(std::wstring(text.begin(), text.end()), font, font_size);
 }
 
-TextUI::TextUI(const std::wstring& text, const std::string& font, uint8_t font_size)
+TextUI::TextUI(const std::wstring& text, const std::string& font, u8 font_size)
 	: ElementUI(std::string(), { 1.f, 1.f })
 {
 	set_text(text, font, font_size);

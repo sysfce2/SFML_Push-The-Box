@@ -4,7 +4,7 @@
 class Floor : public Entity
 {
 public:
-	Floor(vec2f place_pos, vec2u tile_size, uint8_t v);
+	Floor(vec2f place_pos, vec2u tile_size, u8 v);
 	virtual ~Floor() = default;
 private:
 	void update(const float& dt) override;

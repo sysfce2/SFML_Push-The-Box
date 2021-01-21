@@ -14,7 +14,7 @@ const TextBoxProps TB_PROPS {
 
 void LevelEditorMenu::update(const float& dt)
 {
-	uint16_t active_layer = layer_id();
+	u16 active_layer = layer_id();
 	if (active_layer == LE_MENU) {
 		if (m_bNew->was_pressed())
 			set_main_layer(LE_NEW);

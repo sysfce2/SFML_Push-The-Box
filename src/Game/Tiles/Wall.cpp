@@ -1,6 +1,6 @@
 #include "Wall.h"
 
-Wall::Wall(vec2f place_pos, vec2u tile_pos, uint8_t v)
+Wall::Wall(vec2f place_pos, vec2u tile_pos, u8 v)
 	: m_TilePos(tile_pos)
 {
 	v %= 2;

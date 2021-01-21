@@ -17,6 +17,10 @@ void Logger::display_log(int log_type, std::string msg)
 		SetConsoleTextAttribute(Logger::m_ConsoleHandle, _ERROR_COLOR);
 		std::cout << "[ERROR] ";
 		break;
+	case 4:
+		SetConsoleTextAttribute(Logger::m_ConsoleHandle, _OK_COLOR);
+		std::cout << "[OK] ";
+		break;
 	default:
 		SetConsoleTextAttribute(Logger::m_ConsoleHandle, _LOG_COLOR);
 		std::cout << "[LOG] ";

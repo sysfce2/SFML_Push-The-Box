@@ -6,9 +6,10 @@
 
 Application::Application(const std::string& app_name) : m_AppName(app_name)
 {
+	Logger::init();
 	m_ScreenWidth = 1600;
 	m_ScreenHeight = 900;
-	uint8_t fullscreen = 0; // sf::Style::Fullscreen;
+	u8 fullscreen = 0; // sf::Style::Fullscreen;
 
 	sf::Uint32 style = sf::Style::Close | fullscreen;
 	m_Window.create(sf::VideoMode(m_ScreenWidth, m_ScreenHeight), m_AppName, style);
@@ -17,14 +18,13 @@ Application::Application(const std::string& app_name) : m_AppName(app_name)
 	sf::Image icon;
 	if (icon.loadFromFile("icon.bmp")) {
 		m_Window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-		LOG_INFO("Icon loaded");
+		LOG_OK("Icon loaded");
 	}
 
 	Window::set_handle(&m_Window);
-	Logger::init();
 }
 
-void Application::run(uint16_t fps_limit)
+void Application::run(u16 fps_limit)
 {
 	if (!m_IsRunning && on_init()) {
 		m_Window.setFramerateLimit(fps_limit);

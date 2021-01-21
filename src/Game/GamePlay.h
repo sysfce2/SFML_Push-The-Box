@@ -19,20 +19,20 @@ private:
 	void construct_tilemap();
 
 	CameraInfo m_CameraInfo;
-	const float m_CameraBorderDistance = 0.4f;
+	const float m_Border = 0.4f;
 	float m_fovWidth = 1.f;
 	Player* m_Player = nullptr;
 	TileMap* m_TileMap = nullptr;
-	uint32_t m_Moves = 0;
-	uint32_t m_PlayerMoves = 0;
+	u32 m_Moves = 0;
+	u32 m_PlayerMoves = 0;
 	std::string m_LevelPath;
 	std::wstring m_LevelNameStr;
 	std::vector<Undo> m_UndoRegister;
 
 	float m_ElapsedTime = 0.f;
-	uint32_t m_ElapsedMinutes = 0u;
-	uint32_t m_ElapsedSeconds = 0u;
-	uint32_t m_AvaliableUndos = 0u;
+	u32 m_ElapsedMinutes = 0u;
+	u32 m_ElapsedSeconds = 0u;
+	u32 m_AvaliableUndos = 0u;
 	ElementUI* m_Background = nullptr;
 	ElementUI* m_Menu = nullptr;
 	TextUI* m_LevelName = nullptr;

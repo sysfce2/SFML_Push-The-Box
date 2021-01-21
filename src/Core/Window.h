@@ -22,8 +22,8 @@ public:
 	static sf::Window* get_handle();
 	static vec2f res_scale();
 	static vec2f size();
-	static uint16_t width();
-	static uint16_t height();
+	static u16 width();
+	static u16 height();
 	static float aspect_ratio();
 	static bool is_focused();
 private:
@@ -32,7 +32,7 @@ private:
 
 	static sf::Window* m_Handle;
 	static vec2f m_ResScale;
-	static uint16_t m_Width;
-	static uint16_t m_Height;
+	static u16 m_Width;
+	static u16 m_Height;
 	static bool m_IsFocused;
 };

@@ -1,24 +1,12 @@
 #include "State/State.h"
+#include "State/StatesManager.h"
 #include "Core/Logger.h"
 #include "UI/ButtonUI.h"
 
-State::~State()
-{
-	LOG_WARN("A state was destroyed");
-
-	for (auto& entity : m_Entities)
-		delete entity;
-	m_Entities.clear();
-
-	for (auto& layer : m_Layers)
-		delete layer.second;
-	m_Layers.clear();
-}
-
-Entity* State::make_entity(Entity* entity, uint16_t layers)
+Entity* State::make_entity(Entity* entity, u16 layers)
 {
 	if (layers != 0x0)
-		for (uint16_t i = 0; i < MAX_LAYERS; i++) {
+		for (u16 i = 0; i < MAX_LAYERS; i++) {
 			if ((layers & (1 << i)) >> i) {
 				Layer* _layer = layer(1 << i);
 				auto& entities = _layer->m_LayerEntities;
@@ -36,14 +24,14 @@ Entity* State::make_entity(Entity* entity, uint16_t layers)
 	return entity;
 }
 
-Layer* State::layer(uint16_t layer_id)
+Layer* State::layer(u16 layer_id)
 {
 	if (m_Layers.find(layer_id) == m_Layers.end())
 		m_Layers[layer_id] = new Layer();
 	return m_Layers.at(layer_id);
 }
 
-void State::set_main_layer(uint16_t new_layer_id)
+void State::set_main_layer(u16 new_layer_id)
 {	
 	Layer* new_layer = layer(new_layer_id);
 	new_layer->show();
@@ -77,3 +65,15 @@ void State::destroy_state()
 	ButtonUI::m_AnyPressed = false;
 }
 
+State::~State()
+{
+	LOG_INFO("State id:", m_StateId , "was destroyed");
+
+	for (auto& entity : m_Entities)
+		delete entity;
+	m_Entities.clear();
+
+	for (auto& layer : m_Layers)
+		delete layer.second;
+	m_Layers.clear();
+}

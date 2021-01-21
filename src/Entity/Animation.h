@@ -17,8 +17,8 @@ class Animation
 public:
 	void update(const float& dt);
 	bool set_sprite_sheet(const std::string& texture_name);
-	bool play_animation(const std::string& name, uint8_t fps, uint8_t mode = ANIMATE_ONCE, uint32_t repeat_from = 0u);
-	bool new_animation(const std::string& name, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t frames);
+	bool play_animation(const std::string& name, u8 fps, u8 mode = ANIMATE_ONCE, u32 repeat_from = 0u);
+	bool new_animation(const std::string& name, u16 x, u16 y, u16 w, u16 h, u32 frames);
 	inline std::string get_animation_name() const { return m_CurrentAnimationName; }
 	void stop();
 	void pause();
@@ -27,7 +27,7 @@ public:
 	Animation(Entity* animation_owner);
 	virtual ~Animation();
 private:
-	void play_frame(uint16_t frame);
+	void play_frame(u16 frame);
 
 private:
 	bool m_EverPlayed = false;
@@ -35,10 +35,10 @@ private:
 	bool m_PlayBackward = false;
 	float m_FrameTime = 0.f;
 	float m_TimeElapsed = 0.f;
-	uint8_t m_PlayMode = ANIMATE_ONCE;
-	uint32_t m_Frames = 0u;
-	uint32_t m_CurrentFrame = 0u;
-	uint32_t m_RepeatFrom = 0u;
+	u8 m_PlayMode = ANIMATE_ONCE;
+	u32 m_Frames = 0u;
+	u32 m_CurrentFrame = 0u;
+	u32 m_RepeatFrom = 0u;
 	std::string m_CurrentAnimationName;
 
 	AnimationFrames* m_CurrentAnimation = nullptr;

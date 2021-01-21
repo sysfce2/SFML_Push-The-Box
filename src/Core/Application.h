@@ -17,7 +17,7 @@ G³ówna klasa aplikacji odpowiedzialna za:
 class Application
 {
 public:
-	void run(uint16_t fps_limit);
+	void run(u16 fps_limit);
 private:
 	void handle_sfml_events();
 	void update_active_state(const float& dt);
@@ -33,8 +33,8 @@ protected:
 	std::string m_InitErrorMessage;
 	std::string m_RuntimeErrorMessage;
 private:
-	uint16_t m_ScreenWidth;
-	uint16_t m_ScreenHeight;
+	u16 m_ScreenWidth;
+	u16 m_ScreenHeight;
 	std::string m_AppName;
 	sf::RenderWindow m_Window;
 

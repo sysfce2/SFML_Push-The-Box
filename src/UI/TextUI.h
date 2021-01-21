@@ -7,13 +7,13 @@ private:
 	void update(const float& dt) override;
 	void render(sf::RenderTarget& target, const vec2f& camera) override;
 public:
-	void set_text(const std::wstring& text, const std::string& font = "", uint8_t font_size = 0);
+	void set_text(const std::wstring& text, const std::string& font = "", u8 font_size = 0);
 	void set_tcolor(const sf::Color& color);
 	void use_camera_position(bool use = true);
 	inline std::wstring get_content() const { return m_TextContent; }
 
-	TextUI(const std::string& text, const std::string& font, uint8_t font_size);
-	TextUI(const std::wstring& text, const std::string& font, uint8_t font_size);
+	TextUI(const std::string& text, const std::string& font, u8 font_size);
+	TextUI(const std::wstring& text, const std::string& font, u8 font_size);
 	virtual ~TextUI();
 
 	// Deleted entity methods
@@ -26,7 +26,7 @@ public:
 private:
 	std::wstring m_TextContent;
 	vec2f m_Margin;
-	uint8_t m_FontSize = 24;
+	u8 m_FontSize = 24;
 	sf::Color m_Color{ 255, 255, 255, 255 };
 	sf::Font* m_Font = nullptr;
 	sf::Text* m_Text = nullptr;

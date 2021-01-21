@@ -5,7 +5,7 @@
 #include "Entity/Animation.h"
 #include <unordered_map>
 
-constexpr uint16_t UNDOS_LIMIT = 10u;
+constexpr u16 UNDOS_LIMIT = 10u;
 
 struct PlayerControl
 {
@@ -39,7 +39,7 @@ public:
 	virtual ~Player() = default;
 
 private:
-	void init(TileMap* tile_map, std::vector<Undo>* reg, uint32_t* moves);
+	void init(TileMap* tile_map, std::vector<Undo>* reg, u32* moves);
 	void update(const float& dt) override;
 	void try_walk(vec2i direction, const std::string& animation);
 	bool walk(vec2i offset, Box*& pushed_box);
@@ -47,7 +47,7 @@ private:
 	std::vector<Undo>* m_UndoRegister;
 	std::unique_ptr<Animation> m_Animation;
 	TileMap* m_TileMap = nullptr;
-	uint32_t* m_Moves = nullptr;
+	u32* m_Moves = nullptr;
 	vec2u m_TilePosition;
 	bool m_StoppedWalking = true;
 	float m_TileSize;

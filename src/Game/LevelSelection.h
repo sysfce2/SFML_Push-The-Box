@@ -13,12 +13,12 @@ class SelectBlock : public ElementUI
 {
 public:
 	friend class LevelSelection;
-	SelectBlock(const vec2f& position, uint16_t number);
+	SelectBlock(const vec2f& position, u16 number);
 	virtual ~SelectBlock() = default;
 private:
 	ButtonUI* m_PlayButton;
 	TextUI* m_NumberText;
-	uint16_t m_Number;
+	u16 m_Number;
 };
 
 class LevelSelection : public State {
@@ -28,7 +28,7 @@ public:
 	LevelSelection();
 	virtual ~LevelSelection() = default;
 private:
-	void switch_layer(uint16_t layer);
+	void switch_layer(u16 layer);
 
 	std::vector<SelectBlock*> m_Levels;
 	ElementUI* m_Background;

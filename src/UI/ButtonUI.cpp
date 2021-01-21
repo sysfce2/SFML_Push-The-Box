@@ -100,7 +100,7 @@ void ButtonUI::assign_button_sprite(const std::string& unpressed_sprite, const s
 		m_ButtonText->center_x().center_y();
 }
 
-ButtonUI::ButtonUI(const std::string& button_string, const vec2f& scale, uint8_t font_size)
+ButtonUI::ButtonUI(const std::string& button_string, const vec2f& scale, u8 font_size)
 	: ElementUI("btn-4x1", scale), m_ButtonSprite("btn-4x1"), m_PressedButtonSprite("btn-4x1-pressed"),
 	  m_ButtonString(std::wstring(button_string.begin(), button_string.end())),
 	  m_PressTime(0), m_FontSize(font_size)
@@ -113,7 +113,7 @@ ButtonUI::ButtonUI(const std::string& button_string, const vec2f& scale, uint8_t
 	}
 }
 
-ButtonUI::ButtonUI(const std::wstring& button_string, const vec2f& scale, uint8_t font_size)
+ButtonUI::ButtonUI(const std::wstring& button_string, const vec2f& scale, u8 font_size)
 	: ElementUI("btn-4x1", scale), m_ButtonSprite("btn-4x1"), m_PressedButtonSprite("btn-4x1-pressed"),
 	  m_ButtonString(button_string), m_PressTime(0), m_FontSize(font_size)
 {

@@ -10,9 +10,9 @@ const sf::Color GOLDEN_BROWN{ 105, 91, 0, 255 };
 const sf::Color HEADER_COLOR{ 229, 198, 0, 255 };
 const vec2f SELECT_BLOCK_SCALE{ 3.f, 3.f };
 const vec2f BTN_SCALE{ 4.5f, 4.5f };
-const uint8_t BTN_FNT_SIZE = 60;
+const u8 BTN_FNT_SIZE = 60;
 
-SelectBlock::SelectBlock(const vec2f& position, uint16_t number)
+SelectBlock::SelectBlock(const vec2f& position, u16 number)
 	: ElementUI("not-completed", SELECT_BLOCK_SCALE, position), m_Number(number)
 {
 	m_NumberText = new TextUI(std::to_string(number), "invasion", 48);
@@ -26,7 +26,7 @@ SelectBlock::SelectBlock(const vec2f& position, uint16_t number)
 
 void LevelSelection::update(const float& dt)
 {
-	uint16_t active_layer = layer_id();
+	u16 active_layer = layer_id();
 	if (active_layer == DIFFICULTY_SELECTION) {
 		if (m_EasyButton->was_pressed())	switch_layer(EASY_LEVELS);
 		else if (m_HardButton->was_pressed())	switch_layer(HARD_LEVELS);
@@ -97,10 +97,10 @@ LevelSelection::LevelSelection()
 	vec2f place_pos = { place_offset.x, .18f };
 	delete block;
 
-	uint16_t rows = 5; uint16_t cols = 6;
-	for (uint16_t i = 0; i < rows; i++) {
-		for (uint16_t j = 0; j < cols; j++) {
-			uint16_t level_number = i * 6 + j + 1;
+	u16 rows = 5; u16 cols = 6;
+	for (u16 i = 0; i < rows; i++) {
+		for (u16 j = 0; j < cols; j++) {
+			u16 level_number = i * 6 + j + 1;
 			block = new SelectBlock(place_pos, level_number);
 			block->vanish(true);
 			if (level_number > 6)
@@ -116,7 +116,7 @@ LevelSelection::LevelSelection()
 	set_main_layer(DIFFICULTY_SELECTION);
 }
 
-void LevelSelection::switch_layer(uint16_t layer)
+void LevelSelection::switch_layer(u16 layer)
 {
 	std::wstring header_text;
 	switch (layer) {

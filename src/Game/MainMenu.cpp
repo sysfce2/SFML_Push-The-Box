@@ -2,7 +2,7 @@
 #include "State/StatesManager.h"
 #include "LevelSelection.h"
 
-const uint8_t BTN_FNT_SIZE = 60;
+const u8 BTN_FNT_SIZE = 60;
 const vec2f BTN_SCALE{ 4.5f, 4.5f };
 
 MainMenu::MainMenu()

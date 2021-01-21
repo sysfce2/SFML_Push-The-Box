@@ -101,14 +101,14 @@ void Editor::save_level()
 
 			output.write((char*)&m_LevelSize, sizeof(vec2u));
 			output.write((char*)&Values.player->m_TilePos, sizeof(vec2u));
-			output.write((char*)&Values.boxes_placed, sizeof(uint16_t));
+			output.write((char*)&Values.boxes_placed, sizeof(u16));
 
 			for (auto& cols : m_Tiles) for (auto& tile : cols)
 				if (tile->m_HasStorage)
 					output.write((char*)&tile->m_TilePos, sizeof(vec2u));
 			
 			for (auto& cols : m_Tiles) for (auto& tile : cols) {
-				uint8_t tile_id;
+				u8 tile_id;
 				if (tile->m_HasBox)
 					tile_id = BOX_TILE;
 				else
@@ -118,6 +118,7 @@ void Editor::save_level()
 		}
 		output.close();
 		result = L"Poziom zosta³ pomyœlnie zapisany!";
+		LOG_OK("Editor: Level saved [Output file: " + path +"] [Size:", 18 + Values.storages_placed * 8 + m_LevelSize.x * m_LevelSize.y, "B]");
 		StatesManager::get().create_active_state(new OnSave(result, info));
 	}
 	else {
@@ -164,10 +165,10 @@ Editor::Editor(std::string file_name, vec2u size)
 
 	// Construct tiles
 	m_Tiles.reserve(size.x);
-	for (uint16_t i = 0; i < size.x; i++) {
+	for (u16 i = 0; i < size.x; i++) {
 		m_Tiles.emplace_back(std::vector<Tile*>());
 		m_Tiles.back().reserve(size.y);
-		for (uint16_t j = 0; j < size.y; j++)
+		for (u16 j = 0; j < size.y; j++)
 			m_Tiles.back().emplace_back(new Tile(&m_Camera, { i, j }));
 		if (i == 0) m_TileSize = m_Tiles.back().back()->get_size();
 	}
@@ -213,7 +214,7 @@ ToolBox::ToolBox()
 	
 
 	float offset = .0233336f;
-	uint8_t current = FLOOR_TILE;
+	u8 current = FLOOR_TILE;
 	vec2f place_pos = { offset, m_tTiles->get_position().y + .05f };
 	std::vector<std::string> tool_names{ "floor0", "wall0", "box", "storage" };
 
@@ -270,10 +271,10 @@ void ToolBox::update(const float& dt)
 		}
 	}
 
-	uint16_t placed[3] = { val.boxes_placed, val.storages_placed, val.player_placed };
-	uint16_t count[3] = { val.boxes_count, val.boxes_count, 1 };
+	u16 placed[3] = { val.boxes_placed, val.storages_placed, val.player_placed };
+	u16 count[3] = { val.boxes_count, val.boxes_count, 1 };
 	
-	for (uint8_t i = 0; i < 3; i++) {
+	for (u8 i = 0; i < 3; i++) {
 		Tool* tool = m_Tools.at(i + 2);
 		if (placed[i] >= count[i]) {
 			if (!tool->is_disabled()) {
@@ -286,7 +287,7 @@ void ToolBox::update(const float& dt)
 	}
 }
 
-Tile::Tile(vec2f* camera, vec2u tile_pos, uint8_t id)
+Tile::Tile(vec2f* camera, vec2u tile_pos, u8 id)
 	: m_CameraPtr(camera), m_TilePos(tile_pos), m_TileId(id)
 {
 	if (id == PLAYER_TILE) 
@@ -360,7 +361,7 @@ void Tile::select(bool selected)
 		set_color(sf::Color(255, 255, 255, m_TileId != NONE_TILE ? 255 : 230));
 }
 
-void Tile::set_tile(uint8_t tile_id)
+void Tile::set_tile(u8 tile_id)
 {
 	if (tile_id != m_TileId) {
 
@@ -450,7 +451,7 @@ void Tile::set_tile(uint8_t tile_id)
 	}
 }
 
-Tool::Tool(uint8_t id, const std::string& sprite)
+Tool::Tool(u8 id, const std::string& sprite)
 	: CheckBoxUI(sprite, "editor-tool-selection"), m_TileId(id)
 {
 }

@@ -1,10 +1,10 @@
 #include "TextBoxUI.h"
 #include "Core/Window.h"
 
-uint32_t TextBoxUI::m_KeyEntered = 0;
+u32 TextBoxUI::m_KeyEntered = 0;
 bool TextBoxUI::m_WasKeyEntered = false;
 
-void TextBoxUI::set_max_chars(uint16_t max_chars)
+void TextBoxUI::set_max_chars(u16 max_chars)
 {
 	m_MaxChars = max_chars;
 }
@@ -57,7 +57,7 @@ void TextBoxUI::update(const float& dt)
 
 		if (m_Focused && m_WasKeyEntered) {
 			m_WasKeyEntered = false;
-			uint32_t key = m_KeyEntered;
+			u32 key = m_KeyEntered;
 
 			if (key == 13u || key == 27u) {
 				m_Focused = false;

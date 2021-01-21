@@ -8,7 +8,7 @@
 CameraBorders GameCamera::m_CamBorders;
 CameraInfo GameCamera::m_CamInfo;
 
-void GameCamera::set_cam_info(vec2f total_size, Rect canvas, Player* p) {
+void GameCamera::set_cam_info(vec2f total_size, Rect canvas) {
 	
 	CameraInfo camera;
 	vec2f total_cnvs = { canvas.size.x + canvas.pos.x * 2.f, canvas.size.y + canvas.pos.y * 2.f};
@@ -55,16 +55,17 @@ bool TileMap::load_level(const std::string& file_path)
 		vec2u level_size;
 		vec2u player_pos;
 		vec2f place_pos;
-		uint16_t storages_count;
+		u16 storages_count;
 		m_TileSize = Wall(vec2f(), vec2f(), 0).set_scale(m_TileScale).get_size_px().x;
 
 		file.read(reinterpret_cast<char*>(&level_size), sizeof(vec2u));
 		file.read(reinterpret_cast<char*>(&player_pos), sizeof(vec2u));
-		file.read(reinterpret_cast<char*>(&storages_count), sizeof(uint16_t));
+		file.read(reinterpret_cast<char*>(&storages_count), sizeof(u16));
 
 		m_BoxPlacePositions.reserve(storages_count);
 		m_StoragePositions.reserve(storages_count);
-		for (uint16_t i = 0; i < storages_count; i++) {
+
+		for (u16 i = 0; i < storages_count; i++) {
 			vec2u storage_pos;
 			file.read(reinterpret_cast<char*>(&storage_pos), sizeof(vec2u));
 			m_StoragePositions.emplace_back(storage_pos);
@@ -74,23 +75,25 @@ bool TileMap::load_level(const std::string& file_path)
 		m_Storages.reserve(storages_count);
 		m_Tiles.reserve(level_size.x * level_size.y);
 		m_Map.reserve(level_size.x);
-		for (uint16_t i = 0; i < level_size.x; i++) {
-			m_Map.emplace_back(std::vector<uint16_t>());
+
+		for (u16 i = 0; i < level_size.x; i++) {
+			m_Map.emplace_back(std::vector<u16>());
 			m_Map.back().reserve(level_size.y);
-			for (uint16_t j = 0; j < level_size.y; j++)
+			for (u16 j = 0; j < level_size.y; j++)
 				m_Map.back().emplace_back(NONE_TILE);
 		}
 
 		srand(level_size.x * level_size.y + 5 * level_size.x + 7 * level_size.y);
-		uint16_t boxes_created = 0;
-		for (uint16_t i = 0; i < level_size.x; i++) {
-			for (uint16_t j = 0; j < level_size.y; j++) {
+		u16 boxes_created = 0;
 
-				uint8_t tile_id;
-				uint8_t rand_int = rand() % 256;
+		for (u16 i = 0; i < level_size.x; i++) {
+			for (u16 j = 0; j < level_size.y; j++) {
+
+				u8 tile_id;
+				u8 rand_int = rand() % 256;
 				vec2u tile_pos{ i, j };
 				vec2f place_pos{ m_TileSize * i, m_TileSize * j };
-				file.read(reinterpret_cast<char*>(&tile_id), sizeof(uint8_t));
+				file.read(reinterpret_cast<char*>(&tile_id), sizeof(u8));
 
 				if (tile_id == FLOOR_TILE) {
 					Floor* floor = new Floor(place_pos, tile_pos, rand_int);

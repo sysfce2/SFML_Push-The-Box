@@ -1,10 +1,10 @@
 #include "Player.h"
 #include "Core/Logger.h"
 
-constexpr uint16_t ANIMATION_FPS = 8;
+constexpr u16 ANIMATION_FPS = 8;
 PlayerControl* PlayerControl::s_Instance = nullptr;
 
-void Player::init(TileMap* tile_map, std::vector<Undo>* reg, uint32_t* moves)
+void Player::init(TileMap* tile_map, std::vector<Undo>* reg, u32* moves)
 {
 	m_TileMap = tile_map;
 	m_UndoRegister = reg;

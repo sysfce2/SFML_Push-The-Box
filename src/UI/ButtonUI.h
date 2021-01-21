@@ -14,13 +14,13 @@ public:
 	void disable(bool disabled = true);
 	inline bool is_disabled() const { return m_Disabled; }
 	void assign_button_sprite(const std::string& unpressed_sprite, const std::string& pressed_sprite);
-	ButtonUI(const std::string& button_name, const vec2f& scale, uint8_t font_size = 0);
-	ButtonUI(const std::wstring& button_name, const vec2f& scale, uint8_t font_size);
+	ButtonUI(const std::string& button_name, const vec2f& scale, u8 font_size = 0);
+	ButtonUI(const std::wstring& button_name, const vec2f& scale, u8 font_size);
 	virtual ~ButtonUI() = default;
 
 	static bool m_AnyPressed;
 private:
-	uint8_t m_FontSize = 0;
+	u8 m_FontSize = 0;
 	bool m_Disabled = false;
 	bool m_Pressed = false;
 	bool m_ButtonEventHandled = false;

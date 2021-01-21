@@ -1,20 +1,24 @@
 #pragma once
+#include "Core/Vector2.h"
+#include "Entity/Entity.h"
+#include "Layer.h"
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <stack>
-#include "Entity/Entity.h"
-#include "Layer.h"
 
 class State
 {
 public:
 	friend class Application;
 	friend class StatesManager;
+
 protected:
-	Entity* make_entity(Entity* entity, uint16_t layers = 0x0);
-	Layer* layer(uint16_t layer_id);
-	inline uint16_t layer_id() const { return m_MainLayerId; }
-	void set_main_layer(uint16_t new_layer_id);
+
+	Entity* make_entity(Entity* entity, u16 layers = 0x0);
+	Layer* layer(u16 layer_id);
+	inline u16 layer_id() const { return m_MainLayerId; }
+	void set_main_layer(u16 new_layer_id);
 	void update_entities(const float& dt);
 	void render_entities(sf::RenderTarget& target);
 	void destroy_state();
@@ -22,12 +26,15 @@ protected:
 
 	State() = default;
 	virtual ~State();
+
 private:
+	u16 m_StateId = 0;
 	bool m_DestroyState = false;
+
 protected:
 	Layer* m_MainLayer = nullptr;
-	uint16_t m_MainLayerId = 0x0;
+	u16 m_MainLayerId = 0;
 	std::vector<Entity*> m_Entities;
-	std::map<uint16_t, Layer*> m_Layers;
+	std::map<u16, Layer*> m_Layers;
 	vec2f m_Camera = { 0.f, 0.f };
 };

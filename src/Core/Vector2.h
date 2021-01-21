@@ -158,3 +158,6 @@ using vec2f = vec2<float>;
 using vec2d = vec2<double>;
 using vec2i = vec2<int>;
 using vec2u = vec2<unsigned int>;
+using u32 = uint32_t;
+using u16 = uint16_t;
+using u8 = uint8_t;

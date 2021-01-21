@@ -4,7 +4,7 @@
 class Wall : public Entity
 {
 public:
-	Wall(vec2f place_pos, vec2u tile_pos, uint8_t v);
+	Wall(vec2f place_pos, vec2u tile_pos, u8 v);
 	virtual ~Wall() = default;
 private:
 	void update(const float& dt) override;

@@ -14,10 +14,10 @@ class ToolBox;
 struct EditorValues
 {
 	Rect canvas_rect = { {.03f, .055f}, {.67f, .88f} };
-	uint16_t boxes_placed = 0;
-	uint16_t storages_placed = 0;
-	uint16_t boxes_count = 4;
-	uint8_t selected_tool = 1;
+	u16 boxes_placed = 0;
+	u16 storages_placed = 0;
+	u16 boxes_count = 4;
+	u8 selected_tool = 1;
 	Tile* player = nullptr;
 	bool camera_changed = false;
 	bool player_placed = false;
@@ -54,12 +54,12 @@ class Tile : public Entity
 {
 public:
 	friend class Editor;
-	Tile(vec2f* camera, vec2u tile_pos, uint8_t id = NONE_TILE);
+	Tile(vec2f* camera, vec2u tile_pos, u8 id = NONE_TILE);
 	virtual ~Tile() = default;
 private:
 	void update(const float& dt) override;
 	void select(bool selected = true);
-	void set_tile(uint8_t tile_id);
+	void set_tile(u8 tile_id);
 
 	bool m_lMButtonReleased = true;
 	bool m_rMButtonReleased = true;
@@ -69,17 +69,17 @@ private:
 	bool m_HasPlayer = false;
 	vec2f* m_CameraPtr;
 	vec2u m_TilePos;
-	uint8_t m_TileId;
+	u8 m_TileId;
 };
 
 class Tool : public CheckBoxUI
 {
 public:
 	friend class ToolBox;
-	Tool(uint8_t id, const std::string& sprite);
+	Tool(u8 id, const std::string& sprite);
 	virtual ~Tool() = default;
 private:
-	uint8_t m_TileId;
+	u8 m_TileId;
 };
 
 class ToolBox : public ElementUI

@@ -11,7 +11,7 @@ bool AssetsManager::load_texture(const std::string& file_name, const std::string
         if (smooth)
             texture->setSmooth(true);
         m_Textures[asset_id] = texture;
-        LOG_INFO("AssetsManager: loaded texture '", '\b' + asset_id, "\b'");
+        LOG_OK("AssetsManager: loaded texture '", '\b' + asset_id, "\b'");
         return true;
     }
     else return false;
@@ -32,7 +32,7 @@ bool AssetsManager::load_font(const std::string& file_name, const std::string& a
     sf::Font* font = new sf::Font();
     if (font->loadFromFile("assets/" + file_name)) {
         m_Fonts[asset_id] = font;
-        LOG_INFO("AssetsManager: loaded font '", '\b' + asset_id, "\b'");
+        LOG_OK("AssetsManager: loaded font '", '\b' + asset_id, "\b'");
         return true;
     }
     else return false;

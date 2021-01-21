@@ -28,8 +28,8 @@ private:
 	std::vector<Storage*> m_Storages;
 	std::vector<vec2u> m_BoxPlacePositions;
 	std::vector<vec2u> m_StoragePositions;
-	std::vector<std::vector<uint16_t>> m_Map;
-	uint16_t m_StoragesFilled = 0;
+	std::vector<std::vector<u16>> m_Map;
+	u16 m_StoragesFilled = 0;
 	Player* m_Player = nullptr;
 	vec2u m_LevelSize;
 	vec2f m_TileScale = { 1.1f, 1.1f };
@@ -61,7 +61,7 @@ public:
 	inline static CameraBorders& get_cam_borders() { return m_CamBorders; };
 	inline static CameraInfo& get_cam_info() { return m_CamInfo; };
 	static void set_cam_borders(vec2f total_size, Rect canvas);
-	static void set_cam_info(vec2f total_size, Rect canvas, Player* p = nullptr);
+	static void set_cam_info(vec2f total_size, Rect canvas);
 private:
 	static CameraBorders m_CamBorders;
 	static CameraInfo m_CamInfo;

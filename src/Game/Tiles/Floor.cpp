@@ -1,6 +1,6 @@
 #include "Floor.h"
 
-Floor::Floor(vec2f place_pos, vec2u tile_size, uint8_t v)
+Floor::Floor(vec2f place_pos, vec2u tile_size, u8 v)
 	: m_TilePos(tile_size)
 {
 	v %= 4;

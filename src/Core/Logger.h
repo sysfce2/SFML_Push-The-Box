@@ -9,6 +9,7 @@
 #define _INFO_COLOR 9
 #define _WARN_COLOR 14
 #define _ERROR_COLOR 12
+#define _OK_COLOR 10
 
 /*******************************************
 ============================================
@@ -47,3 +48,4 @@ private:
 #define LOG_INFO(...) ::Logger::log(1, __VA_ARGS__);
 #define LOG_WARN(...) ::Logger::log(2, __VA_ARGS__);
 #define LOG_ERROR(...) ::Logger::log(3, __VA_ARGS__);
+#define LOG_OK(...) ::Logger::log(4, __VA_ARGS__);

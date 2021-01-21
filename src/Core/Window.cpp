@@ -2,8 +2,8 @@
 
 sf::Window* Window::m_Handle;
 vec2f Window::m_ResScale;
-uint16_t Window::m_Width;
-uint16_t Window::m_Height;
+u16 Window::m_Width;
+u16 Window::m_Height;
 bool Window::m_IsFocused = true;
 
 void Window::set_handle(sf::Window* window_handle)
@@ -35,12 +35,12 @@ vec2f Window::size()
 	return vec2f(m_Width, m_Height);
 }
 
-uint16_t Window::width()
+u16 Window::width()
 {
 	return m_Width;
 }
 
-uint16_t Window::height()
+u16 Window::height()
 {
 	return m_Height;
 }

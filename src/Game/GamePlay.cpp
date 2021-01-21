@@ -18,28 +18,28 @@ void GamePlay::update(const float& dt)
 
 	if (!m_CameraInfo.locked.x) {
 		// Right game screen side
-		if (camera_offset.x + player_size.x > m_fovWidth - m_CameraBorderDistance * A_RATIO)
-			m_Camera.x = player_pos.x + player_size.x - m_fovWidth + m_CameraBorderDistance * A_RATIO;
+		if (camera_offset.x + player_size.x > m_fovWidth - m_Border * A_RATIO)
+			m_Camera.x = player_pos.x + player_size.x - m_fovWidth + m_Border * A_RATIO;
 
 		// Left game screen side
-		else if (player_pos.x - m_Camera.x < m_CameraBorderDistance * A_RATIO)
-			m_Camera.x = player_pos.x - m_CameraBorderDistance * A_RATIO;
+		else if (player_pos.x - m_Camera.x < m_Border * A_RATIO)
+			m_Camera.x = player_pos.x - m_Border * A_RATIO;
 	}
 
 	if (!m_CameraInfo.locked.y) {
 		// Up game screen side
-		if (camera_offset.y + player_size.y > 1.f - m_CameraBorderDistance)
-			m_Camera.y = player_pos.y + player_size.y - 1.f + m_CameraBorderDistance;
+		if (camera_offset.y + player_size.y > 1.f - m_Border)
+			m_Camera.y = player_pos.y + player_size.y - 1.f + m_Border;
 
 		// Down game screen side
-		else if (camera_offset.y < m_CameraBorderDistance)
-			m_Camera.y = player_pos.y - m_CameraBorderDistance;
+		else if (camera_offset.y < m_Border)
+			m_Camera.y = player_pos.y - m_Border;
 	}
 	
 	// Update timer
-	uint32_t wts = static_cast<uint32_t>(m_ElapsedTime);
-	uint32_t epds = wts % 60u; wts -= epds;
-	uint32_t epdm = wts / 60u;
+	u32 wts = static_cast<u32>(m_ElapsedTime);
+	u32 epds = wts % 60u; wts -= epds;
+	u32 epdm = wts / 60u;
 	if (epds != m_ElapsedSeconds || epdm != m_ElapsedMinutes) {
 		m_ElapsedSeconds = epds;
 		m_ElapsedMinutes = epdm;
@@ -200,9 +200,10 @@ GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
 		// Camera setup
 		TileMap*& tm = m_TileMap;
 		vec2f total_size = (vec2f)tm->m_LevelSize * tm->m_TileSize / Window::size();
-		GameCamera::set_cam_info(total_size, { {0.f, 0.f}, {m_fovWidth, 1.f} }, m_Player);
+		GameCamera::set_cam_info(total_size, { {0.f, 0.f}, {m_fovWidth, 1.f} });
 		m_CameraInfo = GameCamera::get_cam_info();
 		m_Camera = m_CameraInfo.pos;
+		LOG_INFO("Game started on level:", m_LevelPath);
 	}
 	else {
 		LOG_ERROR("Can't open game level:", level_path);
