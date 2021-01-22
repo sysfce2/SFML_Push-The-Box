@@ -84,12 +84,12 @@ bool Animation::play_animation(const std::string& name, u8 fps, u8 mode, u32 rep
 
             m_CurrentAnimationName = name;
             m_Frames = (u32)frames->sprites.size();
-            m_StopAnimation = m_Frames == 1u;
+            m_StopAnimation = m_Frames == 1;
             m_CurrentAnimation = frames; 
             m_RepeatFrom = repeat_from;
             m_FrameTime = 1.f / fps;
             m_TimeElapsed = 0.f;
-            m_CurrentFrame = 1u; 
+            m_CurrentFrame = 1; 
             m_PlayBackward = false;
             m_EverPlayed = true;
             

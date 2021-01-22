@@ -18,7 +18,7 @@ Application::Application(const std::string& app_name) : m_AppName(app_name)
 	sf::Image icon;
 	if (icon.loadFromFile("icon.bmp")) {
 		m_Window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-		LOG_OK("Icon loaded");
+		LOG_OK("Application icon loaded");
 	}
 
 	Window::set_handle(&m_Window);

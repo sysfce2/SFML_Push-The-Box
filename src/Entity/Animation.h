@@ -17,7 +17,7 @@ class Animation
 public:
 	void update(const float& dt);
 	bool set_sprite_sheet(const std::string& texture_name);
-	bool play_animation(const std::string& name, u8 fps, u8 mode = ANIMATE_ONCE, u32 repeat_from = 0u);
+	bool play_animation(const std::string& name, u8 fps, u8 mode = ANIMATE_ONCE, u32 repeat_from = 0);
 	bool new_animation(const std::string& name, u16 x, u16 y, u16 w, u16 h, u32 frames);
 	inline std::string get_animation_name() const { return m_CurrentAnimationName; }
 	void stop();
@@ -36,9 +36,9 @@ private:
 	float m_FrameTime = 0.f;
 	float m_TimeElapsed = 0.f;
 	u8 m_PlayMode = ANIMATE_ONCE;
-	u32 m_Frames = 0u;
-	u32 m_CurrentFrame = 0u;
-	u32 m_RepeatFrom = 0u;
+	u32 m_Frames = 0;
+	u32 m_CurrentFrame = 0;
+	u32 m_RepeatFrom = 0;
 	std::string m_CurrentAnimationName;
 
 	AnimationFrames* m_CurrentAnimation = nullptr;
