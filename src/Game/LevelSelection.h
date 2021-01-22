@@ -4,38 +4,34 @@
 #include "UI/ButtonUI.h"
 #include "UI/TextUI.h"
 
-#define DIFFICULTY_SELECTION	LAYER_1
-#define EASY_LEVELS				LAYER_2
-#define HARD_LEVELS				LAYER_3
-#define EXPERT_LEVELS			LAYER_4
-
 class SelectBlock : public ElementUI
 {
 public:
 	friend class LevelSelection;
-	SelectBlock(const vec2f& position, u16 number);
+	void refresh();
+	SelectBlock(vec2f position, u16 number);
 	virtual ~SelectBlock() = default;
 private:
-	ButtonUI* m_PlayButton;
-	TextUI* m_NumberText;
+	ButtonUI* m_bPlay;
+	TextUI* m_tNumber;
+	TextUI* m_tTime;
+	TextUI* m_tMoves;
 	u16 m_Number;
 };
 
 class LevelSelection : public State {
+public:
+	friend class GamePlay;
+	LevelSelection();
+	virtual ~LevelSelection();
+
 private:
 	void update(const float& dt) override;
-public:
-	LevelSelection();
-	virtual ~LevelSelection() = default;
-private:
-	void switch_layer(u16 layer);
 
-	std::vector<SelectBlock*> m_Levels;
+	static std::vector<SelectBlock*> m_Levels;
 	ElementUI* m_Background;
 	TextUI* m_HeaderText;
-	ButtonUI* m_EasyButton;
-	ButtonUI* m_HardButton;
-	ButtonUI* m_ExpertButton;
-	ButtonUI* m_BackButton;
-	ButtonUI* m_EditorButton;
+	ButtonUI* m_bBack;
+	ButtonUI* m_bCustom;
+	ButtonUI* m_bEditor;
 };

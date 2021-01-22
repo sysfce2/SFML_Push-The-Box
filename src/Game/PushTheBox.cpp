@@ -1,6 +1,7 @@
 #include "PushTheBox.h"
 #include "MainMenu.h"
 #include "Core/Logger.h"
+#include "Progress.h"
 
 #include <iostream>
 #include <string>
@@ -42,6 +43,7 @@ bool PushTheBox::on_init()
 		return false;
 	}
 
+	GameProgress::get().load();
 	StatesManager::get().create_active_state(new MainMenu());
 	return true;
 }

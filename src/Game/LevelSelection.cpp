@@ -1,140 +1,121 @@
 #include "State/StatesManager.h"
 #include "Core/Window.h"
 #include "Core/Logger.h"
-
 #include "LevelSelection.h"
 #include "GamePlay.h"
+#include "Progress.h"
 #include "LevelEditor/LevelEditorMenu.h"
 
-const sf::Color GOLDEN_BROWN{ 105, 91, 0, 255 };
-const sf::Color HEADER_COLOR{ 229, 198, 0, 255 };
 const vec2f SELECT_BLOCK_SCALE{ 3.f, 3.f };
 const vec2f BTN_SCALE{ 4.5f, 4.5f };
-const u8 BTN_FNT_SIZE = 60;
+std::vector<SelectBlock*> LevelSelection::m_Levels;
 
-SelectBlock::SelectBlock(const vec2f& position, u16 number)
+void SelectBlock::refresh()
+{
+	LevelInfo* info = GameProgress::get().get_level_info(m_Number);
+	if (info != nullptr) {
+		if (info->completed) {
+			set_sprite("completed");
+			u32 elapsed = info->time;
+			u32 epds = elapsed % 60; elapsed -= epds;
+			u32 epdm = elapsed / 60;
+			std::wstring wss = std::to_wstring(epds);
+			std::wstring wsm = std::to_wstring(epdm);
+			if (epds < 10) wss = L"0" + wss;
+			if (epdm < 10) wsm = L"0" + wsm;
+			m_tTime->set_text(L"Czas: " + wsm + L":" + wss);
+			m_tMoves->set_text(L"Ruchy: " + std::to_wstring(info->moves));
+		}
+		else
+			set_sprite("not-completed");
+	}
+}
+
+SelectBlock::SelectBlock(vec2f position, u16 number)
 	: ElementUI("not-completed", SELECT_BLOCK_SCALE, position), m_Number(number)
 {
-	m_NumberText = new TextUI(std::to_string(number), "invasion", 48);
-	m_PlayButton = new ButtonUI("", SELECT_BLOCK_SCALE);
-	m_PlayButton->assign_button_sprite("play-btn", "play-btn-pressed");
-	m_NumberText->attach_position(this).center_y(0.015f);
-	m_PlayButton->attach_position(this).center_y(0.075f);
-	add_child_entity(m_NumberText);
-	add_child_entity(m_PlayButton);
+	m_tNumber = new TextUI(std::to_string(number), "joystix", 36);
+	m_tTime = new TextUI("Czas: -:-", "joystix", 24);
+	m_tMoves = new TextUI("Ruchy: -", "joystix", 24);
+	m_bPlay = new ButtonUI("", SELECT_BLOCK_SCALE);
+	m_bPlay->assign_button_sprite("play-btn", "play-btn-pressed");
+	m_tNumber->set_tcolor({ 229, 198, 0, 255 });
+	m_tNumber->attach_position(this).center_y(.0135f);
+	m_tTime->attach_position(this).set_position({.053f, .027f});
+	m_tMoves->attach_position(this).set_position({ .053f, .058f });
+	m_bPlay->attach_position(this).center_y(.17f);
+	if (number < 10) {
+		m_tTime->shift({ -.015f, 0.f });
+		m_tMoves->shift({ -.015f, 0.f });
+	}
+	add_child_entity(m_tNumber);
+	add_child_entity(m_tTime);
+	add_child_entity(m_tMoves);
+	add_child_entity(m_bPlay);
+	refresh();
 }
 
 void LevelSelection::update(const float& dt)
 {
-	u16 active_layer = layer_id();
-	if (active_layer == DIFFICULTY_SELECTION) {
-		if (m_EasyButton->was_pressed())	switch_layer(EASY_LEVELS);
-		else if (m_HardButton->was_pressed())	switch_layer(HARD_LEVELS);
-		else if (m_ExpertButton->was_pressed()) switch_layer(EXPERT_LEVELS);
-		else if (m_EditorButton->was_pressed())
-			StatesManager::get().create_active_state(new LevelEditorMenu());
-	}
-	else 
-		for (auto& b : m_Levels) if (b->m_PlayButton->was_pressed()) {
-			std::string type; std::wstring name;
-			if (active_layer == EASY_LEVELS) {
-				type = "easy";
-				name = L"£ATWY";
-			}
-			else if (active_layer == HARD_LEVELS) {
-				type = "hard";
-				name = L"TRUDNY";
-			}
-			else if (active_layer == EXPERT_LEVELS) {
-				type = "expert";
-				name = L"EKSPERT";
-			}
-			std::string level_path = "levels/" + type + "/";
-			level_path += type + "_" + std::to_string(b->m_Number) + ".lvl";
-			name += L" - " + std::to_wstring(b->m_Number);
-			StatesManager::get().create_active_state(new GamePlay(level_path, name));
-		}
+	if (m_bEditor->was_pressed())
+		StatesManager::get().create_active_state(new LevelEditorMenu());
 
-	if (m_BackButton->was_pressed())
-		if (active_layer != DIFFICULTY_SELECTION)
-			switch_layer(DIFFICULTY_SELECTION);
-		else destroy_state();
+	for (auto& b : m_Levels) if (b->m_bPlay->was_pressed()) {
+		std::string file_path = std::to_string(b->m_Number);
+		if (b->m_Number > 9) file_path = "level" + file_path + ".lvl";
+		else file_path = "level0" + file_path + ".lvl";
+		file_path = "levels/" + file_path;
+		StatesManager::get().create_active_state(new GamePlay(file_path, b->m_Number));
+	}
+
+	if (m_bBack->was_pressed())
+		destroy_state();
 }
 
 LevelSelection::LevelSelection()
 {
-	float btn_y = .2f;
-	float btn_off = .15f;
-	
 	m_Background = new ElementUI("header-state", { 1.5f, 1.5f });
 	m_HeaderText = new TextUI(L"WYBIERZ POZIOM", "joystix", 80);
-	m_EasyButton = new ButtonUI(L"£ATWE", BTN_SCALE, BTN_FNT_SIZE);
-	m_HardButton = new ButtonUI(L"TRUDNE", BTN_SCALE, BTN_FNT_SIZE);
-	m_ExpertButton = new ButtonUI(L"EKSPERT", BTN_SCALE, BTN_FNT_SIZE);
-	m_EditorButton = new ButtonUI(L"   EDYTOR\n   POZIOMóW", BTN_SCALE, 38);
-	m_BackButton = new ButtonUI(L"WRÓÆ", BTN_SCALE, BTN_FNT_SIZE);
+	m_bEditor = new ButtonUI(L"   EDYTOR\n   POZIOMóW", BTN_SCALE, 38);
+	m_bCustom = new ButtonUI(L"STWORZONE\n POZIOMY", BTN_SCALE, 38);
+	m_bBack = new ButtonUI(L"WRÓÆ", BTN_SCALE, 60);
 
-	m_HeaderText->set_tcolor(HEADER_COLOR);
+	m_HeaderText->set_tcolor({229, 198, 0, 255});
 	m_HeaderText->center_x(.03f);
-	m_EasyButton->center_x(btn_y);
-	m_HardButton->center_x(btn_y + btn_off);
-	m_ExpertButton->center_x(btn_y + btn_off * 2);
-	m_EditorButton->set_position({ .72f, .85f });
-	m_BackButton->center_x(.85f);
-	m_EditorButton->assign_button_sprite("editor-btn", "editor-btn-pressed");
+	m_bBack->center_x(.85f);
+
+	float x = m_bBack->get_position().x, length = m_bBack->get_size().x;
+	m_bCustom->set_position({ x - length - .08f, .85f });
+	m_bEditor->set_position({ x + length + .08f, .85f });
+	m_bEditor->assign_button_sprite("editor-btn", "editor-btn-pressed");
 	
 	make_entity(m_Background);
 	make_entity(m_HeaderText);
-	make_entity(m_EasyButton, DIFFICULTY_SELECTION);
-	make_entity(m_HardButton, DIFFICULTY_SELECTION);
-	make_entity(m_ExpertButton, DIFFICULTY_SELECTION);
-	make_entity(m_EditorButton, DIFFICULTY_SELECTION);
-	make_entity(m_BackButton);
+	make_entity(m_bBack);
+	make_entity(m_bCustom);
+	make_entity(m_bEditor);
 
+	u16 rows = 4, cols = 4;
 	SelectBlock* block = new SelectBlock({ 0.f, 0.f }, 1);
 	vec2f block_size =	block->get_size();
-	vec2f place_offset = { (1.f - block_size.x * 6.f) / 7.f, .03f };
+	vec2f place_offset = { (1.f - block_size.x * float(rows)) / float(rows + 1), .06f };
 	vec2f place_pos = { place_offset.x, .18f };
 	delete block;
-
-	u16 rows = 5; u16 cols = 6;
+	
 	for (u16 i = 0; i < rows; i++) {
 		for (u16 j = 0; j < cols; j++) {
-			u16 level_number = i * 6 + j + 1;
+			u16 level_number = i * rows + j + 1;
 			block = new SelectBlock(place_pos, level_number);
-			block->vanish(true);
-			if (level_number > 6)
-				block->m_PlayButton->disable();
 			m_Levels.emplace_back(block);
-			make_entity(block, EASY_LEVELS | HARD_LEVELS | EXPERT_LEVELS);
+			make_entity(block);
 			place_pos.x += place_offset.x + block_size.x;
 		}
 		place_pos.x = place_offset.x;
 		place_pos.y += place_offset.y + block_size.y;
 	}
-
-	set_main_layer(DIFFICULTY_SELECTION);
 }
 
-void LevelSelection::switch_layer(u16 layer)
+LevelSelection::~LevelSelection()
 {
-	std::wstring header_text;
-	switch (layer) {
-	case DIFFICULTY_SELECTION:
-		header_text = L"WYBIERZ POZIOM";
-		break;
-	case EASY_LEVELS:
-		header_text = L"POZIOM £ATWY";
-		break;
-	case HARD_LEVELS:
-		header_text = L"POZIOM TRUDNY";
-		break;
-	case EXPERT_LEVELS:
-		header_text = L"POZIOM EKSPERT";
-		break;
-	}
-
-	m_HeaderText->set_text(header_text);
-	m_HeaderText->center_x();
-	set_main_layer(layer);
+	m_Levels.clear();
 }

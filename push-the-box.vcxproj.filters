@@ -29,6 +29,8 @@
     <ClInclude Include="src\UI\ElementUI.h" />
     <ClInclude Include="src\UI\TextUI.h" />
     <ClInclude Include="src\UI\TextBoxUI.h" />
+    <ClInclude Include="src\Game\Progress.h" />
+    <ClInclude Include="src\Utils\sha256.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -58,6 +60,8 @@
     <ClCompile Include="src\UI\ElementUI.cpp" />
     <ClCompile Include="src\UI\TextUI.cpp" />
     <ClCompile Include="src\UI\TextBoxUI.cpp" />
+    <ClCompile Include="src\Utils\sha256.cpp" />
+    <ClCompile Include="src\Game\Progress.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\assets\icon.ico" />

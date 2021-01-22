@@ -94,7 +94,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)vendor\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -112,7 +112,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)vendor\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -171,6 +171,7 @@
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Game\LevelEditor\Editor.h" />
     <ClInclude Include="src\Game\LevelEditor\LevelEditorMenu.h" />
+    <ClInclude Include="src\Game\Progress.h" />
     <ClInclude Include="src\Game\Tiles\Storage.h" />
     <ClInclude Include="src\State\Layer.h" />
     <ClInclude Include="src\State\State.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="src\UI\ElementUI.h" />
     <ClInclude Include="src\UI\TextUI.h" />
     <ClInclude Include="src\UI\TextBoxUI.h" />
+    <ClInclude Include="src\Utils\sha256.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -199,6 +201,7 @@
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Game\LevelEditor\Editor.cpp" />
     <ClCompile Include="src\Game\LevelEditor\LevelEditorMenu.cpp" />
+    <ClCompile Include="src\Game\Progress.cpp" />
     <ClCompile Include="src\Game\Tiles\Storage.cpp" />
     <ClCompile Include="src\State\Layer.cpp" />
     <ClCompile Include="src\State\State.cpp" />
@@ -218,6 +221,7 @@
     <ClCompile Include="src\UI\CheckBoxUI.cpp" />
     <ClCompile Include="src\UI\TextUI.cpp" />
     <ClCompile Include="src\UI\TextBoxUI.cpp" />
+    <ClCompile Include="src\Utils\sha256.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />

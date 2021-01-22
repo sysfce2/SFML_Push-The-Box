@@ -3,6 +3,8 @@
 #include "Core/Logger.h"
 #include "Core/Window.h"
 #include "State/StatesManager.h"
+#include "Progress.h"
+#include "LevelSelection.h"
 
 using KB = sf::Keyboard;
 constexpr float A_RATIO = 9.f / 16.f;
@@ -37,16 +39,16 @@ void GamePlay::update(const float& dt)
 	}
 	
 	// Update timer
-	u32 wts = static_cast<u32>(m_ElapsedTime);
-	u32 epds = wts % 60u; wts -= epds;
-	u32 epdm = wts / 60u;
+	u32 wts = (u32)m_ElapsedTime;
+	u32 epds = wts % 60; wts -= epds;
+	u32 epdm = wts / 60;
 	if (epds != m_ElapsedSeconds || epdm != m_ElapsedMinutes) {
 		m_ElapsedSeconds = epds;
 		m_ElapsedMinutes = epdm;
 		std::wstring m = std::to_wstring(epdm);
 		std::wstring s = std::to_wstring(epds);
-		if (epdm / 10u == 0u) m = L"0" + m;
-		if (epds / 10u == 0u) s = L"0" + s;
+		if (epdm / 10 == 0u) m = L"0" + m;
+		if (epds / 10 == 0u) s = L"0" + s;
 		m_Timer->set_text(L"Czas: " + m + L":" + s);
 		m_Timer->center_x();
 	}
@@ -78,7 +80,14 @@ void GamePlay::update(const float& dt)
 
 	// Level finished
 	if (m_TileMap->m_Storages.size() == m_TileMap->m_StoragesFilled) {
-		
+		if (m_LevelNumber != -1) {
+			LevelInfo* info = GameProgress::get().get_level_info(m_LevelNumber);
+			info->completed = true;
+			info->moves = m_Moves;
+			info->time = (u32)m_ElapsedTime;
+			LevelSelection::m_Levels.at(m_LevelNumber - 1)->refresh();
+			GameProgress::get().save();
+		}
 		destroy_state();
 	}
 
@@ -109,23 +118,24 @@ void GamePlay::update(const float& dt)
 
 	if (m_Restart->was_pressed()) {
 		destroy_state();
-		StatesManager::get().create_active_state(new GamePlay(m_LevelPath, m_LevelNameStr));
+		StatesManager::get().create_active_state(new GamePlay(m_LevelPath, m_LevelNumber));
 	}
 
 	if (m_Exit->was_pressed()) 
 		destroy_state();
 }
 
-GamePlay::GamePlay(const std::string& level_path, const std::wstring& name)
-	: m_LevelPath(level_path), m_LevelNameStr(name)
+GamePlay::GamePlay(const std::string& level_path, i32 number)
+	: m_LevelPath(level_path), m_LevelNumber(number)
 {
 	m_TileMap = new TileMap();
 	if (m_TileMap->load_level(m_LevelPath)) {
+		std::wstring name = L"LEVEL " + std::to_wstring(number);
 
 		// Initialize UI elements
 		m_Background = new ElementUI("gameplay-background", { 1.f, 1.f });
 		m_Menu = new ElementUI("gameplay-menu", { 1.5f, 1.5f });
-		m_LevelName = new TextUI(m_LevelNameStr, "joystix", 38);
+		m_LevelName = new TextUI(name, "joystix", 38);
 		m_Timer = new TextUI("Czas: 00:00", "joystix", 36);
 		m_MovesText = new TextUI("Ruchy: 0", "joystix", 36);
 		m_UndosText = new TextUI("0/" + std::to_string(UNDOS_LIMIT), "joystix", 36);

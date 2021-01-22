@@ -9,7 +9,7 @@ class GamePlay : public State
 public:
 	friend class TileMap;
 	friend class GameCamera;
-	GamePlay(const std::string& level_path, const std::wstring& name = L"???");
+	GamePlay(const std::string& level_path, i32 number = -1);
 	virtual ~GamePlay() = default;
 
 private:
@@ -23,16 +23,18 @@ private:
 	float m_fovWidth = 1.f;
 	Player* m_Player = nullptr;
 	TileMap* m_TileMap = nullptr;
+	std::vector<Undo> m_UndoRegister;
+	std::string m_LevelPath;
+	i32 m_LevelNumber = -1;
 	u32 m_Moves = 0;
 	u32 m_PlayerMoves = 0;
-	std::string m_LevelPath;
-	std::wstring m_LevelNameStr;
-	std::vector<Undo> m_UndoRegister;
-
+	u32 m_ElapsedTotal = 0;
+	u32 m_ElapsedMinutes = 0;
+	u32 m_ElapsedSeconds = 0;
+	u32 m_AvaliableUndos = 0;
 	float m_ElapsedTime = 0.f;
-	u32 m_ElapsedMinutes = 0u;
-	u32 m_ElapsedSeconds = 0u;
-	u32 m_AvaliableUndos = 0u;
+
+	// Menu UI
 	ElementUI* m_Background = nullptr;
 	ElementUI* m_Menu = nullptr;
 	TextUI* m_LevelName = nullptr;
