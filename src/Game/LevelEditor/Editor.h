@@ -10,18 +10,7 @@
 class Tile;
 class Tool;
 class ToolBox;
-
-struct EditorValues
-{
-	Rect canvas_rect = { {.03f, .055f}, {.67f, .88f} };
-	u16 boxes_placed = 0;
-	u16 storages_placed = 0;
-	u16 boxes_count = 4;
-	u8 selected_tool = 1;
-	Tile* player = nullptr;
-	bool camera_changed = false;
-	bool player_placed = false;
-};
+struct EditorValues;
 
 class Editor : public State
 {
@@ -30,7 +19,7 @@ private:
 	void save_level();
 
 public:
-	Editor(std::string file_name, vec2u size);
+	Editor(bool load_level, std::string file_path, vec2u size = vec2u());
 	virtual ~Editor() = default;
 	static EditorValues Values;
 
@@ -38,7 +27,7 @@ private:
 	CameraInfo m_CameraInfo;
 	vec2f m_TileSize;
 	vec2u m_LevelSize;
-	std::string m_FileName;
+	std::string m_FilePath;
 	std::vector<std::vector<Tile*>> m_Tiles;
 	
 	ElementUI* m_Canvas;
@@ -106,4 +95,27 @@ public:
 
 private:
 	ButtonUI* m_bBack;
+};
+
+struct EditorValues
+{
+	Rect canvas_rect;
+	u16 boxes_placed;
+	u16 storages_placed;
+	u16 boxes_count;
+	u8 selected_tool;
+	Tile* player = nullptr;
+	bool camera_changed;
+	bool player_placed;
+
+	void reset() {
+		canvas_rect = { {.03f, .055f}, {.67f, .88f} };
+		boxes_placed = 0;
+		storages_placed = 0;
+		boxes_count = 4;
+		selected_tool = 1;
+		player = nullptr;
+		camera_changed = false;
+		player_placed = false;
+	}
 };

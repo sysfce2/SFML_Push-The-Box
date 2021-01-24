@@ -41,6 +41,12 @@ void State::set_main_layer(u16 new_layer_id)
 	m_MainLayerId = new_layer_id;
 }
 
+void State::hide_all_layers()
+{
+	for (u16 i = 0; i < MAX_LAYERS; i++)
+		layer(1 << i)->hide();
+}
+
 void State::update_entities(const float& dt)
 {
 	auto it = m_Entities.begin();

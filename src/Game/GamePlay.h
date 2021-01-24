@@ -9,7 +9,7 @@ class GamePlay : public State
 public:
 	friend class TileMap;
 	friend class GameCamera;
-	GamePlay(const std::string& level_path, i32 number = -1);
+	GamePlay(const std::string& level_path, i32 number = -1, const std::wstring name = L"");
 	virtual ~GamePlay() = default;
 
 private:

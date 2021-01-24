@@ -6,6 +6,11 @@
 #include "Progress.h"
 #include "LevelEditor/LevelEditorMenu.h"
 
+#include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
 const vec2f SELECT_BLOCK_SCALE{ 3.f, 3.f };
 const vec2f BTN_SCALE{ 4.5f, 4.5f };
 std::vector<SelectBlock*> LevelSelection::m_Levels;
@@ -57,9 +62,6 @@ SelectBlock::SelectBlock(vec2f position, u16 number)
 
 void LevelSelection::update(const float& dt)
 {
-	if (m_bEditor->was_pressed())
-		StatesManager::get().create_active_state(new LevelEditorMenu());
-
 	for (auto& b : m_Levels) if (b->m_bPlay->was_pressed()) {
 		std::string file_path = std::to_string(b->m_Number);
 		if (b->m_Number > 9) file_path = "level" + file_path + ".lvl";
@@ -67,6 +69,12 @@ void LevelSelection::update(const float& dt)
 		file_path = "levels/" + file_path;
 		StatesManager::get().create_active_state(new GamePlay(file_path, b->m_Number));
 	}
+
+	if (m_bCustom->was_pressed())
+		StatesManager::get().create_active_state(new CustomLevels());
+
+	if (m_bEditor->was_pressed())
+		StatesManager::get().create_active_state(new LevelEditorMenu());
 
 	if (m_bBack->was_pressed())
 		destroy_state();
@@ -118,4 +126,105 @@ LevelSelection::LevelSelection()
 LevelSelection::~LevelSelection()
 {
 	m_Levels.clear();
+}
+
+CustomLevels::CustomLevels()
+{
+	m_Background = new ElementUI("header-state", { 1.5f, 1.5f });
+	m_HeaderText = new TextUI(L"WYBIERZ POZIOM", "joystix", 80);
+	m_bBack = new ButtonUI(L"WRÓÆ", BTN_SCALE, 60);
+	m_HeaderText->set_tcolor({ 229, 198, 0, 255 });
+	m_HeaderText->center_x(.03f);
+	m_bBack->center_x(.85f);
+
+	make_entity(m_Background);
+	make_entity(m_HeaderText);
+	make_entity(m_bBack);
+	m_LevelSelector.create(this, L"GRAJ");
+}
+
+void CustomLevels::update(const float& dt)
+{
+	if (m_LevelSelector.action_was_pressed()) {
+		std::string path = m_LevelSelector.get_level_path();
+		std::wstring name = m_LevelSelector.get_level_name();
+		if (path.size() > 0 && name.size() > 0)
+			StatesManager::get().create_active_state(new GamePlay(path, -1, name));
+	}
+
+	if (m_bBack->was_pressed())
+		destroy_state();
+}
+
+void CustomLevelSelector::create(State* owner_state, std::wstring action_btn_name, u16 add_to_layers)
+{
+	m_LevelList = new SelectListUI({ .3f, .05f }, 10);
+	m_bScrollUp = new ButtonUI("", { 3.f, 3.f }, 36);
+	m_bScrollDown = new ButtonUI("", { 3.f, 3.f }, 36);
+	m_bSelectAction = new ButtonUI(action_btn_name, { 4.f, 4.f }, 48);
+	
+	auto get_file_name = [&](std::string path) -> std::string {
+		std::string name;
+		bool dot = false;
+		for (int i = path.length() - 1; i >= 0; i--) {
+			if (dot) {
+				if (path[i] == '/')
+					break;
+				name = path[i] + name;
+			}
+			else if (path[i] == '.')
+				dot = true;
+		}
+		return name;
+	};
+
+	std::string path = "levels/custom/";
+	for (const auto& entry : fs::directory_iterator(path)) {
+		std::string fp = entry.path().u8string();
+		std::string ext = fp.substr(fp.size() - 4, 4);
+		if (ext == ".lvl") {
+			std::string file = get_file_name(fp);
+			m_LevelList->add_element(std::wstring(file.begin(), file.end()), fp);
+		}
+	}
+
+	ElementUI* arrow_up = new ElementUI("arrow_up", { 3.f, 3.f });
+	ElementUI* arrow_down = new ElementUI("arrow_down", { 3.f, 3.f });
+	m_bScrollUp->assign_button_sprite("btn-1x1", "btn-1x1-pressed");
+	m_bScrollDown->assign_button_sprite("btn-1x1", "btn-1x1-pressed");
+	m_bScrollUp->set_symbol(arrow_up);
+	m_bScrollDown->set_symbol(arrow_down);
+	m_LevelList->center_x(.15f);
+
+	vec2f list_pos = m_LevelList->get_position();
+	vec2f list_size = m_LevelList->get_size();
+
+	float off = .02f;
+	float x_pos = list_pos.x + list_size.x + off;
+	m_bScrollUp->set_position({ x_pos, list_pos.y + off });
+	m_bScrollDown->set_position({ x_pos, list_pos.y + list_size.y - m_bScrollDown->get_size().y - off });
+	m_bSelectAction->set_position({x_pos + off, list_pos.y + list_size.y / 2.f - m_bSelectAction->get_size().y / 2.f});
+
+	m_LevelList->set_scroll_up_button(m_bScrollUp);
+	m_LevelList->set_scroll_down_button(m_bScrollDown);
+	
+	owner_state->make_entity(m_LevelList, add_to_layers);
+	owner_state->make_entity(m_bScrollUp, add_to_layers);
+	owner_state->make_entity(m_bScrollDown, add_to_layers);
+	owner_state->make_entity(m_bSelectAction, add_to_layers);
+}
+
+bool CustomLevelSelector::action_was_pressed()
+{
+	return m_bSelectAction->was_pressed();
+}
+
+std::string CustomLevelSelector::get_level_path()
+{
+	return m_LevelList->get_selected_value();
+}
+
+std::wstring CustomLevelSelector::get_level_name()
+{
+	return m_LevelList->get_selected_name();
 }

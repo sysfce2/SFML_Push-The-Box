@@ -95,8 +95,7 @@ void Editor::save_level()
 	}
 
 	if (valid) {
-		std::string path = "levels/custom/" + m_FileName + ".lvl";
-		std::ofstream output(path, std::ios_base::out | std::ios_base::binary);
+		std::ofstream output(m_FilePath, std::ios_base::out | std::ios_base::binary);
 		if (output.is_open()) {
 
 			output.write((char*)&m_LevelSize, sizeof(vec2u));
@@ -118,7 +117,7 @@ void Editor::save_level()
 		}
 		output.close();
 		result = L"Poziom zosta³ pomyœlnie zapisany!";
-		LOG_OK("Editor: Level saved [Output file: " + path +"] [Size:", 18 + Values.storages_placed * 8 + m_LevelSize.x * m_LevelSize.y, "B]");
+		LOG_OK("Editor: Level saved [Output file: " + m_FilePath +"] [Size:", 18 + Values.storages_placed * 8 + m_LevelSize.x * m_LevelSize.y, "B]");
 		StatesManager::get().create_active_state(new OnSave(result, info));
 	}
 	else {
@@ -128,9 +127,50 @@ void Editor::save_level()
 
 }
 
-Editor::Editor(std::string file_name, vec2u size)
-	: m_FileName(file_name), m_LevelSize(size)
+Editor::Editor(bool load_level, std::string file_path, vec2u size)
+	: m_FilePath(file_path), m_LevelSize(size)
 {
+	Values.reset();
+
+	// Check if load level is needed
+	vec2u player_pos;
+	std::vector<vec2u> loaded_storages_pos;
+	std::vector<vec2u> loaded_boxes_pos;
+	std::vector<u8> loaded_tiles;
+	if (load_level) {
+		LOG("Level loaded:", file_path);
+		std::ifstream file(file_path, std::ios_base::in | std::ios_base::binary);
+
+		if (file.is_open()) {
+			file.read(reinterpret_cast<char*>(&m_LevelSize), sizeof(vec2u));
+			LOG("Level size: ", m_LevelSize);
+
+			file.read(reinterpret_cast<char*>(&player_pos), sizeof(vec2u));
+			LOG("Player pos: ", player_pos);
+
+			file.read(reinterpret_cast<char*>(&Values.boxes_count), sizeof(u16));
+
+			loaded_storages_pos.reserve(Values.boxes_count);
+			for (u16 i = 0; i < Values.boxes_count; i++) {
+				vec2u storage_pos;
+				file.read(reinterpret_cast<char*>(&storage_pos), sizeof(vec2u));
+				loaded_storages_pos.emplace_back(storage_pos);
+			}
+
+			for (u16 i = 0; i < m_LevelSize.x * m_LevelSize.y; i++) {
+				u8 tile_id = NONE_TILE;
+				file.read(reinterpret_cast<char*>(&tile_id), sizeof(u8));
+				if (tile_id == BOX_TILE) {
+					loaded_boxes_pos.emplace_back(vec2u(i / m_LevelSize.y, i % m_LevelSize.y));
+					loaded_tiles.emplace_back(FLOOR_TILE);
+				}
+				else
+					loaded_tiles.emplace_back(tile_id);
+			}
+			file.close();
+		}
+	}
+
 	// Camera
 	vec2f total_size = (vec2f)m_LevelSize * Tile(&m_Camera, vec2u()).get_size();
 	GameCamera::set_cam_info(total_size, Values.canvas_rect);
@@ -138,9 +178,8 @@ Editor::Editor(std::string file_name, vec2u size)
 	m_CameraInfo = GameCamera::get_cam_info();
 	m_Camera = m_CameraInfo.pos;
 
-	// Initialize
+	// Initialize UI
 	m_Canvas = new ElementUI();
-	m_ToolBox = new ToolBox();
 	m_Background = new ElementUI("editor-state", { 1.5f, 1.5f });
 	m_HeaderText = new TextUI(L"EDYTOR", "joystix", 80);
 	m_bSave = new ButtonUI(L"ZAPISZ", { 4.2f, 4.2f }, 42);
@@ -151,27 +190,48 @@ Editor::Editor(std::string file_name, vec2u size)
 	info_text += L"[GUMKA: PRAWY PRZYCISK MYSZY]";
 	m_Info = new TextUI(info_text, "joystix", 25);
 
-	Values.player = new Tile(&m_Camera, { 0u, 0u }, PLAYER_TILE);
-	Values.player->vanish(true);
-
 	auto& canvas = Values.canvas_rect;
 	m_Canvas->set_size(canvas.size).set_position(canvas.pos);
 	m_Canvas->set_color({ 16, 16, 55, 255 });
 	m_HeaderText->set_tcolor({ 229, 198, 0, 255 });
-	m_HeaderText->attach_position(m_ToolBox).center_x(-.115f);
-	m_bSave->attach_position(m_ToolBox).center_x(.53f);
-	m_bExit->attach_position(m_ToolBox).center_x(.67f);
 	m_Info->center_x(.96f);
 
+	// Player tile
+	Values.player = new Tile(&m_Camera, player_pos, PLAYER_TILE);
+	Values.player->vanish(true);
+
 	// Construct tiles
-	m_Tiles.reserve(size.x);
-	for (u16 i = 0; i < size.x; i++) {
+	m_Tiles.reserve(m_LevelSize.x);
+	for (u16 i = 0; i < m_LevelSize.x; i++) {
 		m_Tiles.emplace_back(std::vector<Tile*>());
-		m_Tiles.back().reserve(size.y);
-		for (u16 j = 0; j < size.y; j++)
+		m_Tiles.back().reserve(m_LevelSize.y);
+		for (u16 j = 0; j < m_LevelSize.y; j++)
 			m_Tiles.back().emplace_back(new Tile(&m_Camera, { i, j }));
 		if (i == 0) m_TileSize = m_Tiles.back().back()->get_size();
 	}
+
+	// Set tiles if loaded level
+	if (load_level) {
+		for (u32 i = 0; i < loaded_tiles.size(); i++) {
+			u16 x = i % m_LevelSize.y;
+			u16 y = i / m_LevelSize.y;
+			m_Tiles.at(y).at(x)->set_tile(loaded_tiles.at(i));
+		}
+		
+		for (auto& storage_pos : loaded_storages_pos)
+			m_Tiles.at(storage_pos.x).at(storage_pos.y)->set_tile(STORAGE_TILE);
+
+		for (auto& box_pos : loaded_boxes_pos)
+			m_Tiles.at(box_pos.x).at(box_pos.y)->set_tile(BOX_TILE);
+
+		m_Tiles.at(player_pos.x).at(player_pos.y)->set_tile(PLAYER_TILE);
+	}
+
+	// ToolBox UI
+	m_ToolBox = new ToolBox();
+	m_HeaderText->attach_position(m_ToolBox).center_x(-.115f);
+	m_bSave->attach_position(m_ToolBox).center_x(.53f);
+	m_bExit->attach_position(m_ToolBox).center_x(.67f);
 
 	// Make canvas
 	make_entity(m_Canvas);

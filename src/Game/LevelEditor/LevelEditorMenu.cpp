@@ -25,6 +25,13 @@ void LevelEditorMenu::update(const float& dt)
 		if (m_bCreate->was_pressed() && create_level())
 			destroy_state();
 	}
+	else if (active_layer == LE_LOAD) {
+		if (m_LevelSelector.action_was_pressed()) {
+			std::string level_path = m_LevelSelector.get_level_path();
+			if (level_path.size() > 0)
+				StatesManager::get().create_active_state(new Editor(true, level_path));
+		}
+	}
 
 	if (m_bBack->was_pressed())
 		if (active_layer != LE_MENU) {
@@ -51,7 +58,7 @@ bool LevelEditorMenu::create_level()
 
 	if (size.x < 5u || size.y < 5u) return false;
 
-	StatesManager::get().create_active_state(new Editor(level_name, size));
+	StatesManager::get().create_active_state(new Editor(false, "levels/custom/" + level_name + ".lvl", size));
 	return true;
 }
 
@@ -85,7 +92,7 @@ LevelEditorMenu::LevelEditorMenu()
 	m_NewCaption3 = new TextUI(L"WYSOKOŒÆ POZIOMU (5-99)", "joystix", 36);
 	m_bCreate = new ButtonUI(L"STWÓRZ", BUTTON_SCALE, 60);
 
-	m_tbLevelName->set_max_chars(14);
+	m_tbLevelName->set_max_chars(16);
 	m_tbLevelWidth->only_numbers(); m_tbLevelHeight->only_numbers();
 	m_tbLevelWidth->set_max_chars(2); m_tbLevelHeight->set_max_chars(2);
 	m_NewCaption1->center_x(.2f);
@@ -104,6 +111,8 @@ LevelEditorMenu::LevelEditorMenu()
 	make_entity(m_NewCaption3, LE_NEW);
 	make_entity(m_bCreate, LE_NEW);
 
-	set_main_layer(LE_NEW);
+	m_LevelSelector.create(this, L"WCZYTAJ", LE_LOAD);
+
+	hide_all_layers();
 	set_main_layer(LE_MENU);
 }

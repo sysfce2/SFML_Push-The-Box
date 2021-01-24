@@ -31,6 +31,7 @@
     <ClInclude Include="src\UI\TextBoxUI.h" />
     <ClInclude Include="src\Game\Progress.h" />
     <ClInclude Include="src\Utils\sha256.h" />
+    <ClInclude Include="src\UI\SelectListUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -62,6 +63,7 @@
     <ClCompile Include="src\UI\TextBoxUI.cpp" />
     <ClCompile Include="src\Utils\sha256.cpp" />
     <ClCompile Include="src\Game\Progress.cpp" />
+    <ClCompile Include="src\UI\SelectListUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\assets\icon.ico" />

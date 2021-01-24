@@ -45,7 +45,7 @@ protected:
 	Entity& add_child_entity(Entity* entity);
 
 public:
-	Entity(const Entity& entity) = delete;
+	//Entity(const Entity& entity) = delete;
 	Entity();
 	virtual ~Entity();
 

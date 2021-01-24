@@ -61,12 +61,6 @@ void GamePlay::update(const float& dt)
 
 	if (m_UndoRegister.size() != m_AvaliableUndos) {
 		m_AvaliableUndos = m_UndoRegister.size();
-
-		if (m_UndoButton->is_disabled())
-			if (m_AvaliableUndos > 0) m_UndoButton->disable(false);
-		else
-			if (m_AvaliableUndos == 0) m_UndoButton->disable();
-
 		m_UndosText->set_text(std::to_wstring(m_AvaliableUndos) + L"/" + std::to_wstring(UNDOS_LIMIT));
 		m_UndosText->center_x();
 	}
@@ -125,17 +119,19 @@ void GamePlay::update(const float& dt)
 		destroy_state();
 }
 
-GamePlay::GamePlay(const std::string& level_path, i32 number)
+GamePlay::GamePlay(const std::string& level_path, i32 number, const std::wstring name)
 	: m_LevelPath(level_path), m_LevelNumber(number)
 {
 	m_TileMap = new TileMap();
 	if (m_TileMap->load_level(m_LevelPath)) {
-		std::wstring name = L"LEVEL " + std::to_wstring(number);
+		std::wstring _name = name;
+		if (number > 0)
+			std::wstring name = L"LEVEL " + std::to_wstring(number);
 
 		// Initialize UI elements
 		m_Background = new ElementUI("gameplay-background", { 1.f, 1.f });
 		m_Menu = new ElementUI("gameplay-menu", { 1.5f, 1.5f });
-		m_LevelName = new TextUI(name, "joystix", 38);
+		m_LevelName = new TextUI(_name, "joystix", 32);
 		m_Timer = new TextUI("Czas: 00:00", "joystix", 36);
 		m_MovesText = new TextUI("Ruchy: 0", "joystix", 36);
 		m_UndosText = new TextUI("0/" + std::to_string(UNDOS_LIMIT), "joystix", 36);
@@ -161,7 +157,6 @@ GamePlay::GamePlay(const std::string& level_path, i32 number)
 		m_MovesText->attach_position(m_Menu).center_x(.18f);
 		m_UndoButton->assign_button_sprite("btn-3x1", "btn-3x1-pressed");
 		m_UndoButton->attach_position(m_Menu).center_x(.24f);
-		m_UndoButton->disable();
 		m_UndosText->attach_position(m_Menu).center_x(.33f);
 
 		ElementUI* arrow_up = new ElementUI("arrow_up", BTN_SCALE);

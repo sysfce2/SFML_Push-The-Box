@@ -27,7 +27,7 @@ void CheckBoxUI::select(bool selected)
 void CheckBoxUI::disable(bool disabled)
 {
 	m_IsDisabled = disabled;
-	if (disabled && m_IsSelected) select(false);
+	select(false);
 	if (disabled) set_color(sf::Color(222, 222, 222, 75));
 	else  set_color(sf::Color(255, 255, 255, 255));
 }

@@ -188,6 +188,7 @@
     <ClInclude Include="src\UI\CheckBoxUI.h" />
     <ClInclude Include="src\UI\ButtonUI.h" />
     <ClInclude Include="src\UI\ElementUI.h" />
+    <ClInclude Include="src\UI\SelectListUI.h" />
     <ClInclude Include="src\UI\TextUI.h" />
     <ClInclude Include="src\UI\TextBoxUI.h" />
     <ClInclude Include="src\Utils\sha256.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="src\UI\ButtonUI.cpp" />
     <ClCompile Include="src\UI\ElementUI.cpp" />
     <ClCompile Include="src\UI\CheckBoxUI.cpp" />
+    <ClCompile Include="src\UI\SelectListUI.cpp" />
     <ClCompile Include="src\UI\TextUI.cpp" />
     <ClCompile Include="src\UI\TextBoxUI.cpp" />
     <ClCompile Include="src\Utils\sha256.cpp" />

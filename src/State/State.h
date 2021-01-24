@@ -12,13 +12,13 @@ class State
 public:
 	friend class Application;
 	friend class StatesManager;
+	Entity* make_entity(Entity* entity, u16 layers = 0x0);
 
 protected:
-
-	Entity* make_entity(Entity* entity, u16 layers = 0x0);
 	Layer* layer(u16 layer_id);
 	inline u16 layer_id() const { return m_MainLayerId; }
 	void set_main_layer(u16 new_layer_id);
+	void hide_all_layers();
 	void update_entities(const float& dt);
 	void render_entities(sf::RenderTarget& target);
 	void destroy_state();

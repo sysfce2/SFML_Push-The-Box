@@ -2,6 +2,7 @@
 #include "State/State.h"
 #include "UI/ButtonUI.h"
 #include "UI/TextBoxUI.h"
+#include "../LevelSelection.h"
 
 #define LE_MENU LAYER_1
 #define LE_NEW LAYER_2
@@ -16,6 +17,7 @@ public:
 	LevelEditorMenu();
 	virtual ~LevelEditorMenu() = default;
 private:
+	CustomLevelSelector m_LevelSelector;
 
 	ElementUI* m_Background;
 	TextUI* m_HeaderText;
