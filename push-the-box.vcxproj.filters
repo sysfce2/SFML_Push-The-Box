@@ -23,7 +23,6 @@
     <ClInclude Include="src\Game\Tiles\Wall.h" />
     <ClInclude Include="src\Game\Tiles\Storage.h" />
     <ClInclude Include="src\Game\LevelEditor\Editor.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="src\UI\ButtonUI.h" />
     <ClInclude Include="src\UI\CheckBoxUI.h" />
     <ClInclude Include="src\UI\ElementUI.h" />
@@ -32,6 +31,7 @@
     <ClInclude Include="src\Game\Progress.h" />
     <ClInclude Include="src\Utils\sha256.h" />
     <ClInclude Include="src\UI\SelectListUI.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp" />
@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\assets\icon.ico" />
-    <Image Include="icon1.ico" />
+    <Image Include="res\icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="push-the-box.rc" />

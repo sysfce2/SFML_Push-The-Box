@@ -33,6 +33,9 @@ void MainMenu::update(const float& dt)
 	if (m_PlayButton->was_pressed())
 		StatesManager::get().create_active_state(new LevelSelection());
 
+	if (m_OptionsButton->was_pressed())
+		system("notepad.exe app.config");
+
 	if (m_ExitButton->was_pressed())
 		destroy_state();
 }

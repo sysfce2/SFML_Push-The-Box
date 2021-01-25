@@ -218,11 +218,11 @@ Editor::Editor(bool load_level, std::string file_path, vec2u size)
 			m_Tiles.at(y).at(x)->set_tile(loaded_tiles.at(i));
 		}
 		
-		for (auto& storage_pos : loaded_storages_pos)
-			m_Tiles.at(storage_pos.x).at(storage_pos.y)->set_tile(STORAGE_TILE);
+		for (auto& pos : loaded_storages_pos)
+			m_Tiles.at(pos.x).at(pos.y)->set_tile(STORAGE_TILE);
 
-		for (auto& box_pos : loaded_boxes_pos)
-			m_Tiles.at(box_pos.x).at(box_pos.y)->set_tile(BOX_TILE);
+		for (auto& pos : loaded_boxes_pos)
+			m_Tiles.at(pos.x).at(pos.y)->set_tile(BOX_TILE);
 
 		m_Tiles.at(player_pos.x).at(player_pos.y)->set_tile(PLAYER_TILE);
 	}

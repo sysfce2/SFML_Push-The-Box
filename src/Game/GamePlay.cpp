@@ -14,108 +14,141 @@ const vec2f BTN_SCALE{ 4.2f, 4.2f };
 void GamePlay::update(const float& dt)
 {	
 	m_ElapsedTime += dt;
-	vec2f player_pos = m_Player->get_position();
-	vec2f player_size = m_Player->get_size();
-	vec2f camera_offset = player_pos - m_Camera;
+	if (!m_LevelFinished) {
+		vec2f player_pos = m_Player->get_position();
+		vec2f player_size = m_Player->get_size();
+		vec2f camera_offset = player_pos - m_Camera;
 
-	if (!m_CameraInfo.locked.x) {
-		// Right game screen side
-		if (camera_offset.x + player_size.x > m_fovWidth - m_Border * A_RATIO)
-			m_Camera.x = player_pos.x + player_size.x - m_fovWidth + m_Border * A_RATIO;
+		if (!m_CameraInfo.locked.x) {
+			// Right game screen side
+			if (camera_offset.x + player_size.x > m_fovWidth - m_Border * A_RATIO)
+				m_Camera.x = player_pos.x + player_size.x - m_fovWidth + m_Border * A_RATIO;
 
-		// Left game screen side
-		else if (player_pos.x - m_Camera.x < m_Border * A_RATIO)
-			m_Camera.x = player_pos.x - m_Border * A_RATIO;
-	}
-
-	if (!m_CameraInfo.locked.y) {
-		// Up game screen side
-		if (camera_offset.y + player_size.y > 1.f - m_Border)
-			m_Camera.y = player_pos.y + player_size.y - 1.f + m_Border;
-
-		// Down game screen side
-		else if (camera_offset.y < m_Border)
-			m_Camera.y = player_pos.y - m_Border;
-	}
-	
-	// Update timer
-	u32 wts = (u32)m_ElapsedTime;
-	u32 epds = wts % 60; wts -= epds;
-	u32 epdm = wts / 60;
-	if (epds != m_ElapsedSeconds || epdm != m_ElapsedMinutes) {
-		m_ElapsedSeconds = epds;
-		m_ElapsedMinutes = epdm;
-		std::wstring m = std::to_wstring(epdm);
-		std::wstring s = std::to_wstring(epds);
-		if (epdm / 10 == 0u) m = L"0" + m;
-		if (epds / 10 == 0u) s = L"0" + s;
-		m_Timer->set_text(L"Czas: " + m + L":" + s);
-		m_Timer->center_x();
-	}
-
-	if (m_PlayerMoves != m_Moves) {
-		m_Moves = m_PlayerMoves;
-		m_MovesText->set_text(L"Ruchy: " + std::to_wstring(m_Moves));
-		m_MovesText->center_x();
-	}
-
-	if (m_UndoRegister.size() != m_AvaliableUndos) {
-		m_AvaliableUndos = m_UndoRegister.size();
-		m_UndosText->set_text(std::to_wstring(m_AvaliableUndos) + L"/" + std::to_wstring(UNDOS_LIMIT));
-		m_UndosText->center_x();
-	}
-
-	if (Window::is_focused()) {
-		PlayerControl::get().go_up = KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed();
-		PlayerControl::get().go_down = KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed();
-		PlayerControl::get().go_right = KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed();
-		PlayerControl::get().go_left = KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed();
-	}
-
-	// Level finished
-	if (m_TileMap->m_Storages.size() == m_TileMap->m_StoragesFilled) {
-		if (m_LevelNumber != -1) {
-			LevelInfo* info = GameProgress::get().get_level_info(m_LevelNumber);
-			info->completed = true;
-			info->moves = m_Moves;
-			info->time = (u32)m_ElapsedTime;
-			LevelSelection::m_Levels.at(m_LevelNumber - 1)->refresh();
-			GameProgress::get().save();
+			// Left game screen side
+			else if (player_pos.x - m_Camera.x < m_Border * A_RATIO)
+				m_Camera.x = player_pos.x - m_Border * A_RATIO;
 		}
-		destroy_state();
-	}
 
-	if (m_UndoButton->was_pressed()) {
-		if (m_Player->get_velocity_px().is_zero() && m_UndoRegister.size() > 0) {
-			
-			Undo undo = m_UndoRegister.back();
-			vec2f undo_move = (vec2f)undo.m_LastMove * m_TileMap->m_TileSize;
-			float speed = 1000.f * m_TileMap->m_TileScale.x;
-			m_Player->start_movement(undo_move, speed);
-			m_Player->m_TilePosition += undo.m_LastMove;
-			m_Player->m_Animation->play_animation(undo.m_Animation, 1);
-			m_Player->m_Animation->stop();
+		if (!m_CameraInfo.locked.y) {
+			// Up game screen side
+			if (camera_offset.y + player_size.y > 1.f - m_Border)
+				m_Camera.y = player_pos.y + player_size.y - 1.f + m_Border;
 
-			if (undo.m_Box != nullptr) {
-				undo.m_Box->start_movement(undo_move, speed);
-				vec2u box_pos = undo.m_Box->m_TilePos;
-				m_TileMap->m_Map[box_pos.x][box_pos.y] = FLOOR_TILE;
-				box_pos += undo.m_LastMove;
-				m_TileMap->m_Map[box_pos.x][box_pos.y] = BOX_TILE;
-				undo.m_Box->m_TilePos = box_pos;
-				undo.m_Box->m_CheckForStorage = true;
+			// Down game screen side
+			else if (camera_offset.y < m_Border)
+				m_Camera.y = player_pos.y - m_Border;
+		}
+
+		// Update timer
+		u32 wts = (u32)m_ElapsedTime;
+		u32 epds = wts % 60; wts -= epds;
+		u32 epdm = wts / 60;
+		if (epds != m_ElapsedSeconds || epdm != m_ElapsedMinutes) {
+			m_ElapsedSeconds = epds;
+			m_ElapsedMinutes = epdm;
+			std::wstring m = std::to_wstring(epdm);
+			std::wstring s = std::to_wstring(epds);
+			if (epdm / 10 == 0u) m = L"0" + m;
+			if (epds / 10 == 0u) s = L"0" + s;
+			m_Timer->set_text(L"Czas: " + m + L":" + s);
+			m_Timer->center_x();
+		}
+
+		// Player moves counter
+		if (m_PlayerMoves != m_Moves) {
+			m_Moves = m_PlayerMoves;
+			m_MovesText->set_text(L"Ruchy: " + std::to_wstring(m_Moves));
+			m_MovesText->center_x();
+		}
+
+		// Undos counter
+		if (m_UndoRegister.size() != m_AvaliableUndos) {
+			m_AvaliableUndos = (u32)m_UndoRegister.size();
+			m_UndosText->set_text(std::to_wstring(m_AvaliableUndos) + L"/" + std::to_wstring(UNDOS_LIMIT));
+			m_UndosText->center_x();
+		}
+
+		// Player movement control
+		if (Window::is_focused()) {
+			PlayerControl::get().go_up = KB::isKeyPressed(KB::Up) || m_MoveUp->is_pressed();
+			PlayerControl::get().go_down = KB::isKeyPressed(KB::Down) || m_MoveDown->is_pressed();
+			PlayerControl::get().go_right = KB::isKeyPressed(KB::Right) || m_MoveRight->is_pressed();
+			PlayerControl::get().go_left = KB::isKeyPressed(KB::Left) || m_MoveLeft->is_pressed();
+		}
+
+		// Chek if level finished
+		if (m_TileMap->m_Storages.size() == m_TileMap->m_StoragesFilled) {
+			if (m_LevelNumber != -1) {
+				LevelInfo* info = GameProgress::get().get_level_info(m_LevelNumber);
+				u32 et = (u32)m_ElapsedTime;
+				if (info->completed) {
+					if (et < info->time)
+						info->time = et;
+					if (m_Moves < info->moves)
+						info->moves = m_Moves;
+				}
+				else {
+					info->completed = true;
+					info->moves = m_Moves;
+					info->time = et;
+				}
+				GameProgress::get().save();
+				LevelSelection::m_Levels.at(m_LevelNumber - 1)->refresh();
 			}
-			m_PlayerMoves--;
-			m_UndoRegister.pop_back();
+			m_ElapsedTime = 0.f;
+			m_LevelFinished = true;
+		}
+
+		// Undo button handle
+		if (m_UndoButton->was_pressed()) {
+			if (m_Player->get_velocity_px().is_zero() && m_UndoRegister.size() > 0) {
+
+				Undo undo = m_UndoRegister.back();
+				vec2f undo_move = (vec2f)undo.m_LastMove * m_TileMap->m_TileSize;
+				float speed = 1000.f * m_TileMap->m_TileScale.x;
+				m_Player->start_movement(undo_move, speed);
+				m_Player->m_TilePosition += undo.m_LastMove;
+				m_Player->m_Animation->play_animation(undo.m_Animation, 1);
+				m_Player->m_Animation->stop();
+
+				if (undo.m_Box != nullptr) {
+					undo.m_Box->start_movement(undo_move, speed);
+					vec2u box_pos = undo.m_Box->m_TilePos;
+					m_TileMap->m_Map[box_pos.x][box_pos.y] = FLOOR_TILE;
+					box_pos += undo.m_LastMove;
+					m_TileMap->m_Map[box_pos.x][box_pos.y] = BOX_TILE;
+					undo.m_Box->m_TilePos = box_pos;
+					undo.m_Box->m_CheckForStorage = true;
+				}
+				m_PlayerMoves--;
+				m_UndoRegister.pop_back();
+			}
+		}
+
+		// Restart button
+		if (m_Restart->was_pressed()) {
+			destroy_state();
+			StatesManager::get().create_active_state(new GamePlay(m_LevelPath, m_LevelNumber));
 		}
 	}
-
-	if (m_Restart->was_pressed()) {
-		destroy_state();
-		StatesManager::get().create_active_state(new GamePlay(m_LevelPath, m_LevelNumber));
+	else {
+		// When level finished
+		if (m_ElapsedTime / .15f > 1) {
+			for (auto& box : m_TileMap->m_Boxes) {
+				if (m_FlickState)
+					box->set_sprite("box-gold");
+				else
+					box->set_sprite("box");
+			}
+			m_Flicks++;
+			m_ElapsedTime -= .15f;
+			m_FlickState = !m_FlickState;
+		}
+		if (m_Flicks == 16)
+			destroy_state();
 	}
 
-	if (m_Exit->was_pressed()) 
+	if (m_Exit->was_pressed())
 		destroy_state();
 }
 
@@ -126,7 +159,7 @@ GamePlay::GamePlay(const std::string& level_path, i32 number, const std::wstring
 	if (m_TileMap->load_level(m_LevelPath)) {
 		std::wstring _name = name;
 		if (number > 0)
-			std::wstring name = L"LEVEL " + std::to_wstring(number);
+			_name = L"LEVEL " + std::to_wstring(number);
 
 		// Initialize UI elements
 		m_Background = new ElementUI("gameplay-background", { 1.f, 1.f });

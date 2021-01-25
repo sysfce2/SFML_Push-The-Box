@@ -33,6 +33,10 @@ private:
 	u32 m_ElapsedSeconds = 0;
 	u32 m_AvaliableUndos = 0;
 	float m_ElapsedTime = 0.f;
+	bool m_LevelFinished = false;
+	bool m_FlickState = false;
+	u32 m_Flicks = 0;
+
 
 	// Menu UI
 	ElementUI* m_Background = nullptr;

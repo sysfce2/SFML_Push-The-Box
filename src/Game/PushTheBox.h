@@ -7,6 +7,6 @@ protected:
 	bool on_init() override;
 	bool on_update(const float& dt) override;
 public:
-	PushTheBox() : Application("Push The Box") {};
+	PushTheBox();
 	virtual ~PushTheBox() = default;
 };

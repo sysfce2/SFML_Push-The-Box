@@ -34,9 +34,11 @@ void Player::update(const float& dt)
 
 void Player::try_walk(vec2i direction, const std::string& animation)
 {
+	if (m_TileMap->m_StoragesFilled == m_TileMap->m_Storages.size())
+		return;
+
 	Box* pushed_box = nullptr;
 	if (walk(direction, pushed_box)) {
-
 		vec2f movement = { m_TileSize * direction.x, m_TileSize * direction.y };
 		start_movement(movement, m_MovementSpeed);
 

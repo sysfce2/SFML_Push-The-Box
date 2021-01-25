@@ -166,7 +166,7 @@ void CustomLevelSelector::create(State* owner_state, std::wstring action_btn_nam
 	auto get_file_name = [&](std::string path) -> std::string {
 		std::string name;
 		bool dot = false;
-		for (int i = path.length() - 1; i >= 0; i--) {
+		for (int i = (int)path.length() - 1; i >= 0; i--) {
 			if (dot) {
 				if (path[i] == '/')
 					break;
