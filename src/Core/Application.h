@@ -3,17 +3,6 @@
 #include "State/StatesManager.h"
 #include "Core/AssetsManager.h"
 
-/*******************************************
-============================================
-G³ówna klasa aplikacji odpowiedzialna za:
-	- utworzenie okna
-	- pêtla gry
-	- wywo³anie funkcji aktualizuj¹cych
-	- wywo³aniu funkcji renderuj¹cych
-	- obs³u¿enie eventów SFML
-============================================
-*******************************************/
-
 struct AppConfig
 {
 	u16 screen_width;

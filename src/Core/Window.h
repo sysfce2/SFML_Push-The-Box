@@ -3,18 +3,6 @@
 #define WIDTH_MODEL   1920.f
 #define HEIGHT_MODEL  1080.f
 
-/*******************************************
-============================================
-Klasa okna pozwalaj¹ca na dostêp do 
-parametrów okna z kod gry.
-	Parametry okna:
-		- D³ugoœæ (piksele)
-		- Szerokoœæ (piksele)
-		- Skala rozdzielczoœci
-		- Fokus okna
-============================================
-*******************************************/
-
 class Window
 {
 public:

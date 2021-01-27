@@ -2,15 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 
-/*******************************************
-============================================
-Klasa zajmuj¹ca siê zarz¹dzaniem teksturami
-	- wczytanie tekstury z pliku
-	- wczytanie czcionki z pliku
-	- dostêp do tekstur i czcionek
-============================================
-*******************************************/
-
 class AssetsManager
 {
 public:

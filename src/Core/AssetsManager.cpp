@@ -14,7 +14,10 @@ bool AssetsManager::load_texture(const std::string& file_name, const std::string
         LOG_OK("AssetsManager: loaded texture '", '\b' + asset_id, "\b'");
         return true;
     }
-    else return false;
+    else {
+        delete texture;
+        return false;
+    }
 }
 
 sf::Texture* AssetsManager::get_texture(const std::string& asset_id)
@@ -35,7 +38,10 @@ bool AssetsManager::load_font(const std::string& file_name, const std::string& a
         LOG_OK("AssetsManager: loaded font '", '\b' + asset_id, "\b'");
         return true;
     }
-    else return false;
+    else {
+        delete font;
+        return false;
+    }
 }
 
 sf::Font* AssetsManager::get_font(const std::string& asset_id)

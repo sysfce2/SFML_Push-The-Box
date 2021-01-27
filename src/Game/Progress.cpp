@@ -18,9 +18,8 @@ void GameProgress::load()
 	std::ifstream file("game.progress");
 	Levels levels_read; levels_read.reserve(LEVELS_COUNT);
 	if (file.is_open()) {
-		char checksum[65];
+		char checksum[65] = { 0 };
 		file.read(checksum, 64);
-		checksum[64] = 0;
 		for (u16 i = 0; i < LEVELS_COUNT; i++) {
 			if (file.eof()) {
 				LOG_ERROR("Game progress file was corrupted");

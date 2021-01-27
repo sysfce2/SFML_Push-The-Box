@@ -15,6 +15,9 @@ void GamePlay::update(const float& dt)
 {	
 	m_ElapsedTime += dt;
 	if (!m_LevelFinished) {
+		if (m_Moves == 0)
+			m_ElapsedTime = 0.f;
+
 		vec2f player_pos = m_Player->get_position();
 		vec2f player_size = m_Player->get_size();
 		vec2f camera_offset = player_pos - m_Camera;
@@ -128,7 +131,7 @@ void GamePlay::update(const float& dt)
 		// Restart button
 		if (m_Restart->was_pressed()) {
 			destroy_state();
-			StatesManager::get().create_active_state(new GamePlay(m_LevelPath, m_LevelNumber));
+			StatesManager::get().create_active_state(new GamePlay(m_LevelPath, m_LevelNumber, m_LevelName));
 		}
 	}
 	else {
@@ -157,14 +160,14 @@ GamePlay::GamePlay(const std::string& level_path, i32 number, const std::wstring
 {
 	m_TileMap = new TileMap();
 	if (m_TileMap->load_level(m_LevelPath)) {
-		std::wstring _name = name;
+		m_LevelName = name;
 		if (number > 0)
-			_name = L"LEVEL " + std::to_wstring(number);
+			m_LevelName = L"LEVEL " + std::to_wstring(number);
 
 		// Initialize UI elements
 		m_Background = new ElementUI("gameplay-background", { 1.f, 1.f });
 		m_Menu = new ElementUI("gameplay-menu", { 1.5f, 1.5f });
-		m_LevelName = new TextUI(_name, "joystix", 32);
+		m_tLevelName = new TextUI(m_LevelName, "joystix", 32);
 		m_Timer = new TextUI("Czas: 00:00", "joystix", 36);
 		m_MovesText = new TextUI("Ruchy: 0", "joystix", 36);
 		m_UndosText = new TextUI("0/" + std::to_string(UNDOS_LIMIT), "joystix", 36);
@@ -185,7 +188,7 @@ GamePlay::GamePlay(const std::string& level_path, i32 number, const std::wstring
 		// Construct UI menu
 		m_fovWidth = 1.f - m_Menu->get_size().x;
 		m_Menu->set_position({ m_fovWidth, 0.f });
-		m_LevelName->attach_position(m_Menu).center_x(.05f);
+		m_tLevelName->attach_position(m_Menu).center_x(.05f);
 		m_Timer->attach_position(m_Menu).center_x(.13f);
 		m_MovesText->attach_position(m_Menu).center_x(.18f);
 		m_UndoButton->assign_button_sprite("btn-3x1", "btn-3x1-pressed");
@@ -223,7 +226,7 @@ GamePlay::GamePlay(const std::string& level_path, i32 number, const std::wstring
 		m_Exit->attach_position(m_Menu).center_x(.85f);
 
 		make_entity(m_Menu);
-		make_entity(m_LevelName);
+		make_entity(m_tLevelName);
 		make_entity(m_Timer);
 		make_entity(m_MovesText);
 		make_entity(m_UndoButton);

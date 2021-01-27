@@ -2,13 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-/*******************************************
-============================================
-	Klasa vector s³u¿¹ca do reprezentacji 
-		punktu w 2 wymiarach: x, y.
-============================================
-*******************************************/
-
 template <typename T>
 struct vec2
 {

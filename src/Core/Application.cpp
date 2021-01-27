@@ -21,6 +21,7 @@ Application::Application(const std::string& app_name, const std::string& icon_pa
 				sf::Style::Close | (m_AppConfig.fullscreen ? sf::Style::Fullscreen : 0));
 	load_icon(icon_path);
 	m_Window.clear();
+	m_Window.display();
 	Window::set_handle(&m_Window);
 	m_InitSuccess = true;
 }

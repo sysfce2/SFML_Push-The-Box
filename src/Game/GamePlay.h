@@ -25,6 +25,7 @@ private:
 	TileMap* m_TileMap = nullptr;
 	std::vector<Undo> m_UndoRegister;
 	std::string m_LevelPath;
+	std::wstring m_LevelName;
 	i32 m_LevelNumber = -1;
 	u32 m_Moves = 0;
 	u32 m_PlayerMoves = 0;
@@ -41,7 +42,7 @@ private:
 	// Menu UI
 	ElementUI* m_Background = nullptr;
 	ElementUI* m_Menu = nullptr;
-	TextUI* m_LevelName = nullptr;
+	TextUI* m_tLevelName = nullptr;
 	TextUI* m_Timer = nullptr;
 	TextUI* m_MovesText = nullptr;
 	TextUI* m_UndosText = nullptr;
