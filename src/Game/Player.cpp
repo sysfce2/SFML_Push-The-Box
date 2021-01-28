@@ -40,7 +40,6 @@ void Player::try_walk(vec2i direction, const std::string& animation)
 		m_Animation->stop();
 		return;
 	}
-
 	Box* pushed_box = nullptr;
 	if (walk(direction, pushed_box)) {
 

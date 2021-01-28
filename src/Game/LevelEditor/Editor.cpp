@@ -79,7 +79,7 @@ void Editor::save_level()
 		valid = false;
 	}
 	
-	if (Values.boxes_placed != Values.boxes_placed) {
+	if (Values.storages_placed != Values.boxes_placed) {
 		info.emplace_back(L"-Liczba skrzynek nie jest równa liczbie magazynów");
 		valid = false;
 	}
