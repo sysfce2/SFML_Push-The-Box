@@ -9,16 +9,21 @@ constexpr u16 UNDOS_LIMIT = 10u;
 
 struct PlayerControl
 {
-	bool go_up = false;
-	bool go_down = false;
-	bool go_right = false;
-	bool go_left = false;
+	bool go_up = false; bool go_down = false;
+	bool go_right = false; bool go_left = false;
+
 	inline static PlayerControl& get() {
 		if (s_Instance == nullptr)
 			s_Instance = new PlayerControl();
 		return *s_Instance;
 	}
-	inline void reset();
+	inline void reset() {
+		go_up = false;  go_down = false;
+		go_right = false; go_left = false;
+	};
+	inline u8 full_state() {
+		return (go_up << 3) + (go_down << 2) + (go_right << 1) + go_left;
+	}
 private:
 	static PlayerControl* s_Instance;
 };
@@ -49,7 +54,7 @@ private:
 	TileMap* m_TileMap = nullptr;
 	u32* m_Moves = nullptr;
 	vec2u m_TilePosition;
-	bool m_StoppedWalking = true;
+	u8 m_PrevControlState = 0;
 	float m_TileSize;
 	float m_MovementSpeed = 300.f;
 };

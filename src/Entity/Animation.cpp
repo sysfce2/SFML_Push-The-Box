@@ -90,6 +90,7 @@ bool Animation::play_animation(const std::string& name, u8 fps, u8 mode, u32 rep
             m_FrameTime = 1.f / fps;
             m_TimeElapsed = 0.f;
             m_CurrentFrame = 1; 
+            m_PlayMode = mode;
             m_PlayBackward = false;
             m_EverPlayed = true;
             

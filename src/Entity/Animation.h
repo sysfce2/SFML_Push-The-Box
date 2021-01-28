@@ -20,6 +20,7 @@ public:
 	bool play_animation(const std::string& name, u8 fps, u8 mode = ANIMATE_ONCE, u32 repeat_from = 0);
 	bool new_animation(const std::string& name, u16 x, u16 y, u16 w, u16 h, u32 frames);
 	inline std::string get_animation_name() const { return m_CurrentAnimationName; }
+	inline bool is_playing() const { return !m_StopAnimation; }
 	void stop();
 	void pause();
 	void resume();

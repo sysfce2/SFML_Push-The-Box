@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "Core/Logger.h"
 
-constexpr u16 ANIMATION_FPS = 8;
+constexpr u16 ANIMATION_FPS = 24;
 PlayerControl* PlayerControl::s_Instance = nullptr;
 
 void Player::init(TileMap* tile_map, std::vector<Undo>* reg, u32* moves)
@@ -20,11 +20,17 @@ void Player::update(const float& dt)
 
 	if (get_velocity_px().is_zero()) {
 
-		if (!m_StoppedWalking) {
-			m_StoppedWalking = true;
-			m_Animation->stop();
+		if (m_Animation->is_playing()) {
+			bool stop_animation = true;
+			u8 now = PlayerControl::get().full_state();
+			if (now == m_PrevControlState)
+				stop_animation = false;
+
+			if (stop_animation)
+				m_Animation->stop();
 		}
 
+		m_PrevControlState = PlayerControl::get().full_state();
 		if (PlayerControl::get().go_up)		try_walk({ 0, -1 }, "MovingUp");
 		else if (PlayerControl::get().go_right)	try_walk({ 1, 0 },  "MovingRight");
 		else if (PlayerControl::get().go_down)	try_walk({ 0, 1 },  "MovingDown");
@@ -34,20 +40,24 @@ void Player::update(const float& dt)
 
 void Player::try_walk(vec2i direction, const std::string& animation)
 {
-	if (m_TileMap->m_StoragesFilled == m_TileMap->m_Storages.size())
+	if (m_TileMap->m_StoragesFilled == m_TileMap->m_Storages.size()) {
+		m_Animation->stop();
 		return;
+	}
 
 	Box* pushed_box = nullptr;
 	if (walk(direction, pushed_box)) {
+
 		vec2f movement = { m_TileSize * direction.x, m_TileSize * direction.y };
 		start_movement(movement, m_MovementSpeed);
-
-		m_Animation->play_animation(animation, ANIMATION_FPS, ANIMATE_REPEAT);
-		m_StoppedWalking = false;
+		if (!m_Animation->is_playing())
+			m_Animation->play_animation(animation, ANIMATION_FPS, ANIMATE_REPEAT);
 		
 		if (pushed_box != nullptr)
 			pushed_box->start_movement(movement, m_MovementSpeed);
 	}
+	else if (m_Animation->is_playing())
+		m_Animation->stop();
 }
 
 bool Player::walk(vec2i offset, Box*& pushed_box)
@@ -76,7 +86,7 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 		m_TileMap->m_Map[first.x][first.y] = FLOOR_TILE;
 		m_TileMap->m_Map[second.x][second.y] = BOX_TILE;
 		
-		for (Box* box : m_TileMap->m_Boxes)
+		for (Box* box : m_TileMap->m_Boxes) {
 			if (box->m_TilePos == vec2u(first.x, first.y)) {
 				box->m_TilePos = { (unsigned)second.x, (unsigned)second.y };
 				box->m_CheckForStorage = true;
@@ -84,6 +94,7 @@ bool Player::walk(vec2i offset, Box*& pushed_box)
 				pushed_box = box;
 				break;
 			}
+		}
 	}
 
 	m_TilePosition += offset;
@@ -106,12 +117,4 @@ Player::Player()
 	m_Animation->new_animation("MovingRight", 0, 128, 64, 64, 9);
 	m_Animation->new_animation("MovingLeft", 0, 192, 64, 64, 9);
 	PlayerControl::get().reset();
-}
-
-inline void PlayerControl::reset()
-{
-	go_up = false;
-	go_down = false;
-	go_right = false;
-	go_left = false;
 }
