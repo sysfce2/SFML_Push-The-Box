@@ -21,16 +21,12 @@ void Player::update(const float& dt)
 	if (get_velocity_px().is_zero()) {
 
 		if (m_Animation->is_playing()) {
-			bool stop_animation = true;
-			u8 now = PlayerControl::get().full_state();
-			if (now == m_PrevControlState)
-				stop_animation = false;
-
-			if (stop_animation)
+			u8 now = PlayerControl::get().whole_state();
+			if (now != m_PrevControlState)
 				m_Animation->stop();
 		}
 
-		m_PrevControlState = PlayerControl::get().full_state();
+		m_PrevControlState = PlayerControl::get().whole_state();
 		if (PlayerControl::get().go_up)		try_walk({ 0, -1 }, "MovingUp");
 		else if (PlayerControl::get().go_right)	try_walk({ 1, 0 },  "MovingRight");
 		else if (PlayerControl::get().go_down)	try_walk({ 0, 1 },  "MovingDown");

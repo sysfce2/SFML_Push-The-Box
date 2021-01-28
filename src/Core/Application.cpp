@@ -3,7 +3,6 @@
 #include "Core/Logger.h"
 #include "UI/TextBoxUI.h"
 
-#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>

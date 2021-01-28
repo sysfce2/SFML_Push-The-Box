@@ -3,7 +3,6 @@
 #include "TileMap.h"
 #include "Tiles/Box.h"
 #include "Entity/Animation.h"
-#include <unordered_map>
 
 constexpr u16 UNDOS_LIMIT = 10u;
 
@@ -21,7 +20,7 @@ struct PlayerControl
 		go_up = false;  go_down = false;
 		go_right = false; go_left = false;
 	};
-	inline u8 full_state() {
+	inline u8 whole_state() {
 		return (go_up << 3) + (go_down << 2) + (go_right << 1) + go_left;
 	}
 private:
