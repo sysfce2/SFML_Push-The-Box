@@ -1,43 +1,41 @@
 #include "Core/Application.h"
-#include "Core/Window.h"
 #include "Core/Logger.h"
 #include "UI/TextBoxUI.h"
+#include "Utils/Utils.h"
 
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <sstream>
 
 Application::Application(const std::string& app_name, const std::string& icon_path)
-	: m_AppName(app_name)
+	: m_AppName(app_name), m_IconPath(icon_path)
 {
 	Logger::init();
-	if (!load_app_conifg()) {
-		LOG_ERROR("Failed to load app config file 'app.config'");
-		return;
+	AppConfig app_config = load_app_config();
+	if (app_config) {
+		Window::create_window(app_config);
+		m_Window = Window::get_handle();
+		m_InitSuccess = true;
 	}
-	m_Window.create(sf::VideoMode(m_AppConfig.screen_width, m_AppConfig.screen_height), m_AppName, 
-				sf::Style::Close | (m_AppConfig.fullscreen ? sf::Style::Fullscreen : 0));
-	load_icon(icon_path);
-	m_Window.clear();
-	m_Window.display();
-	Window::set_handle(&m_Window);
-	m_InitSuccess = true;
+	else {
+		LOG_ERROR("Couldn't load config file");
+		m_InitSuccess = false;
+	}
 }
 
 void Application::run(u16 fps_limit)
 {
 	if (!m_IsRunning) {
 		if (load_resources() && on_init()) {
-			m_Window.setFramerateLimit(fps_limit);
+			m_Window->setFramerateLimit(fps_limit);
 			m_IsRunning = true;
 			sf::Time frame_start, frame_end;
 			sf::Clock clock;
 
-			while (m_Window.isOpen()) {
+			while (m_Window->isOpen()) {
 				frame_start = clock.getElapsedTime();
 				if (!on_update(m_FrameTime)) {
-					m_Window.close();
+					m_Window->close();
 					LOG_ERROR("Game runtime error:", m_RuntimeErrorMessage);
 				}
 				handle_sfml_events();
@@ -54,35 +52,28 @@ void Application::run(u16 fps_limit)
 		LOG_ERROR("Game is already running!");
 }
 
-std::vector<std::string> str_split(std::string str, char split_char) {
-	std::stringstream ss(str);
-	std::string segment;
-	std::vector<std::string> segments;
-	while (std::getline(ss, segment, split_char))
-		segments.emplace_back(segment);
-	return segments;
-}
-
-bool Application::load_app_conifg()
+AppConfig Application::load_app_config()
 {
 	std::ifstream config("app.config");
+	AppConfig app_config = { 0 };
 	if (config.is_open()) {
 		std::string line;
 		while (getline(config, line)) {
-			std::vector<std::string>args = str_split(line, '=');
+			std::vector<std::string>args = utils::str_split(line, '=');
 			if (args.size() < 2) continue;
 
 			if (args[0] == "width")
-				m_AppConfig.screen_width = stoi(args[1]);
+				app_config.screen_width = stoi(args[1]);
 			else if (args[0] == "height")
-				m_AppConfig.screen_height = stoi(args[1]);
+				app_config.screen_height = stoi(args[1]);
 			else if (args[0] == "fullscreen")
-				m_AppConfig.fullscreen = stoi(args[1]);
+				app_config.fullscreen = stoi(args[1]);
 		}
 		config.close();
+		app_config.icon_path = m_IconPath;
+		app_config.app_name = m_AppName;
 	}
-	else return false;
-	return true;
+	return app_config;
 }
 
 bool Application::load_resources()
@@ -94,7 +85,7 @@ bool Application::load_resources()
 		while (getline(resources, line))
 			if (line.size() > 0 && line[0] != '#') {
 				line.erase(remove(line.begin(), line.end(), ','), line.end());
-				std::vector<std::string> args = str_split(line, ' ');
+				std::vector<std::string> args = utils::str_split(line, ' ');
 				if (args.size() < 2) continue;
 
 				if (args[0] == "FONT")
@@ -116,20 +107,6 @@ bool Application::load_resources()
 	return true;
 }
 
-bool Application::load_icon(const std::string& icon_path)
-{
-	sf::Image icon;
-	if (icon.loadFromFile(icon_path)) {
-		m_Window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-		LOG_OK("Application icon loaded");
-	}
-	else {
-		LOG_ERROR("Failed to load application icon'");
-		return false;
-	}
-	return true;
-}
-
 Application::~Application()
 {
 	auto& app_states = StatesManager::get().m_AppStates;
@@ -138,15 +115,16 @@ Application::~Application()
 		app_states.pop();
 	}
 	AssetsManager::get().free_memory();
+	delete m_Window;
 }
 
 void Application::handle_sfml_events()
 {
 	sf::Event event;
-	while (m_Window.pollEvent(event))
+	while (m_Window->pollEvent(event))
 		switch (event.type) {
 		case sf::Event::Closed:
-			m_Window.close();
+			m_Window->close();
 			break;
 		case sf::Event::TextEntered:
 			TextBoxUI::m_WasKeyEntered = true;
@@ -174,19 +152,20 @@ void Application::update_active_state(const float& dt)
 	else {
 		delete app_states.top();
 		app_states.pop();
+		StatesManager::get().m_RefreshStates.pop_back();
 		m_SkipNextRender = true;
 	}
 
 	if (app_states.size() == 0)
-		m_Window.close();
+		m_Window->close();
 }
 
 void Application::render_active_state()
 {
 	if (!m_SkipNextRender) {
-		m_Window.clear();
-		StatesManager::get().m_AppStates.top()->render_entities(m_Window);
-		m_Window.display();
+		m_Window->clear();
+		StatesManager::get().m_AppStates.top()->render_entities(*m_Window);
+		m_Window->display();
 	}
 	else
 		m_SkipNextRender = false;
