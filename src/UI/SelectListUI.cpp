@@ -5,22 +5,23 @@ const sf::Color BACKGROUND_COLOR = { 28,28,76,255 };
 const sf::Color SELECTED_COLOR = { 96,96,242,255 };
 const sf::Color NOSELECTED_COLOR = { 56,56,160,255 };
 
-void SelectListUI::add_element(const std::wstring& display_name, const std::string& value)
+ListElement* SelectListUI::add_element(const std::wstring& display_name, const std::string& value)
 {
 	m_AllElements.emplace_back(ListElementInfo{ display_name, value });
+	ListElement* element = nullptr;
 	if (m_ElementsTotal < m_DisplayElementsCount) {
-		ListElement* element = m_ListElements.at(m_ElementsTotal);
+		element = m_ListElements.at(m_ElementsTotal);
 		element->set_disp_name(display_name);
 		element->set_value(value);
 		element->m_Number = m_ElementsTotal;
 		if (m_ElementsTotal == 0) {
 			element->select();
-			m_CurrentSelected = element;
 		}
 	}
 	else if (m_ElementsTotal == m_DisplayElementsCount)
 		m_ListElements.at(m_ElementsTotal - 1)->make_three_dots();
 	m_ElementsTotal++;
+	return element;
 }
 
 void SelectListUI::set_scroll_up_button(ButtonUI* button)
@@ -47,8 +48,8 @@ std::wstring SelectListUI::get_selected_name()
 	return m_CurrentSelected->get_name();
 }
 
-SelectListUI::SelectListUI(vec2f element_size, u16 elements_count)
-	: m_ElementSize(element_size), m_DisplayElementsCount(elements_count)
+SelectListUI::SelectListUI(vec2f element_size, u16 elements_count, PositionPressFn on_position_press)
+	: m_ElementSize(element_size), m_DisplayElementsCount(elements_count), m_OnPositionPress(on_position_press)
 {
 	set_color(BACKGROUND_COLOR);
 	set_size({ element_size.x + m_BackgroundPadding * 2.f / Window::aspect_ratio(), 
@@ -71,9 +72,8 @@ void SelectListUI::refresh_list()
 
 		if (i == m_ScrollOffset && m_ScrollOffset > 0) {
 			if (element == m_CurrentSelected) {
-				m_CurrentSelected->select(false);
 				ListElement* next = m_ListElements.at(i - m_ScrollOffset + 1);
-				next->select(true);
+				next->select();
 				m_CurrentSelected = next;
 			}
 			element->make_three_dots();
@@ -83,10 +83,8 @@ void SelectListUI::refresh_list()
 		if (i == m_ScrollOffset + m_DisplayElementsCount - 1) {
 			if (i < m_AllElements.size() - 1) {
 				if (element == m_CurrentSelected) {
-					m_CurrentSelected->select(false);
 					ListElement* previous = m_ListElements.at(i - m_ScrollOffset - 1);
-					previous->select(true);
-					m_CurrentSelected = previous;
+					previous->select();
 				}
 				element->make_three_dots();
 				break;
@@ -140,24 +138,23 @@ void ListElement::update(const float& dt)
 			if (bounds.contains((float)mouse.x, (float)mouse.y)) {
 				ListElement* current = m_ListPtr->m_CurrentSelected;
 				if (current != this && m_Value.length() > 0) {
-					if (current != nullptr)
-						current->select(false);
-					
-					m_ListPtr->m_CurrentSelected = this;
-					m_ListPtr->m_SelectedNumber = m_Number;
 					select();
+					if (m_ListPtr->m_OnPositionPress) {
+						m_ListPtr->m_OnPositionPress(this);
+					}
 				}
 			}
 		}
 	}
 }
 
-void ListElement::select(bool selected)
+void ListElement::select()
 {
-	if (selected)
-		set_color(SELECTED_COLOR);
-	else
-		set_color(NOSELECTED_COLOR);
+	if (m_ListPtr->m_CurrentSelected != nullptr)
+		m_ListPtr->m_CurrentSelected->set_color(NOSELECTED_COLOR);
+	m_ListPtr->m_CurrentSelected = this;
+	m_ListPtr->m_SelectedNumber = m_Number;
+	set_color(SELECTED_COLOR);
 }
 
 void ListElement::make_three_dots()
