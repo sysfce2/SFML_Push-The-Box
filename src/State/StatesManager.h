@@ -6,6 +6,9 @@ class StatesManager
 {
 public:
 	friend class Application;
+	friend class State;
+	friend class Window;
+
 	void create_active_state(State* state);
 
 	inline static StatesManager& get() {
@@ -16,5 +19,6 @@ public:
 
 private:
 	static StatesManager* s_Instance;
-	static std::stack<State*> m_AppStates;
+	std::stack<State*> m_AppStates;
+	std::vector<bool> m_RefreshStates;
 };

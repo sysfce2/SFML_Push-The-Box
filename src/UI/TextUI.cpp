@@ -25,6 +25,21 @@ void TextUI::render(sf::RenderTarget& target, const vec2f& camera)
 	}
 }
 
+void TextUI::refresh()
+{
+	set_text(m_TextContent, m_FontName, m_FontSize);
+
+	if (m_Centered_X && m_Centered_Y) {
+		center_x();
+		center_y();
+	}
+	else if (m_Centered_X) {
+		center_x();
+	}	
+	else if (m_Centered_Y)
+		center_y();
+}
+
 void TextUI::set_text(const std::wstring& text, const std::string& font, u8 font_size)
 {
 	if (m_Text != nullptr)
@@ -37,6 +52,7 @@ void TextUI::set_text(const std::wstring& text, const std::string& font, u8 font
 		m_FontSize = font_size;
 
 	if (m_Font != nullptr) {
+		m_FontName = font;
 		m_TextContent = text;
 		m_Text = new sf::Text();
 		m_Text->setFont(*m_Font);

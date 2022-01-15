@@ -87,10 +87,6 @@ Entity& Entity::set_position_px(const vec2f& position)
 
 Entity& Entity::set_size(const vec2f& size)
 {
-	if (m_Sprite != nullptr)
-		set_scale(size / m_SpriteSize / Window::size());
-	else m_Scale = { 1.f, 1.f };
-
 	vec2f size_px = size * Window::size();
 	m_RectSprite.setSize(size_px);
 	m_SizePx = size_px;
@@ -100,14 +96,9 @@ Entity& Entity::set_size(const vec2f& size)
 
 Entity& Entity::set_size_px(const vec2f& size_px)
 {
-	if (m_Sprite != nullptr)
-		set_scale(size_px / m_SpriteSize);
-	else m_Scale = { 1.f, 1.f };
-
 	m_RectSprite.setSize((vec2f)(size_px));
 	m_SizePx = size_px;
 	m_Size = size_px / Window::size();
-
 	return *this;
 }
 
@@ -118,13 +109,6 @@ Entity& Entity::set_scale(const vec2f& scale)
 		m_Sprite->setScale(draw_scale);
 		m_SizePx = m_SpriteSize * draw_scale;
 		m_Size = m_SpriteSize * draw_scale / Window::size();
-		m_Scale = scale;
-	}
-	else if (!m_Size.is_zero()) {
-		vec2f rect_init_size = vec2f(m_RectSprite.getSize().x, m_RectSprite.getSize().y) / m_Scale;
-		m_RectSprite.setScale(draw_scale);
-		m_SizePx = rect_init_size * scale;
-		m_Size = rect_init_size * scale / Window::size();
 		m_Scale = scale;
 	}
 	return *this;
@@ -151,6 +135,7 @@ Entity& Entity::shift_px(const vec2f& offset)
 
 Entity& Entity::center_x()
 {
+	m_Centered_X = true;
 	if (m_AttachedToEntity == nullptr)
 		set_position({ .5f - get_size().x / 2.f, get_position().y });
 	else {
@@ -162,6 +147,7 @@ Entity& Entity::center_x()
 
 Entity& Entity::center_y()
 {
+	m_Centered_Y = true;
 	if (m_AttachedToEntity == nullptr)
 		set_position({ get_position().x, .5f - get_size().y / 2.f });
 	else {
@@ -173,12 +159,14 @@ Entity& Entity::center_y()
 
 Entity& Entity::center_x(float y_pos)
 {
+	m_Centered_X = true;
 	set_position({ 0.f, y_pos });
 	return center_x();
 }
 
 Entity& Entity::center_y(float x_pos)
 {
+	m_Centered_Y = true;
 	set_position({ x_pos, 0.f });
 	return center_y();
 }
@@ -193,6 +181,25 @@ Entity& Entity::detach_position()
 {
 	m_AttachedToEntity = nullptr;
 	return *this;
+}
+
+void Entity::refresh()
+{
+	if (m_Sprite != nullptr)
+		set_sprite(m_Sprite, false);
+
+	set_scale(get_scale());
+	set_size(get_size());
+	set_position(get_position());
+
+	if (m_Centered_X && m_Centered_Y) {
+		center_x();
+		center_y();
+	}
+	else if (m_Centered_X)
+		center_x();
+	else if (m_Centered_Y)
+		center_y();
 }
 
 void Entity::start_movement(vec2f move_offset_px, float movement_speed_px)

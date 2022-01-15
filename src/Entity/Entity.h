@@ -24,15 +24,16 @@ public:
 	Entity& center_y(float x_pos);
 	Entity& attach_position(Entity* other);
 	Entity& detach_position();
-	inline Entity* get_attached()  const { return m_AttachedToEntity; }
-	inline vec2f get_position()    const { return m_Position; }
-	inline vec2f get_position_px() const { return m_PositionPx; }
-	inline vec2f get_size()        const { return m_Size; }
-	inline vec2f get_size_px()     const { return m_SizePx; }
-	inline vec2f get_scale()       const { return m_Scale; }
-	inline vec2f get_velocity_px() const { return m_VelocityPx; }
-	inline float get_rotation()    const { return m_RotationAngle; }
-	inline bool is_visible()	   const { return m_Visible; }
+	inline Entity* get_attached()  const { return m_AttachedToEntity;	}
+	inline vec2f get_position()    const { return m_Position;			}
+	inline vec2f get_position_px() const { return m_PositionPx;			}
+	inline vec2f get_size()        const { return m_Size;				}
+	inline vec2f get_size_px()     const { return m_SizePx;				}
+	inline vec2f get_scale()       const { return m_Scale;				}
+	inline vec2f get_velocity_px() const { return m_VelocityPx;			}
+	inline float get_rotation()    const { return m_RotationAngle;		}
+	inline bool is_visible()	   const { return m_Visible;			}
+	virtual void refresh();
 	void start_movement(vec2f move_offset_px, float movement_speed_px);
 	void update_movements(const float& dt);
 	void vanish(bool freeze = false);
@@ -58,6 +59,8 @@ private:
 protected:
 	sf::Sprite* m_Sprite = nullptr;
 	sf::RectangleShape m_RectSprite;
+	bool m_Centered_X = false;
+	bool m_Centered_Y = false;
 	bool m_Visible = true;
 	bool m_Freezed = false;
 	bool m_UseCameraPosition = true;
@@ -65,7 +68,7 @@ protected:
 	vec2f m_PositionPx;
 	vec2f m_Position;
 	vec2f m_SizePx;
-	vec2f m_Size ;
+	vec2f m_Size;
 	vec2f m_VelocityPx;
 	vec2f m_DistanceLeft;
 	bool m_MovingToDestination = false;

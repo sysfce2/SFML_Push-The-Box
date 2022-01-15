@@ -12,6 +12,7 @@ class State
 public:
 	friend class Application;
 	friend class StatesManager;
+	friend class Options;
 	Entity* make_entity(Entity* entity, u16 layers = 0x0);
 
 protected:
@@ -20,6 +21,7 @@ protected:
 	void set_main_layer(u16 new_layer_id);
 	void hide_all_layers();
 	void update_entities(const float& dt);
+	void refresh_entities();
 	void render_entities(sf::RenderTarget& target);
 	void destroy_state();
 	virtual void update(const float& dt) = 0;

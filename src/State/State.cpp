@@ -2,6 +2,7 @@
 #include "State/StatesManager.h"
 #include "Core/Logger.h"
 #include "UI/ButtonUI.h"
+#include "Core/Window.h"
 
 Entity* State::make_entity(Entity* entity, u16 layers)
 {
@@ -49,14 +50,34 @@ void State::hide_all_layers()
 
 void State::update_entities(const float& dt)
 {
+	bool refresh = false;
+	if (StatesManager::get().m_RefreshStates[m_StateId]) {
+		StatesManager::get().m_RefreshStates[m_StateId] = false;
+		refresh = true;
+	}
+
 	auto it = m_Entities.begin();
-	while (it != m_Entities.end())
-		if ((*it)->m_Active) {
-			if (!(*it)->m_Freezed)
-				(*it)->update(dt);
+	while (it != m_Entities.end()) {
+
+		auto& entt = *it;
+		if (entt->m_Active) {
+
+			if (!entt->m_Freezed)
+				entt->update(dt);
+
+			if (refresh)
+				entt->refresh();
+
 			it++;
 		}
 		else m_Entities.erase(it);
+	}
+
+}
+
+void State::refresh_entities()
+{
+	LOG_INFO("REFRESH ENTT");
 }
 
 void State::render_entities(sf::RenderTarget& target)

@@ -7,6 +7,7 @@ private:
 	void update(const float& dt) override;
 	void render(sf::RenderTarget& target, const vec2f& camera) override;
 public:
+	void refresh() override;
 	void set_text(const std::wstring& text, const std::string& font = "", u8 font_size = 0);
 	void set_tcolor(const sf::Color& color);
 	void use_camera_position(bool use = true);
@@ -25,6 +26,7 @@ public:
 
 private:
 	std::wstring m_TextContent;
+	std::string m_FontName;
 	vec2f m_Margin;
 	u8 m_FontSize = 24;
 	sf::Color m_Color{ 255, 255, 255, 255 };
