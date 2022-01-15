@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "State/StatesManager.h"
 #include "LevelSelection.h"
+#include "Options.h"
 
 const u8 BTN_FNT_SIZE = 60;
 const vec2f BTN_SCALE{ 4.5f, 4.5f };
@@ -34,7 +35,7 @@ void MainMenu::update(const float& dt)
 		StatesManager::get().create_active_state(new LevelSelection());
 
 	if (m_OptionsButton->was_pressed())
-		system("notepad.exe app.config");
+		StatesManager::get().create_active_state(new Options());
 
 	if (m_ExitButton->was_pressed())
 		destroy_state();
